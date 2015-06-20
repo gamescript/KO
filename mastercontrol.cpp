@@ -171,6 +171,9 @@ void MasterControl::CreateUI()
 void MasterControl::LoadResources()
 {
     resources.models.ko = cache_->GetResource<Model>("Resources/Models/KO.mdl");
+    resources.models.items.shield = cache_->GetResource<Model>("Resources/Models/Shield.mdl");
+    resources.models.items.sword = cache_->GetResource<Model>("Resources/Models/Sword.mdl");
+
     resources.models.enemies.floatingEye = cache_->GetResource<Model>("Resources/Models/FloatingEye.mdl");
     resources.models.enemies.cornea = cache_->GetResource<Model>("Resources/Models/Cornea.mdl");
     resources.models.doodads.firePit = cache_->GetResource<Model>("Resources/Models/FirePit.mdl");

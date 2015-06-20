@@ -70,11 +70,19 @@ Player::Player(Context *context, MasterControl *masterControl):
     rigidBody_->SetRestitution(0.0f);
     rigidBody_->SetMass(1.0f);
     rigidBody_->SetLinearFactor(Vector3::ONE - Vector3::UP);
-    rigidBody_->SetLinearDamping(0.95f);
+    rigidBody_->SetLinearDamping(0.99f);
     rigidBody_->SetAngularFactor(Vector3::UP);
     rigidBody_->SetAngularDamping(1.0f);
     rigidBody_->SetLinearRestThreshold(0.01f);
     rigidBody_->SetAngularRestThreshold(0.1f);
+
+    StaticModel* rightHand = rootNode_->GetChild("Hand.R",true)->CreateComponent<StaticModel>();
+    rightHand->SetModel(masterControl_->resources.models.items.sword);
+    rightHand->SetMaterial(masterControl_->resources.materials.metal);
+    StaticModel* leftHand = rootNode_->GetChild("Hand.L",true)->CreateComponent<StaticModel>();
+    leftHand->SetModel(masterControl_->resources.models.items.shield);
+    leftHand->SetMaterial(1, masterControl_->resources.materials.leather);
+    leftHand->SetMaterial(0, masterControl_->resources.materials.metal);
 
     CollisionShape* collisionShape = rootNode_->CreateComponent<CollisionShape>();
     collisionShape->SetCylinder(0.3f, 0.5f);

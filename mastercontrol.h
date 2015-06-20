@@ -64,6 +64,10 @@ typedef struct Resources
     struct {
         SharedPtr<Model> ko;
         struct {
+            SharedPtr<Model> shield;
+            SharedPtr<Model> sword;
+        } items;
+        struct {
             SharedPtr<Model> floatingEye;
             SharedPtr<Model> cornea;
         } enemies;
