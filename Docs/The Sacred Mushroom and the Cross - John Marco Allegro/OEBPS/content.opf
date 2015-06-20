@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="bookid">
+  <metadata>
+    <meta content="cover-image" name="cover"/>
+    <dc:type>Text</dc:type>
+    <dc:identifier id="bookid">pdfy-XTEfv8wyrr2jWE1Q</dc:identifier>
+    <dc:date>2014-01-01</dc:date>
+    <dc:description>&lt;p&gt;	&lt;strong&gt;This public document was automatically mirrored from &lt;a href="https://pdf.yt/" rel="nofollow"&gt;PDFy&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Original filename:&lt;/strong&gt; the-sacred-mushroom-and-the-cross-john-allegro.pdf&lt;/li&gt;	&lt;li&gt;&lt;strong&gt;URL:&lt;/strong&gt; &lt;a href="http://pdf.yt/d/XTEfv8wyrr2jWE1Q" rel="nofollow"&gt;https://pdf.yt/d/XTEfv8wyrr2jWE1Q&lt;/a&gt;&lt;/li&gt;	&lt;li&gt;&lt;strong&gt;Upload date:&lt;/strong&gt; January 16, 2015 13:30:39&lt;/li&gt;&lt;/ul&gt;</dc:description>
+    <dc:subject>mirror</dc:subject>
+    <dc:title>the-sacred-mushroom-and-the-cross-john-allegro.pdf (PDFy mirror)</dc:title>
+    <dc:subject>pdf.yt</dc:subject>
+    <dc:language>en</dc:language>
+  </metadata>
+  <manifest>
+    <item href="stylesheet.css" id="css" media-type="text/css"/>
+    <item href="images/picture0.jpg" id="picture0" media-type="image/jpeg"/>
+    <item href="images/picture1.jpg" id="picture1" media-type="image/jpeg"/>
+    <item href="images/picture2.jpg" id="picture2" media-type="image/jpeg"/>
+    <item href="part0000.html" id="part0000" media-type="application/xhtml+xml"/>
+    <item href="images/picture3.jpg" id="picture3" media-type="image/jpeg"/>
+    <item href="images/picture4.jpg" id="picture4" media-type="image/jpeg"/>
+    <item href="part0001.html" id="part0001" media-type="application/xhtml+xml"/>
+    <item href="images/picture5.jpg" id="picture5" media-type="image/jpeg"/>
+    <item href="images/picture6.jpg" id="picture6" media-type="image/jpeg"/>
+    <item href="part0002.html" id="part0002" media-type="application/xhtml+xml"/>
+    <item href="part0003.html" id="part0003" media-type="application/xhtml+xml"/>
+    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="part0000"/>
+    <itemref idref="part0001"/>
+    <itemref idref="part0002"/>
+    <itemref idref="part0003"/>
+  </spine>
+  <guide>
+    <reference href="part0000.html" title="Book" type="text"/>
+  </guide>
+</package>
