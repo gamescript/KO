@@ -28,9 +28,7 @@
 #include <Urho3D/Input/Input.h>
 
 #include "tile.h"
-#include "imp.h"
 #include "frop.h"
-#include "grass.h"
 #include "firepit.h"
 
 Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
@@ -43,30 +41,17 @@ Object(context)
     rootNode_ = dungeon_->rootNode_->CreateChild("Tile");
     rootNode_->SetPosition(Vector3((double)coords_.x_, 0.0f, -(double)coords_.y_));
 
-    //Create random tile addons
-    int extraRandomizer = Random(23);
-
-    //Create random imps
-    if (extraRandomizer < 7){
-        Vector3 randomPosition = Vector3(Random(-0.3f, 0.3f), 0.0f, Random(-0.3f, 0.3f));
-        //new Imp(context_, masterControl_, rootNode_, randomPosition);
-    }
-    //Create fire
-    else if (extraRandomizer == 8){
-        new FirePit(context_, masterControl_, this);
-    }
-    //Create random plants
-    else if (extraRandomizer > 20){
-        for (int i = 0; i < extraRandomizer - 8; i++){
+    //Create plants
+    if ((coords_.x_ % 4 == 0 && coords_.y_ % 5 != 0) || ((coords_.x_+2) % 4 != 0 && (coords_.y_+3) % 6 == 0)){
+        for (int i = 0; i < 5; i++){
             Vector3 randomPosition = Vector3(Random(-0.4f, 0.4f), 0.0f, Random(-0.4f, 0.4f));
             new Frop(context_, masterControl_, rootNode_, randomPosition);
         }
     }
-
-    /*for (int i = 0; i < (23-extraRandomizer)+16; i++){
-        Vector3 randomPosition = Vector3(Random(-0.4f, 0.4f), 0.0f, Random(-0.4f, 0.4f));
-        new Grass(context_, masterControl_, rootNode_, randomPosition);
-    }*/
+    //Create fire pits
+    else if (((coords_.x_+2) % 4 == 0 && coords_.y_ % 6 == 0)){
+        new FirePit(context_, masterControl_, this);
+    }
 
     //Set up center and edge nodes.
     for (int i = 0; i <= TE_LENGTH; i++){
@@ -91,12 +76,8 @@ Object(context)
             break;
         default:break;
         }
-
-
         model->SetCastShadows(true);
     }
-
-    //SubscribeToEvent(E_UPDATE, HANDLER(Tile, HandleUpdate));
 }
 
 void Tile::Start()
@@ -104,36 +85,6 @@ void Tile::Start()
 }
 void Tile::Stop()
 {
-}
-
-void Tile::HandleUpdate(StringHash eventType, VariantMap &eventData)
-{
-
-}
-
-void Tile::SetBuilding(TileType type)
-{
-    Vector<SharedPtr<Node> > children = rootNode_->GetChildren();
-    for (int i = 0; i < children.Length(); i++)
-        if (children[i]->GetNameHash() != N_TILEPART)
-            children[i]->SetEnabledRecursive(false);
-
-    buildingType_ = type;
-    if (buildingType_ > TT_EMPTY) dungeon_->DisableSlot(coords_);
-    StaticModel* model = elements_[0]->GetComponent<StaticModel>();
-    switch (buildingType_)
-    {
-    case TT_ENGINE: {
-        //model->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Engine_center.mdl"));
-        //model->SetMaterial(0,masterControl_->resources.materials.floor);
-    } break;
-    default: break;
-    }
-}
-
-TileType Tile::GetBuilding()
-{
-    return buildingType_;
 }
 
 //Fix this tile's element models and materials according to
@@ -153,17 +104,7 @@ void Tile::FixFringe()
             }
             //If neighbour is not empty
             else {
-                if (element == 1) {
-                    switch (GetBuilding())
-                    {
-                    case TT_ENGINE : if (dungeon_->GetNeighbourType(coords_, (TileElement)element) == TT_ENGINE) model->SetModel(SharedPtr<Model>()); break;
-                    default :
-                        model->SetModel(masterControl_->resources.models.tileParts.blockTween);
-                        model->SetMaterial(0, masterControl_->resources.materials.floor);
-                        break;
-                    }
-                }
-                else if (element == 4) {
+                if (element == 1 || element == 4) {
                     model->SetModel(masterControl_->resources.models.tileParts.blockTween);
                     model->SetMaterial(0, masterControl_->resources.materials.floor);
                 }

@@ -81,7 +81,4 @@ private:
     void Deselect();
     void SetSelected(bool selected);
     bool IsSelected() const;
-
-    void SetTileType(IntVector2 coords, TileType type = TT_ENGINE);
-    void EmptyTile(IntVector2 coords) {SetTileType(coords, TT_EMPTY);}
 };

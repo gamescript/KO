@@ -24,12 +24,10 @@ SOURCES += \
     mastercontrol.cpp \
     player.cpp \
     sceneobject.cpp \
-    imp.cpp \
     tile.cpp \
     dungeon.cpp \
     kocam.cpp \
     inputmaster.cpp \
-    grass.cpp \
     frop.cpp \
     firepit.cpp \
     deco.cpp \
@@ -41,12 +39,10 @@ HEADERS += \
     mastercontrol.h \
     player.h \
     sceneobject.h \
-    imp.h \
     tile.h \
     dungeon.h \
     kocam.h \
     inputmaster.h \
-    grass.h \
     frop.h \
     firepit.h \
     deco.h \

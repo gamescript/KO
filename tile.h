@@ -58,11 +58,5 @@ private:
     CollisionShape* collisionShape_;
     Node* elements_[TE_LENGTH];
     double health_ = 1.0;
-    //A node pointer for each element:
-    // 516 ^
-    // 402 N
-    // 837 |
-    void SetBuilding(TileType type);
-    TileType GetBuilding();
     void FixFringe();
 };

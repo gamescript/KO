@@ -228,15 +228,6 @@ void MasterControl::CreateScene()
     planeObject->SetModel(cache_->GetResource<Model>("Models/Plane.mdl"));
     planeObject->SetMaterial(cache_->GetResource<Material>("Resources/Materials/invisible.xml"));
 
-    //Create a Zone component for ambient lighting & fog control
-    /*Node* zoneNode = world.scene_->CreateChild("Zone");
-    Zone* zone = zoneNode->CreateComponent<Zone>();
-    zone->SetBoundingBox(BoundingBox(Vector3(-1000.0f, -10.0f, -1000.0f),Vector3(1000.0f, 20.0f, 1000.0f)));
-    zone->SetAmbientColor(Color(0.15f, 0.15f, 0.15f));
-    zone->SetFogColor(Color(0.2f, 0.1f, 0.3f));
-    zone->SetFogStart(100.0f);
-    zone->SetFogEnd(110.0f);*/
-
     //Create a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");
     lightNode->SetDirection(Vector3(0.0f, -1.0f, 0.0f));
@@ -245,8 +236,8 @@ void MasterControl::CreateScene()
     light->SetBrightness(0.23f);
     light->SetColor(Color(1.0f, 0.8f, 0.7f));
     light->SetCastShadows(true);
-    //light->SetShadowIntensity(1.0f);
     light->SetShadowBias(BiasParameters(0.00025f, 0.5f));
+    light->SetShadowResolution(0.23f);
 
     //Set cascade splits at 10, 50, 200 world unitys, fade shadows at 80% of maximum shadow distance
     light->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));

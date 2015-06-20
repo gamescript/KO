@@ -44,21 +44,11 @@ Player::Player(Context *context, MasterControl *masterControl):
 
     model_ = rootNode_->CreateComponent<AnimatedModel>();
     model_->SetModel(masterControl_->resources.models.ko);
-    /*AnimationState* walkState =*/ model_->AddAnimationState(masterControl_->resources.animations.ko.walk);
-    //walkState->
-    model_->SetAnimationEnabled(true);
     model_->SetMaterial(1, masterControl_->resources.materials.cloth);
     model_->SetMaterial(2, masterControl_->resources.materials.skin);
     model_->SetMaterial(4, masterControl_->resources.materials.hair);
     model_->SetMaterial(0, masterControl_->resources.materials.pants);
     model_->SetMaterial(3, masterControl_->resources.materials.metal);
-
-    /*model_->SetMaterial(3, masterControl_->resources.materials.cloth);
-    model_->SetMaterial(4, masterControl_->resources.materials.skin);
-    model_->SetMaterial(1, masterControl_->resources.materials.leather);
-    model_->SetMaterial(2, masterControl_->resources.materials.pants);
-    model_->SetMaterial(0, masterControl_->resources.materials.metal);
-    model_->SetMaterial(5, masterControl_->resources.materials.hair);*/
 
     model_->SetCastShadows(true);
 
@@ -79,10 +69,12 @@ Player::Player(Context *context, MasterControl *masterControl):
     StaticModel* rightHand = rootNode_->GetChild("Hand.R",true)->CreateComponent<StaticModel>();
     rightHand->SetModel(masterControl_->resources.models.items.sword);
     rightHand->SetMaterial(masterControl_->resources.materials.metal);
+    rightHand->SetCastShadows(true);
     StaticModel* leftHand = rootNode_->GetChild("Hand.L",true)->CreateComponent<StaticModel>();
     leftHand->SetModel(masterControl_->resources.models.items.shield);
     leftHand->SetMaterial(1, masterControl_->resources.materials.leather);
     leftHand->SetMaterial(0, masterControl_->resources.materials.metal);
+    leftHand->SetCastShadows(true);
 
     CollisionShape* collisionShape = rootNode_->CreateComponent<CollisionShape>();
     collisionShape->SetCylinder(0.3f, 0.5f);
@@ -125,51 +117,31 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     Vector3 moveKey = Vector3::ZERO;
     double thrust = 300.0;
     double maxSpeed = 18.0;
-    //Firing values
-    Vector3 fire = Vector3::ZERO;
-    Vector3 fireJoy = Vector3::ZERO;
-    Vector3 fireKey = Vector3::ZERO;
-
-
 
     //Read input
     JoystickState* joystickState = input->GetJoystickByIndex(0);
     if (joystickState){
     moveJoy = camRight * joystickState->GetAxisPosition(0) +
             -camForward * joystickState->GetAxisPosition(1);
-    fireJoy = camRight * joystickState->GetAxisPosition(2) +
-            -camForward * joystickState->GetAxisPosition(3);
     }
     moveKey = -camRight * input->GetKeyDown(KEY_A) +
                camRight * input->GetKeyDown(KEY_D) +
             camForward * input->GetKeyDown(KEY_W) +
             -camForward * input->GetKeyDown(KEY_S);
-    fireKey = -camRight * input->GetKeyDown(KEY_J) +
-               camRight * input->GetKeyDown(KEY_L) +
-            camForward * input->GetKeyDown(KEY_I) +
-            -camForward * input->GetKeyDown(KEY_K);
 
     //Pick most significant input
     moveJoy.Length() > moveKey.Length() ? move = moveJoy : move = moveKey;
-    fireJoy.Length() > fireKey.Length() ? fire = fireJoy : fire = fireKey;
-
 
     //Restrict move vector length
     if (move.Length() > 1.0f) move.Normalize();
     //Deadzone
     else if (move.Length() < 0.01f) move *= 0.0f;
 
-    animCtrl_->SetSpeed("Resources/Models/Walk.ani", (move.Length() + (rigidBody_->GetLinearVelocity().Length()/(0.5f*maxSpeed))));
-
-
-    if (fire.Length() < 0.1f) fire *= 0.0f;
-    else fire.Normalize();
+    animCtrl_->SetSpeed("Resources/Models/Walk.ani", rigidBody_->GetLinearVelocity().Length());
 
     //Apply movement
     Vector3 force = move * thrust * timeStep;
-    //if (rigidBody_->GetLinearVelocity().Length() < maxSpeed || (rigidBody_->GetLinearVelocity().Normalized() + force.Normalized()).Length() < 1.0) {
-        rigidBody_->ApplyForce(force);
-    //}
+    rigidBody_->ApplyForce(force);
 
     //Update rotation according to direction of the player's movement.
     if (rigidBody_->GetLinearVelocity().Length() > 0.01f){

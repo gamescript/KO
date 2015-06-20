@@ -46,17 +46,14 @@ Object(context)
     tileMap_[firstCoordPair] = new Tile(context_, firstCoordPair, this);
     // Add random tiles
     int addedTiles = 1;
-    int dungeonSize = 150;//Random(32, 128);
+    int dungeonSize = 235;//Random(32, 128);
 
     while (addedTiles < dungeonSize){
         //Pick a random exsisting tile from a list.
         Vector<IntVector2> coordsVector = tileMap_.Keys();
         IntVector2 randomTileCoords = coordsVector[Random((int)coordsVector.Length())];
 
-        //Create a vector of numbers 1 to 4
-        /*Vector<int> directions;
-        for (int i = 1; i <= 4; i++){directions.Push(i);*/
-        //Check neighbours in random orer
+        //Check neighbours in random order
         char startDir = Random(1,4);
         for (int direction = startDir; direction < startDir+4; direction++){
             int clampedDir = direction;
@@ -66,7 +63,7 @@ Object(context)
                 IntVector2 newTileCoords = GetNeighbourCoords(randomTileCoords, (TileElement)clampedDir);
                 AddTile(newTileCoords);
                 addedTiles++;
-                /*if (newTileCoords.x_ != 0) {
+                if (newTileCoords.x_ != 0) {
                     IntVector2 mirrorTileCoords = newTileCoords * IntVector2(-1,1);
                     tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
                     addedTiles++;
@@ -80,7 +77,7 @@ Object(context)
                     IntVector2 mirrorTileCoords = newTileCoords * IntVector2(-1,-1);
                     tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
                     addedTiles++;
-                }*/
+                }
             }
         }
     }
@@ -103,29 +100,16 @@ void Dungeon::Stop()
 
 bool Dungeon::EnableSlot(IntVector2 coords)
 {
-    //collisionMap_[coords]->rootNode_->SetEnabled(true);
 }
 void Dungeon::EnableSlots()
 {
-    /*for (int i = 0; i < collisionMap_.Values().Length(); i++)
-    {
-        if (GetTileType(collisionMap_.Values()[i]->coords_) <= TT_EMPTY)
-            EnableSlot(collisionMap_.Values()[i]->coords_);
-    }*/
 }
 
 bool Dungeon::DisableSlot(IntVector2 coords)
 {
-    //collisionMap_[coords]->rootNode_->SetEnabled(false);
 }
 void Dungeon::DisableSlots()
 {
-    /*
-    for (int i = 0; i < collisionMap_.Values().Length(); i++)
-    {
-        DisableSlot(collisionMap_.Values()[i]->coords_);
-    }
-    */
 }
 
 void Dungeon::Select()
@@ -151,13 +135,8 @@ bool Dungeon::IsSelected() const
     return selected_;
 }
 
-
-
 void Dungeon::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
-    float camDist = Vector3::Distance(masterControl_->world.camera->GetWorldPosition(), rootNode_->GetWorldPosition());
-    if (camDist > 23.0f) rootNode_->SetEnabledRecursive(false);
-    else rootNode_->SetEnabledRecursive(true);
 }
 
 void Dungeon::AddTile(IntVector2 newTileCoords)
@@ -193,12 +172,6 @@ void Dungeon::FixFringe(IntVector2 coords)
         IntVector2 neighbourCoords = GetNeighbourCoords(coords, (TileElement)coordsOffset);
         if (!CheckEmpty(neighbourCoords, true)) tileMap_[neighbourCoords]->FixFringe();
     }
-}
-
-void Dungeon::SetTileType(IntVector2 coords, TileType type)
-{
-    tileMap_[coords]->SetBuilding(type);
-    FixFringe(coords);
 }
 
 bool Dungeon::CheckEmpty(IntVector2 coords, bool checkTiles = true) const
