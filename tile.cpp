@@ -42,7 +42,7 @@ Object(context)
     rootNode_->SetPosition(Vector3((double)coords_.x_, 0.0f, -(double)coords_.y_));
 
     //Create plants
-    if ((coords_.x_ % 4 == 0 && coords_.y_ % 5 != 0) || ((coords_.x_+2) % 4 != 0 && (coords_.y_+3) % 6 == 0)){
+    if ((coords_.x_ % 4 == 0 && coords_.y_ % 6 != 0) || ((coords_.x_+2) % 4 != 0 && (coords_.y_+3) % 6 == 0)){
         for (int i = 0; i < 5; i++){
             Vector3 randomPosition = Vector3(Random(-0.4f, 0.4f), 0.0f, Random(-0.4f, 0.4f));
             new Frop(context_, masterControl_, rootNode_, randomPosition);

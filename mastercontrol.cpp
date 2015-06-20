@@ -226,7 +226,7 @@ void MasterControl::CreateScene()
     world.voidNode->SetScale(Vector3(1000.0f, 1.0f, 1000.0f));
     StaticModel* planeObject = world.voidNode->CreateComponent<StaticModel>();
     planeObject->SetModel(cache_->GetResource<Model>("Models/Plane.mdl"));
-    planeObject->SetMaterial(cache_->GetResource<Material>("Resources/Materials/invisible.xml"));
+    planeObject->SetMaterial(cache_->GetResource<Material>("Resources/Materials/Invisible.xml"));
 
     //Create a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");
