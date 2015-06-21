@@ -48,9 +48,9 @@ void FloatingEye::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
     using namespace Update;
     float timeStep = eventData[P_TIMESTEP].GetFloat();
-    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f),
-                                    masterControl_->Sine(1.0f, -0.05f, 0.075f),
-                                    masterControl_->Sine(0.91f, -0.023f, 0.023f)));
+    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, randomizer_*M_TAU),
+                                    masterControl_->Sine(1.0f, -0.05f, 0.075f, -randomizer_*M_TAU),
+                                    masterControl_->Sine(0.91f, -0.023f, 0.023f, randomizer_*M_TAU)));
 
     Vector3 targetPosition = masterControl_->world.player_->rootNode_->GetWorldPosition();
 

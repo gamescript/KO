@@ -57,8 +57,7 @@ KOCam::KOCam(Context *context, MasterControl *masterControl):
     zone->SetFogStart(10.0f);
     zone->SetFogEnd(viewRange);
 
-    //Set an initial position for the camera scene node above the origin
-    rootNode_->SetPosition(Vector3(0.0f, 10.0f, -5.0f));
+    rootNode_->SetPosition(Vector3(0.5f, 7.0f, -2.8f));
     rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
     rigidBody_->SetAngularDamping(10.0f);
@@ -67,16 +66,6 @@ KOCam::KOCam(Context *context, MasterControl *masterControl):
     CollisionShape* collisionShape = rootNode_->CreateComponent<CollisionShape>();
     collisionShape->SetSphere(0.1f);
     rigidBody_->SetMass(1.0f);
-
-
-
-    /*Node* lightNode = translationNode_->CreateChild("DirectionalLight");
-    lightNode->SetDirection(Vector3(0.0f, -1.0f, 0.0f));
-    Light* light = lightNode->CreateComponent<Light>();
-    light->SetLightType(LIGHT_POINT);
-    light->SetBrightness(0.5f);
-    light->SetColor(Color(0.7f, 0.9f, 0.6f));
-    light->SetCastShadows(false);*/
 
     SetupViewport();
 }

@@ -67,7 +67,7 @@ void MasterControl::Setup()
 {
     // Modify engine startup parameters.
     //Set custom window title and icon.
-    engineParameters_["WindowTitle"] = "KO";
+    engineParameters_["WindowTitle"] = "KO: Hail Eris! All Hail Discordia!";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
     engineParameters_["FullScreen"] = true;
     engineParameters_["Headless"] = false;
@@ -83,11 +83,8 @@ void MasterControl::Start()
 
     LoadResources();
 
-
     CreateSineLookupTable();
 
-    // Get default style
-    defaultStyle_ = cache_->GetResource<XMLFile>("UI/DefaultStyle.xml");
     SetWindowTitleAndIcon();
     //Create console and debug HUD.
     CreateConsoleAndDebugHud();
@@ -104,7 +101,7 @@ void MasterControl::Start()
     Node* musicNode = world.scene->CreateChild("Music");
     SoundSource* musicSource = musicNode->CreateComponent<SoundSource>();
     musicSource->SetSoundType(SOUND_MUSIC);
-    //musicSource->Play(music);
+    musicSource->Play(music);
 }
 void MasterControl::Stop()
 {
@@ -166,10 +163,14 @@ void MasterControl::CreateUI()
     instructionText->SetHorizontalAlignment(HA_CENTER);
     instructionText->SetVerticalAlignment(VA_CENTER);
     instructionText->SetPosition(0, ui->GetRoot()->GetHeight()/2.1);
+    instructionText->SetColor(Color(1.0f, 0.023f, 0.0f, 0.5f));
 }
 
 void MasterControl::LoadResources()
 {
+    // Get default style
+    defaultStyle_ = cache_->GetResource<XMLFile>("UI/DefaultStyle.xml");
+
     resources.models.ko = cache_->GetResource<Model>("Resources/Models/KO.mdl");
     resources.models.items.shield = cache_->GetResource<Model>("Resources/Models/Shield.mdl");
     resources.models.items.sword = cache_->GetResource<Model>("Resources/Models/Sword.mdl");
@@ -236,6 +237,8 @@ void MasterControl::CreateScene()
     light->SetBrightness(0.23f);
     light->SetColor(Color(1.0f, 0.8f, 0.7f));
     light->SetCastShadows(true);
+    light->SetShadowIntensity(0.5f);
+    light->SetSpecularIntensity(0.0f);
     light->SetShadowBias(BiasParameters(0.00025f, 0.5f));
     light->SetShadowResolution(0.23f);
 
@@ -247,8 +250,9 @@ void MasterControl::CreateScene()
 
     new Dungeon(context_, Vector3::ZERO, this);
     world.player_ = new Player(context_, this);
-    new FloatingEye(context_, this, Vector3::LEFT);
-    new FloatingEye(context_, this, Vector3::RIGHT);
+    for (int i = 0; i < 23; i++){
+        new FloatingEye(context_, this, Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
+    }
 }
 
 void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
