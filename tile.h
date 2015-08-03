@@ -16,12 +16,13 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef TILE_H
+#define TILE_H
+
+#include <Urho3D/Urho3D.h>
 
 #include "mastercontrol.h"
 #include "dungeon.h"
-#include <Urho3D/Physics/RigidBody.h>
-#include <Urho3D/Core/CoreEvents.h>
 
 namespace Urho3D {
 class Drawable;
@@ -48,8 +49,8 @@ public:
 
     IntVector2 coords_;
     TileType buildingType_ = TT_EMPTY;
-    double GetHealth(){return health_;}
-    double ApplyDamage(double damage){health_ = Max(health_ - damage, 0.0);}
+    float GetHealth(){return health_;}
+    float ApplyDamage(float damage){health_ = Max(health_ - damage, 0.0f);}
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
     MasterControl* masterControl_;
@@ -57,6 +58,8 @@ private:
     Node* rootNode_;
     CollisionShape* collisionShape_;
     Node* elements_[TE_LENGTH];
-    double health_ = 1.0;
+    float health_ = 1.0f;
     void FixFringe();
 };
+
+#endif // TILE_H

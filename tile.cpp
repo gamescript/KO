@@ -16,17 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <Urho3D/Urho3D.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Physics/CollisionShape.h>
-#include <Urho3D/Graphics/StaticModel.h>
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Graphics/Material.h>
-#include <Urho3D/Graphics/ParticleEmitter.h>
-#include <Urho3D/Graphics/ParticleEffect.h>
-#include <Urho3D/Resource/ResourceCache.h>
-#include <Urho3D/Input/Input.h>
-
 #include "tile.h"
 #include "frop.h"
 #include "firepit.h"
@@ -39,7 +28,7 @@ Object(context)
     coords_ = coords;
 
     rootNode_ = dungeon_->rootNode_->CreateChild("Tile");
-    rootNode_->SetPosition(Vector3((double)coords_.x_, 0.0f, -(double)coords_.y_));
+    rootNode_->SetPosition(Vector3((float)coords_.x_, 0.0f, -(float)coords_.y_));
 
     //Create plants
     if ((coords_.x_ % 4 == 0 && coords_.y_ % 6 != 0) || ((coords_.x_+2) % 4 != 0 && (coords_.y_+3) % 6 == 0)){

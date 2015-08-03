@@ -16,10 +16,12 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef DUNGEON_H
+#define DUNGEON_H
+
+#include <Urho3D/Urho3D.h>
 
 #include "mastercontrol.h"
-#include <Urho3D/Core/CoreEvents.h>
 
 namespace Urho3D {
 class Drawable;
@@ -82,3 +84,5 @@ private:
     void SetSelected(bool selected);
     bool IsSelected() const;
 };
+
+#endif // DUNGEON_H

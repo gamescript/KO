@@ -16,36 +16,20 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef FLOATINGEYE_H
-#define FLOATINGEYE_H
+#include "helper.h"
 
-#include <Urho3D/Urho3D.h>
-
-#include "mastercontrol.h"
-#include "npc.h"
-
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
+float KO::Distance(const Urho3D::Vector3 from, const Urho3D::Vector3 to){
+    return (to - from).Length();
 }
 
-using namespace Urho3D;
+unsigned KO::IntVector2ToHash(Urho3D::IntVector2 vec) {
+    return (Urho3D::MakeHash(vec.x_) & 0xffff) | (Urho3D::MakeHash(vec.y_) << 16);
+}
 
-class FloatingEye : public NPC
-{
-    OBJECT(FloatingEye);
-public:
-    FloatingEye(Context *context, MasterControl* masterControl, Vector3 pos);
-protected:
-    Node* modelNode_;
-    StaticModel* ballModel_;
-    StaticModel* corneaModel_;
-private:
-    Vector3 smoothTargetPosition_;
+Urho3D::Vector3 KO::Scale(const Urho3D::Vector3 lhs, const Urho3D::Vector3 rhs) {
+    return Urho3D::Vector3(lhs.x_ * rhs.x_, lhs.y_ * rhs.y_, lhs.z_ * rhs.z_);
+}
 
-    void HandleUpdate(StringHash eventType, VariantMap &eventData);
-};
-
-#endif // FLOATINGEYE_H
+Urho3D::IntVector2 KO::Scale(const Urho3D::IntVector2 lhs, const Urho3D::IntVector2 rhs) {
+    return Urho3D::IntVector2(lhs.x_ * rhs.x_, lhs.y_ * rhs.y_);
+}

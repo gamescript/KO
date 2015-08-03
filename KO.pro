@@ -1,19 +1,15 @@
-LIBS += /home/frode/Sync/Source/Urho3D/lib/libUrho3D.a \
+LIBS += ../KO/Urho3D/lib/libUrho3D.a \
     -lpthread \
-    -lSDL \
     -ldl \
     -lGL
 
 DEFINES += URHO3D_COMPILE_QT
 
-#QMAKE_CXXFLAGS += -std=c++11
-
-
+QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += \
-    /home/frode/Sync/Source/Urho3D/include \
-    /home/frode/Sync/Source/Urho3D/include/Urho3D/ThirdParty \
-    #/home/frode/Sync/Source/Urho3D/Source/Samples
+    ../KO/Urho3D/include \
+    ../KO/Urho3D/include/Urho3D/ThirdParty \
 
 TEMPLATE = app
 CONFIG += console
@@ -33,7 +29,8 @@ SOURCES += \
     deco.cpp \
     wallcollider.cpp \
     floatingeye.cpp \
-    npc.cpp
+    npc.cpp \
+    helper.cpp
 
 HEADERS += \
     mastercontrol.h \
@@ -48,4 +45,5 @@ HEADERS += \
     deco.h \
     wallcollider.h \
     floatingeye.h \
-    npc.h
+    npc.h \
+    helper.h

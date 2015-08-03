@@ -16,9 +16,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef INPUTMASTER_H
+#define INPUTMASTER_H
 
-#include <Urho3D/Input/Input.h>
+#include <Urho3D/Urho3D.h>
 
 #include "mastercontrol.h"
 #include "dungeon.h"
@@ -51,3 +52,5 @@ private:
     Vector<SharedPtr<Dungeon> > selectedDungeons_;
     void SetSelection(SharedPtr<Dungeon> platform);
 };
+
+#endif // INPUTMASTER_H

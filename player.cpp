@@ -16,23 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <Urho3D/Urho3D.h>
-#include <Urho3D/Core/CoreEvents.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Scene/SceneEvents.h>
-#include <Urho3D/Physics/CollisionShape.h>
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Graphics/Material.h>
-#include <Urho3D/Graphics/AnimationState.h>
-#include <Urho3D/Resource/ResourceCache.h>
-#include <Urho3D/UI/UI.h>
-#include <Urho3D/UI/Text.h>
-#include <Urho3D/UI/Font.h>
-#include <Urho3D/Graphics/ParticleEmitter.h>
-#include <Urho3D/Graphics/ParticleEffect.h>
-#include <Urho3D/Audio/Sound.h>
-#include <Urho3D/Audio/SoundSource.h>
-
 #include "mastercontrol.h"
 #include "player.h"
 #include "kocam.h"
@@ -89,7 +72,7 @@ void Player::AddScore(int points)
 
 void Player::PlaySample(Sound* sample)
 {
-    for (int i = 0; i < sampleSources_.Length(); i++){
+    for (int i = 0; i < sampleSources_.Size(); i++){
         if (!sampleSources_[i]->IsPlaying()){
             sampleSources_[i]->Play(sample_);
             break;
@@ -109,14 +92,14 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     //Orientation vectors
     Vector3 camRight = masterControl_->world.camera->rootNode_->GetRight();
     Vector3 camForward = masterControl_->world.camera->rootNode_->GetDirection();
-    camRight = Vector3::Scale(camRight, Vector3::ONE - Vector3::UP).Normalized();
-    camForward = Vector3::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
+    camRight = KO::Scale(camRight, Vector3::ONE - Vector3::UP).Normalized();
+    camForward = KO::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
     //Movement values
     Vector3 move = Vector3::ZERO;
     Vector3 moveJoy = Vector3::ZERO;
     Vector3 moveKey = Vector3::ZERO;
-    double thrust = 300.0;
-    double maxSpeed = 18.0;
+    float thrust = 300.0f;
+    float maxSpeed = 18.0f;
 
     //Read input
     JoystickState* joystickState = input->GetJoystickByIndex(0);
@@ -155,4 +138,5 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
 
 void Player::Hack()
 {
+    
 }

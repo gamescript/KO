@@ -16,9 +16,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef FIREPIT_H
+#define FIREPIT_H
 
-#include <Urho3D/Scene/SceneEvents.h>
+#include <Urho3D/Urho3D.h>
 
 #include "mastercontrol.h"
 #include "deco.h"
@@ -43,3 +44,5 @@ private:
     Node* lightNode_;
     Light* light_;
 };
+
+#endif // FIREPIT_H

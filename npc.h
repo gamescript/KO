@@ -16,12 +16,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef NPC_H
+#define NPC_H
 
 #include <Urho3D/Urho3D.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Physics/RigidBody.h>
-#include <Urho3D/Physics/CollisionShape.h>
 
 #include "mastercontrol.h"
 #include "sceneobject.h"
@@ -46,3 +44,5 @@ protected:
     float maxHealth_;
     float health_;
 };
+
+#endif // NPC_H

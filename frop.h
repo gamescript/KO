@@ -18,21 +18,9 @@
 
 #pragma once
 
-#include "mastercontrol.h"
 #include <Urho3D/Urho3D.h>
-#include <Urho3D/Engine/Application.h>
-#include <Urho3D/Math/Plane.h>
-#include <Urho3D/Physics/RigidBody.h>
-#include <Urho3D/Graphics/Viewport.h>
-#include <Urho3D/Graphics/Renderer.h>
-#include <Urho3D/Graphics/Animation.h>
-#include <Urho3D/Graphics/AnimationState.h>
-#include <Urho3D/UI/UI.h>
-#include <Urho3D/UI/Text.h>
-#include <Urho3D/Audio/Sound.h>
-#include <Urho3D/Audio/SoundSource.h>
-#include <Urho3D/Input/Input.h>
-#include <Urho3D/Core/CoreEvents.h>
+
+#include "mastercontrol.h"
 
 namespace Urho3D {
 class Drawable;

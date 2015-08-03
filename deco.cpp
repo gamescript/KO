@@ -16,7 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "tile.h"
 #include "deco.h"
 
 Deco::Deco(Context* context, MasterControl *masterControl, Tile* tile, String name):

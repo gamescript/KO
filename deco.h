@@ -16,7 +16,8 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef DECO_H
+#define DECO_H
 
 #include "mastercontrol.h"
 #include "tile.h"
@@ -38,3 +39,5 @@ public:
     Deco(Context *context, MasterControl* masterControl, Tile *tile, String name);
 protected:
 };
+
+#endif // DECO_H

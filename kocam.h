@@ -16,7 +16,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef KOCAM_H
+#define KOCAM_H
+
+#include <Urho3D/Urho3D.h>
 
 #include "mastercontrol.h"
 #include "dungeon.h"
@@ -68,3 +71,5 @@ private:
     void SetupViewport();
     void Lock(SharedPtr<Dungeon> platform);
 };
+
+#endif // KOCAM_H

@@ -16,20 +16,17 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <Urho3D/Urho3D.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Container/Vector.h>
-#include <Urho3D/Math/Vector2.h>
-#include <Urho3D/Graphics/StaticModel.h>
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Graphics/Material.h>
-#include <Urho3D/Resource/ResourceCache.h>
-#include <Urho3D/Physics/RigidBody.h>
-
 #include "dungeon.h"
 #include "tile.h"
 #include "wallcollider.h"
 #include "kocam.h"
+
+namespace Urho3D {
+template <> unsigned MakeHash(const IntVector2& value)
+  {
+    return KO::IntVector2ToHash(value);
+  }
+}
 
 Dungeon::Dungeon(Context *context, Vector3 position, MasterControl* masterControl):
 Object(context)
@@ -51,30 +48,29 @@ Object(context)
     while (addedTiles < dungeonSize){
         //Pick a random exsisting tile from a list.
         Vector<IntVector2> coordsVector = tileMap_.Keys();
-        IntVector2 randomTileCoords = coordsVector[Random((int)coordsVector.Length())];
+        IntVector2 randomTileCoords = coordsVector[Random((int)coordsVector.Size())];
 
         //Check neighbours in random order
         char startDir = Random(1,4);
         for (int direction = startDir; direction < startDir+4; direction++){
-            int clampedDir = direction;
-            if (clampedDir > 4) clampedDir -= 4;
+            int clampedDir = KO::Cycle(direction, 1, 4);
             if (CheckEmptyNeighbour(randomTileCoords, (TileElement)clampedDir, true))
             {
                 IntVector2 newTileCoords = GetNeighbourCoords(randomTileCoords, (TileElement)clampedDir);
                 AddTile(newTileCoords);
                 addedTiles++;
                 if (newTileCoords.x_ != 0) {
-                    IntVector2 mirrorTileCoords = newTileCoords * IntVector2(-1,1);
+                    IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(-1,1));
                     tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
                     addedTiles++;
                 }
                 if (newTileCoords.y_ != 0) {
-                    IntVector2 mirrorTileCoords = newTileCoords * IntVector2(1,-1);
+                    IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(1,-1));
                     tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
                     addedTiles++;
                 }
                 if (newTileCoords.x_ != 0 && newTileCoords.y_ != 0) {
-                    IntVector2 mirrorTileCoords = newTileCoords * IntVector2(-1,-1);
+                    IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(-1,-1));
                     tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
                     addedTiles++;
                 }
@@ -159,7 +155,7 @@ void Dungeon::AddMissingColliders()
 void Dungeon::FixFringe()
 {
     Vector<SharedPtr<Tile> > tiles = tileMap_.Values();
-    for (int tile = 0; tile < tiles.Length(); tile++)
+    for (int tile = 0; tile < tiles.Size(); tile++)
     {
         tiles[tile]->FixFringe();
     }

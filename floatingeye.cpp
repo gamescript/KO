@@ -16,8 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <Urho3D/Core/CoreEvents.h>
-
 #include "floatingeye.h"
 #include "player.h"
 
@@ -48,9 +46,9 @@ void FloatingEye::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
     using namespace Update;
     float timeStep = eventData[P_TIMESTEP].GetFloat();
-    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, randomizer_*M_TAU),
-                                    masterControl_->Sine(1.0f, -0.05f, 0.075f, -randomizer_*M_TAU),
-                                    masterControl_->Sine(0.91f, -0.023f, 0.023f, randomizer_*M_TAU)));
+    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, randomizer_*M_PI*2.0f),
+                                    masterControl_->Sine(1.0f, -0.05f, 0.075f, -randomizer_*M_PI*2.0f),
+                                    masterControl_->Sine(0.91f, -0.023f, 0.023f, randomizer_*M_PI)));
 
     Vector3 targetPosition = masterControl_->world.player_->rootNode_->GetWorldPosition();
 

@@ -16,17 +16,12 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef MASTERCONTROL_H
+#define MASTERCONTROL_H
 
 #include <Urho3D/Urho3D.h>
-#include <Urho3D/Container/HashMap.h>
-#include <Urho3D/Engine/Application.h>
-#include <Urho3D/Graphics/Viewport.h>
-#include <Urho3D/Graphics/Renderer.h>
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Graphics/Animation.h>
-#include <Urho3D/UI/UI.h>
-#include <Urho3D/Physics/RigidBody.h>
+
+#include "helper.h"
 
 namespace Urho3D {
 class Drawable;
@@ -115,6 +110,7 @@ StringHash const N_VOID = StringHash("Void");
 StringHash const N_CURSOR = StringHash("Cursor");
 StringHash const N_TILEPART = StringHash("TilePart");
 StringHash const N_SLOT = StringHash("Slot");
+StringHash const N_FLOATINGEYE = StringHash("FloatingEye");
 }
 
 
@@ -187,33 +183,4 @@ private:
     void LoadResources();
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif // MASTERCONTROL_H

@@ -16,7 +16,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#pragma once
+#ifndef WALLCOLLIDER_H
+#define WALLCOLLIDER_H
+
+#include <Urho3D/Urho3D.h>
 
 #include "sceneobject.h"
 #include "mastercontrol.h"
@@ -37,3 +40,5 @@ class WallCollider: public Object
 public:
     WallCollider(Context *context, Dungeon* dungeon, IntVector2 coords);
 };
+
+#endif // WALLCOLLIDER_H

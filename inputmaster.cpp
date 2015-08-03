@@ -16,12 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <Urho3D/Urho3D.h>
-#include <Urho3D/Scene/Node.h>
-#include <Urho3D/Graphics/Graphics.h>
-#include <Urho3D/Graphics/OctreeQuery.h>
-#include <Urho3D/IO/FileSystem.h>
-
 #include "inputmaster.h"
 #include "dungeon.h"
 #include "kocam.h"
@@ -112,7 +106,7 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
 
 void InputMaster::DeselectAll()
 {
-    for (int i = 0; i < selectedDungeons_.Length(); i++)
+    for (int i = 0; i < selectedDungeons_.Size(); i++)
     {
         selectedDungeons_[i]->Deselect();
     }
