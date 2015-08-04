@@ -34,8 +34,6 @@ MasterControl::MasterControl(Context *context):
 
 void MasterControl::Setup()
 {
-    // Modify engine startup parameters.
-    //Set custom window title and icon.
     engineParameters_["WindowTitle"] = "KO: The Curse of Greyface";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
     engineParameters_["FullScreen"] = true;
@@ -55,13 +53,9 @@ void MasterControl::Start()
     CreateSineLookupTable();
 
     SetWindowTitleAndIcon();
-    //Create console and debug HUD.
     CreateConsoleAndDebugHud();
-    //Create the scene content
     CreateScene();
-    //Create the UI content
     CreateUI();
-    //Hook up to the frame update and render post-update events
     SubscribeToEvents();
 
     Sound* music = cache_->GetResource<Sound>("Resources/Music/Pantera_Negra_-_Sumerian_Speech.ogg");
@@ -274,8 +268,9 @@ void MasterControl::Exit()
 void MasterControl::CreateSineLookupTable()
 {
     //Generate sine lookup array
-    for (int i = 0; i < 1024; i++){
-        sine_.Push(sin((i/512.0)*2.0*M_PI));
+    int maxi = 256;
+    for (int i = 0; i < maxi; i++){
+        sine_.Push((float)sin((i/(float)maxi)*2.0f*M_PI));
     }
 }
 

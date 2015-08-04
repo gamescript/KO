@@ -5,7 +5,7 @@
 	<parameter name="UOffset" value="1 0 0 0" />
 	<parameter name="VOffset" value="0 1 0 0" />
 	<parameter name="MatDiffColor" value="1 1 1 1" />
-	<parameter name="MatSpecColor" value="0.25 0.5 0.1 32" />
+	<parameter name="MatSpecColor" value="0.1 0.4 0.3 32" />
 	<cull value="ccw" />
 	<shadowcull value="ccw" />
 	<depthbias constant="0" slopescaled="0" />

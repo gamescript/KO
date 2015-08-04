@@ -141,9 +141,7 @@ public:
     void Exit();
 
     void CreateSineLookupTable();
-    double Sine(double x);
     float Sine(float x);
-    double Sine(double freq, double min, double max, double shift = 0.0);
     float Sine(float freq, float min, float max, float shift = 0.0f);
 private:
     SharedPtr<UI> ui_;

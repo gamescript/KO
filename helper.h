@@ -72,10 +72,11 @@ namespace KO {
 
 template <class T>
 T Cycle(T x, T min, T max){
+    T range = max - min;
     return (x < min) ?
-                x + (max - min) * abs(ceil((min - x) / (max - min)))
+                x + range * abs(ceil((min - x) / range))
               : (x > max) ?
-                x - (max - min) * abs(ceil((x - max) / (max - min)))
+                x - range * abs(ceil((x - max) / range))
                   : x;
 }
 
