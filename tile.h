@@ -41,11 +41,7 @@ class Tile : public Object
     friend class Deco;
     OBJECT(Tile);
 public:
-    Tile(Context *context, const IntVector2 coords, Dungeon *platform);
-
-    virtual void Start();
-    virtual void Stop();
-
+    Tile(Context *context, IntVector2 coords, Dungeon *platform);
 
     IntVector2 coords_;
     TileType buildingType_ = TT_EMPTY;

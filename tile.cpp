@@ -21,7 +21,7 @@
 #include "firepit.h"
 
 Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
-Object(context)
+    Object(context)
 {
     masterControl_ = platform->masterControl_;
     dungeon_ = platform;
@@ -67,13 +67,6 @@ Object(context)
         }
         model->SetCastShadows(true);
     }
-}
-
-void Tile::Start()
-{
-}
-void Tile::Stop()
-{
 }
 
 //Fix this tile's element models and materials according to

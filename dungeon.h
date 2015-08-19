@@ -28,6 +28,7 @@ class Drawable;
 class Node;
 class Scene;
 class Sprite;
+class TmxFile2D;
 }
 
 using namespace Urho3D;
@@ -44,27 +45,29 @@ class Dungeon : public Object
     OBJECT(Dungeon);
     friend class InputMaster;
 public:
-    Dungeon(Context *context, Vector3 position, MasterControl* masterControl);
+    Dungeon(Context *context, const Vector3 &position, MasterControl* masterControl);
 
     MasterControl* masterControl_;
     Node* rootNode_;
 
-    bool CheckEmpty(Vector3 coords, bool checkTiles) const { return CheckEmpty(IntVector2(round(coords.x_), round(coords.z_)), checkTiles); }
-    bool CheckEmpty(IntVector2 coords, bool checkTiles) const;
-    bool CheckEmptyNeighbour(IntVector2 coords, TileElement element, bool tileMap) const;
+    bool CheckEmpty(Vector3 coords, bool checkTiles = true) const { return CheckEmpty(IntVector2(round(coords.x_), round(coords.z_)), checkTiles); }
+    bool CheckEmpty(IntVector2 coords, bool checkTiles = true) const;
+    bool CheckEmptyNeighbour(IntVector2 coords, TileElement element, bool tileMap = true) const;
     IntVector2 GetNeighbourCoords(IntVector2 coords, TileElement element) const;
     CornerType PickCornerType(IntVector2 tileCoords, TileElement element) const;
     TileType GetTileType(IntVector2 coords);
     TileType GetNeighbourType(IntVector2 coords, TileElement element);
 
 
-    virtual void Start();
-    virtual void Stop();
     void AddColliders();
     void FixFringe();
     void FixFringe(IntVector2 coords);
 
     void AddTile(IntVector2 newTileCoords);
+
+    void InitializeRandom();
+    void InitializeFromMap(const TmxFile2D& tmxFile);
+
 private:
     RigidBody* rigidBody_;
     HashMap<IntVector2, SharedPtr<Tile> > tileMap_;

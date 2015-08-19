@@ -21,6 +21,8 @@
 #include "wallcollider.h"
 #include "kocam.h"
 
+#include <Urho3D/Urho2D/TmxFile2D.h>
+
 namespace Urho3D {
 template <> unsigned MakeHash(const IntVector2& value)
   {
@@ -28,7 +30,7 @@ template <> unsigned MakeHash(const IntVector2& value)
   }
 }
 
-Dungeon::Dungeon(Context *context, Vector3 position, MasterControl* masterControl):
+Dungeon::Dungeon(Context *context, const Vector3& position, MasterControl* masterControl):
     Object(context)
 {
     masterControl_ = masterControl;
@@ -38,15 +40,36 @@ Dungeon::Dungeon(Context *context, Vector3 position, MasterControl* masterContro
     rootNode_->SetPosition(position);
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
 
+    //InitializeRandom();
+
+    TmxFile2D* tmxFile = masterControl_->cache_->GetResource<TmxFile2D>("Resources/Maps/test.tmx");
+    if (tmxFile)
+        InitializeFromMap(*tmxFile);
+    else
+        InitializeRandom();
+}
+
+
+void Dungeon::HandleUpdate(StringHash eventType, VariantMap &eventData)
+{
+}
+
+void Dungeon::AddTile(IntVector2 newTileCoords)
+{
+    tileMap_[newTileCoords] = new Tile(context_, newTileCoords, this);
+}
+
+void Dungeon::InitializeRandom()
+{
     // Add base tile
     IntVector2 firstCoordPair = IntVector2(0,0);
     tileMap_[firstCoordPair] = new Tile(context_, firstCoordPair, this);
     // Add random tiles
     int addedTiles = 1;
-    int dungeonSize = 235;//Random(32, 128);
+    int dungeonSize = 32;//Random(32, 128);
 
     while (addedTiles < dungeonSize){
-        //Pick a random exsisting tile from a list.
+        //Pick a random existing tile from a list.
         Vector<IntVector2> coordsVector = tileMap_.Keys();
         IntVector2 randomTileCoords = coordsVector[Random((int)coordsVector.Size())];
 
@@ -61,17 +84,17 @@ Dungeon::Dungeon(Context *context, Vector3 position, MasterControl* masterContro
                 addedTiles++;
                 if (newTileCoords.x_ != 0) {
                     IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(-1,1));
-                    tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
+                    AddTile(mirrorTileCoords);
                     addedTiles++;
                 }
                 if (newTileCoords.y_ != 0) {
                     IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(1,-1));
-                    tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
+                    AddTile(mirrorTileCoords);
                     addedTiles++;
                 }
                 if (newTileCoords.x_ != 0 && newTileCoords.y_ != 0) {
                     IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(-1,-1));
-                    tileMap_[mirrorTileCoords] = new Tile(context_, mirrorTileCoords, this);
+                    AddTile(mirrorTileCoords);
                     addedTiles++;
                 }
             }
@@ -83,30 +106,35 @@ Dungeon::Dungeon(Context *context, Vector3 position, MasterControl* masterContro
     FixFringe();
 }
 
-
-void Dungeon::Start()
+void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
 {
-}
+    const TmxLayer2D* layer = tmxFile.GetLayer(0);
+    if (!layer)
+        return;
+    if (layer->GetType() != LT_TILE_LAYER)
+        return;
 
-void Dungeon::Stop()
-{
-}
+    const TmxTileLayer2D& tileLayer = *static_cast<const TmxTileLayer2D*>(layer);
 
-void Dungeon::HandleUpdate(StringHash eventType, VariantMap &eventData)
-{
-}
+    for (int y = 0; y < tileLayer.GetHeight(); ++y) {
+        for (int x = 0; x < tileLayer.GetWidth(); ++x) {
+            if (Tile2D* tile = tileLayer.GetTile(x, y)) {
+                if (tile->HasProperty("floor"))
+                    AddTile(IntVector2(x, y));
+            }
+        }
+    }
 
-void Dungeon::AddTile(IntVector2 newTileCoords)
-{
-    tileMap_[newTileCoords] = new Tile(context_, newTileCoords, this);
+    AddColliders();
+    FixFringe();
 }
 
 void Dungeon::AddColliders()
 {
-   Vector<IntVector2> tileCoords = tileMap_.Keys();
-    for (uint nthTile = 0; nthTile < tileCoords.Size(); nthTile++){
+    for (auto i = tileMap_.Begin(); i != tileMap_.End(); ++i) {
+        const IntVector2& coords = i->first_;
         for (int element = 0; element <= 4; element++){
-            IntVector2 checkCoords = GetNeighbourCoords(tileCoords[nthTile], (TileElement)element);
+            IntVector2 checkCoords = GetNeighbourCoords(coords, (TileElement)element);
             if (CheckEmpty(checkCoords, false) && CheckEmpty(checkCoords, true))
                 collisionMap_[checkCoords] = new WallCollider(context_, this, checkCoords);
         }
@@ -131,14 +159,16 @@ void Dungeon::FixFringe(IntVector2 coords)
     }
 }
 
-bool Dungeon::CheckEmpty(IntVector2 coords, bool checkTiles = true) const
+bool Dungeon::CheckEmpty(IntVector2 coords, bool checkTiles) const
 {
-    if (checkTiles) return (!tileMap_.Keys().Contains(coords));
-    else return (!collisionMap_.Keys().Contains(coords));
+    if (checkTiles)
+        return (!tileMap_.Contains(coords));
+    else
+        return (!collisionMap_.Contains(coords));
 }
 
 
-bool Dungeon::CheckEmptyNeighbour(IntVector2 coords, TileElement element, bool checkTiles = true) const
+bool Dungeon::CheckEmptyNeighbour(IntVector2 coords, TileElement element, bool checkTiles) const
 {
     return CheckEmpty(GetNeighbourCoords(coords, element), checkTiles);
 }
