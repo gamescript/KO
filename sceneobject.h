@@ -35,7 +35,7 @@ class SceneObject : public Object
 {
     OBJECT(SceneObject);
 public:
-    SceneObject(Context *context, MasterControl* masterControl);
+    SceneObject(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
 
     Vector3 GetPosition() {return rootNode_->GetWorldPosition();}
 protected:

@@ -20,7 +20,6 @@
 #define DECO_H
 
 #include "mastercontrol.h"
-#include "tile.h"
 #include "sceneobject.h"
 
 namespace Urho3D {
@@ -36,7 +35,7 @@ class Deco : public SceneObject
 {
     OBJECT(Deco);
 public:
-    Deco(Context *context, MasterControl* masterControl, Tile *tile, String name);
+    Deco(Context *context, MasterControl* masterControl, Vector3 position);
 protected:
 };
 

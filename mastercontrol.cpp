@@ -38,8 +38,8 @@ void MasterControl::Setup()
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
     engineParameters_["FullScreen"] = true;
     engineParameters_["Headless"] = false;
-    engineParameters_["WindowWidth"] = 960;
-    engineParameters_["WindowHeight"] = 540;
+//    engineParameters_["WindowWidth"] = 960;
+//    engineParameters_["WindowHeight"] = 540;
 }
 void MasterControl::Start()
 {
@@ -208,12 +208,10 @@ void MasterControl::CreateScene()
     //Set cascade splits at 10, 50, 200 world unitys, fade shadows at 80% of maximum shadow distance
     light->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
 
-    //Create camera
-    world.camera = new KOCam(context_, this);
-
     world.player_ = new Player(context_, this);
 
-    new Dungeon(context_, Vector3::ZERO, this);
+    new Dungeon(context_, this);
+    world.camera = new KOCam(context_, this);
 }
 
 void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)

@@ -45,7 +45,7 @@ class Dungeon : public Object
     OBJECT(Dungeon);
     friend class InputMaster;
 public:
-    Dungeon(Context *context, const Vector3 &position, MasterControl* masterControl);
+    Dungeon(Context *context, MasterControl* masterControl);
 
     MasterControl* masterControl_;
     Node* rootNode_;

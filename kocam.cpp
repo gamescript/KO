@@ -33,16 +33,16 @@ KOCam::KOCam(Context *context, MasterControl *masterControl):
     //Create the camera. Limit far clip distance to match the fog
     rootNode_ = masterControl_->world.scene->CreateChild("CamTrans");
     camera_ = rootNode_->CreateComponent<Camera>();
-    camera_->SetFarClip(viewRange);
+    camera_->SetFarClip(1024.0f);//viewRange);
     camera_->SetNearClip(0.1f);
 
     Zone* zone = rootNode_->CreateComponent<Zone>();
     zone->SetBoundingBox(BoundingBox(Vector3(-100.0f, -50.0f, -100.0f), Vector3(100.0f, 50.0f, 100.0f)));
     zone->SetFogColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
     zone->SetFogStart(10.0f);
-    zone->SetFogEnd(viewRange);
+    //zone->SetFogEnd(viewRange);
 
-    rootNode_->SetPosition(Vector3(0.5f, 7.0f, -2.8f));
+    rootNode_->SetPosition(masterControl_->world.player_->GetPosition() + Vector3(0.5f, 5.0f, -2.8f));
     rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
     rigidBody_->SetAngularDamping(10.0f);

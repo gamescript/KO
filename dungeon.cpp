@@ -19,6 +19,8 @@
 #include "dungeon.h"
 
 #include "floatingeye.h"
+#include "firepit.h"
+#include "frop.h"
 #include "tile.h"
 #include "wallcollider.h"
 #include "kocam.h"
@@ -33,14 +35,13 @@ template <> unsigned MakeHash(const IntVector2& value)
   }
 }
 
-Dungeon::Dungeon(Context *context, const Vector3& position, MasterControl* masterControl):
+Dungeon::Dungeon(Context *context, MasterControl* masterControl):
     Object(context)
 {
     masterControl_ = masterControl;
     SubscribeToEvent(E_UPDATE, HANDLER(Dungeon, HandleUpdate));
     rootNode_ = masterControl_->world.scene->CreateChild("Dungeon");
 
-    rootNode_->SetPosition(position);
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
 
     //InitializeRandom();
@@ -146,11 +147,15 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
         if (!properties)
             continue;
 
-        Vector3 pos(object->GetPosition().x_ / 32.f, 0.0f, object->GetPosition().y_ / 32.f);
+        Vector3 pos(object->GetPosition().x_ * 3.12f, 0.0f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.0f);
         if (properties->HasProperty("FloatingEye")) {
             new FloatingEye(context_, masterControl_, pos);
         } else if (properties->HasProperty("Player")) {
             masterControl_->world.player_->SetPosition(pos);
+        } else if (properties->HasProperty("FirePit")) {
+            new FirePit(context_, masterControl_, pos);
+        } else if (properties->HasProperty("Plant")) {
+            //new Frop(context_, masterControl_, pos);
         }
     }
 

@@ -18,8 +18,8 @@
 
 #include "firepit.h"
 
-FirePit::FirePit(Context* context, MasterControl* masterControl, Tile* tile):
-    Deco(context, masterControl, tile, "FirePit")
+FirePit::FirePit(Context* context, MasterControl* masterControl, Vector3 position):
+    Deco(context, masterControl, position)
 {
     rootNode_->SetRotation(Quaternion(0.0f, randomizer_ * 360.0f, 0.0f));
 

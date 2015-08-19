@@ -46,7 +46,7 @@ public:
     void AddScore(int points);
     Vector3 GetLinearVelocity() {return rigidBody_->GetLinearVelocity();}
 
-    void SetPosition(const Vector3& pos) { rootNode_->SetWorldPosition(pos); }
+    void SetPosition(const Vector3& pos) { rootNode_->SetPosition(pos); }
 
 private:
     float health_ = 1.0f;

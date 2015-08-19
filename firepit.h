@@ -23,7 +23,6 @@
 
 #include "mastercontrol.h"
 #include "deco.h"
-#include "tile.h"
 
 namespace Urho3D {
 class Drawable;
@@ -38,7 +37,7 @@ class FirePit : public Deco
 {
     OBJECT(FirePit);
 public:
-    FirePit(Context* context, MasterControl *masterControl, Tile *tile);
+    FirePit(Context* context, MasterControl *masterControl, Vector3 position = Vector3::ZERO);
     void HandleSceneUpdate(StringHash eventType, VariantMap &eventData);
 private:
     Node* lightNode_;

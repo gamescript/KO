@@ -30,18 +30,6 @@ Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
     rootNode_ = dungeon_->rootNode_->CreateChild("Tile");
     rootNode_->SetPosition(Vector3((float)coords_.x_, 0.0f, -(float)coords_.y_));
 
-    //Create plants
-    if ((coords_.x_ % 4 == 0 && coords_.y_ % 6 != 0) || ((coords_.x_+2) % 4 != 0 && (coords_.y_+3) % 6 == 0)){
-        for (int i = 0; i < 5; i++){
-            Vector3 randomPosition = Vector3(Random(-0.4f, 0.4f), 0.0f, Random(-0.4f, 0.4f));
-            new Frop(context_, masterControl_, rootNode_, randomPosition);
-        }
-    }
-    //Create fire pits
-    else if (((coords_.x_+2) % 4 == 0 && coords_.y_ % 6 == 0)){
-        new FirePit(context_, masterControl_, this);
-    }
-
     //Set up center and edge nodes.
     for (int i = 0; i <= TE_LENGTH; i++){
         elements_[i] = rootNode_->CreateChild("TilePart");

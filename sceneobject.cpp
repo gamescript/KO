@@ -18,12 +18,13 @@
 
 #include "sceneobject.h"
 
-SceneObject::SceneObject(Context* context, MasterControl* masterControl):
+SceneObject::SceneObject(Context* context, MasterControl* masterControl, Vector3 position):
     Object(context),
     masterControl_{masterControl}
 {
     //Create the root node.
     rootNode_ = masterControl_->world.scene->CreateChild("SceneObject");
+    rootNode_->SetPosition(position);
     //Random float between 0.0f and 1.0f used for variation
     randomizer_ = Random();
 }

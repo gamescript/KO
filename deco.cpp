@@ -18,12 +18,7 @@
 
 #include "deco.h"
 
-Deco::Deco(Context* context, MasterControl *masterControl, Tile* tile, String name):
-    SceneObject(context, masterControl)
+Deco::Deco(Context* context, MasterControl *masterControl, Vector3 position):
+    SceneObject(context, masterControl, position)
 {
-    rootNode_->SetParent(tile->rootNode_);
-    rootNode_->SetPosition(Vector3(
-                               Random(-0.25f, 0.25f),
-                               0.0f,
-                               Random(-0.25f, 0.25f)));
 }

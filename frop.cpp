@@ -18,12 +18,10 @@
 
 #include "frop.h"
 
-Frop::Frop(Context *context, MasterControl *masterControl, Node *parent, Vector3 pos) : Object(context)
+Frop::Frop(Context *context, MasterControl *masterControl, Vector3 position) :
+    Deco(context, masterControl, position)
 {
     growthStart_ = Random(0.0f, 5.0f);
-    masterControl_ = masterControl;
-    rootNode_ = parent->CreateChild("Frop");
-    rootNode_->SetPosition(pos);
     rootNode_->Rotate(Quaternion(Random(-10.0f, 10.0f),Random(360.0f),Random(-10.0f, 10.0f)));
     rootNode_->SetScale(0.0f);
     float randomWidth = Random(0.5f,2.0f);
@@ -34,14 +32,6 @@ Frop::Frop(Context *context, MasterControl *masterControl, Node *parent, Vector3
     fropModel_->SetCastShadows(true);
 
     SubscribeToEvent(E_UPDATE, HANDLER(Frop, HandleUpdate));
-}
-
-void Frop::Start()
-{
-}
-
-void Frop::Stop()
-{
 }
 
 void Frop::HandleUpdate(StringHash eventType, VariantMap &eventData)
