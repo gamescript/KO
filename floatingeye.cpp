@@ -44,16 +44,15 @@ FloatingEye::FloatingEye(Context *context, MasterControl *masterControl, Vector3
 
 void FloatingEye::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
-    using namespace Update;
-    float timeStep = eventData[P_TIMESTEP].GetFloat();
+    float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
     modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, randomizer_*M_PI*2.0f),
                                     masterControl_->Sine(1.0f, -0.05f, 0.075f, -randomizer_*M_PI*2.0f),
                                     masterControl_->Sine(0.91f, -0.023f, 0.023f, randomizer_*M_PI)));
 
-    Vector3 targetPosition = masterControl_->world.player_->rootNode_->GetWorldPosition();
+    Vector3 targetPosition = masterControl_->world.player_->GetPosition();
 
     Quaternion rotation = rootNode_->GetWorldRotation();
-    Quaternion aimRotation = rotation;
-    aimRotation.FromLookRotation(targetPosition - rootNode_->GetWorldPosition());
-    rootNode_->SetRotation(rotation.Slerp(aimRotation, 1.5f*timeStep));
+    Quaternion aimRotation;
+    if (aimRotation.FromLookRotation(targetPosition - rootNode_->GetWorldPosition()))
+        rootNode_->SetRotation(rotation.Slerp(aimRotation, 1.5f*timeStep));
 }
