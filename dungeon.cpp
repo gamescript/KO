@@ -155,7 +155,7 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
         } else if (properties->HasProperty("FirePit")) {
             new FirePit(context_, masterControl_, pos);
         } else if (properties->HasProperty("Plant")) {
-            //new Frop(context_, masterControl_, pos);
+            new Frop(context_, masterControl_, pos);
         }
     }
 

@@ -39,8 +39,6 @@ public:
     Frop(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
-    MasterControl* masterControl_;
-    Node* rootNode_;
     StaticModel* fropModel_;
     Vector3 scale_;
 
