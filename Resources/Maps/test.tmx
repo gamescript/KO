@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="Dungeon" tilewidth="32" tileheight="32" tilecount="256">
+  <image source="TileSet2D.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2EmWwyAMBUAn9z909nmm24BsKVCL2sQT1mdyXsdxvAAAAAAAAAAAAAAA4Ie9T2S3aWd35yHn+TwqyK5LpTy+j0fdv+ea7LqslMds/985j6t1/es3echjR6M1PcuwdUwe87mMXD+Tffb7V/NUHqPX7iLqG6Enj+/7y+M8j6sZ3SG7DlWM7q/O7nP1HOOjv5a9NbJ+/GYe5qvxOkXnMXP+jq5+x2Xk13p2ds0q5BH1rNl2yiMvj9Y+MLtmK+Xh26VOHr3PbZ23ci5PrucR7Wx9X65i5p2ezuOsb2TXb5c8/huL8nguj9a8tOp/X1F7l571eHYvtfK+N6rv3ZFH694r73kzxkdEG7PrtnMeO8mYr7LfubKINXZ0XUAe1UXNV8TloS/XIY9azFe1GB8AAAAAAAAAAAAAAADA3T7WCSkR
+  </data>
+ </layer>
+</map>
