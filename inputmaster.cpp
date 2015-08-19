@@ -35,44 +35,10 @@ void InputMaster::HandleMouseDown(StringHash eventType, VariantMap &eventData)
     using namespace MouseButtonDown;
     int button = eventData[P_BUTTON].GetInt();
     if (button == MOUSEB_LEFT){
-        //See through cursor
-        /*int first = 0;
-        if (masterControl_->world.cursor.hitResults[first].node_->GetNameHash() == N_CURSOR) first = 1;
-        firstHit_ = SharedPtr<Node>(masterControl_->world.cursor.hitResults[first].node_);
-        //Void interaction (create new platform)
-        if (firstHit_->GetNameHash() == N_VOID){
-            Vector3 cursorPos = masterControl_->world.cursor.sceneCursor->GetPosition();
-            new Dungeon(context_, Vector3(round(cursorPos.x_), 0.0f, round(cursorPos.z_)), masterControl_);
-        }
-        //Dungeon selection
-        else if (firstHit_->GetNameHash() == N_TILEPART)
-        {
-            //Select single platform
-            if (!(input_->GetKeyDown(KEY_LSHIFT)||input_->GetKeyDown(KEY_RSHIFT)))
-            {
-                SharedPtr<Dungeon> platform = masterControl_->platformMap_[firstHit_->GetParent()->GetParent()->GetID()];
-                SetSelection(platform);
-            }
-            //Add platform to selection when either of the shift keys is held down
-            else
-            {
-                SharedPtr<Dungeon> platform = masterControl_->platformMap_[firstHit_->GetParent()->GetParent()->GetID()];
-                platform->SetSelected(!platform->IsSelected());
-                selectedDungeons_ += platform;
-            }
-        }*/
-
     }
     else if (button == MOUSEB_RIGHT){
         //Dungeon move command for each selected platform
     }
-}
-
-void InputMaster::SetSelection(SharedPtr<Dungeon> platform)
-{
-    DeselectAll();
-    selectedDungeons_ += platform;
-    platform->Select();
 }
 
 void InputMaster::HandleMouseUp(StringHash eventType, VariantMap &eventData)
@@ -88,7 +54,7 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
     int key = eventData[P_KEY].GetInt();
 
     //Exit when ESC is pressed
-    if (key == KEY_ESC) DeselectAll();//masterControl_->Exit();
+    if (key == KEY_ESC) masterControl_->Exit();
 
     //Take screenshot
     else if (key == KEY_9)
@@ -102,13 +68,4 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
         //Log::Write(1, fileName);
         screenshot.SavePNG(fileName);
     }
-}
-
-void InputMaster::DeselectAll()
-{
-    for (int i = 0; i < selectedDungeons_.Size(); i++)
-    {
-        selectedDungeons_[i]->Deselect();
-    }
-    selectedDungeons_.Clear();
 }

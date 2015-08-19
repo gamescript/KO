@@ -60,15 +60,11 @@ public:
 
     virtual void Start();
     virtual void Stop();
-    void AddMissingColliders();
+    void AddColliders();
     void FixFringe();
     void FixFringe(IntVector2 coords);
 
     void AddTile(IntVector2 newTileCoords);
-    bool DisableSlot(IntVector2 coords);
-    bool EnableSlot(IntVector2 coords);
-    void EnableSlots();
-    void DisableSlots();
 private:
     RigidBody* rigidBody_;
     HashMap<IntVector2, SharedPtr<Tile> > tileMap_;
@@ -76,13 +72,6 @@ private:
     HashMap<IntVector2, TileType> buildingMap_;
 
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
-
-    bool selected_;
-
-    void Select();
-    void Deselect();
-    void SetSelected(bool selected);
-    bool IsSelected() const;
 };
 
 #endif // DUNGEON_H

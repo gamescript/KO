@@ -40,7 +40,6 @@ public:
     InputMaster(Context* context, MasterControl* masterControl);
     WeakPtr<Node> firstHit_;
 
-    void DeselectAll();
 private:
     MasterControl* masterControl_;
 
@@ -48,9 +47,6 @@ private:
     void HandleMouseDown(StringHash eventType, VariantMap &eventData);
     void HandleKeyDown(StringHash eventType, VariantMap &eventData);
     void HandleMouseUp(StringHash eventType, VariantMap &eventData);
-
-    Vector<SharedPtr<Dungeon> > selectedDungeons_;
-    void SetSelection(SharedPtr<Dungeon> platform);
 };
 
 #endif // INPUTMASTER_H

@@ -29,7 +29,7 @@ template <> unsigned MakeHash(const IntVector2& value)
 }
 
 Dungeon::Dungeon(Context *context, Vector3 position, MasterControl* masterControl):
-Object(context)
+    Object(context)
 {
     masterControl_ = masterControl;
     SubscribeToEvent(E_UPDATE, HANDLER(Dungeon, HandleUpdate));
@@ -79,10 +79,8 @@ Object(context)
     }
 
     //Add slots
-    AddMissingColliders();
+    AddColliders();
     FixFringe();
-
-    Deselect();
 }
 
 
@@ -94,43 +92,6 @@ void Dungeon::Stop()
 {
 }
 
-bool Dungeon::EnableSlot(IntVector2 coords)
-{
-}
-void Dungeon::EnableSlots()
-{
-}
-
-bool Dungeon::DisableSlot(IntVector2 coords)
-{
-}
-void Dungeon::DisableSlots()
-{
-}
-
-void Dungeon::Select()
-{
-    selected_ = true;
-    EnableSlots();
-}
-
-void Dungeon::Deselect()
-{
-    selected_ = false;
-    DisableSlots();
-}
-
-void Dungeon::SetSelected(bool selected)
-{
-    if (selected == true) Select();
-    if (selected == false) Deselect();
-}
-
-bool Dungeon::IsSelected() const
-{
-    return selected_;
-}
-
 void Dungeon::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
 }
@@ -140,7 +101,7 @@ void Dungeon::AddTile(IntVector2 newTileCoords)
     tileMap_[newTileCoords] = new Tile(context_, newTileCoords, this);
 }
 
-void Dungeon::AddMissingColliders()
+void Dungeon::AddColliders()
 {
    Vector<IntVector2> tileCoords = tileMap_.Keys();
     for (uint nthTile = 0; nthTile < tileCoords.Size(); nthTile++){
