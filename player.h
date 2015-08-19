@@ -45,6 +45,9 @@ public:
     void Hit(float damage, int ownerID);
     void AddScore(int points);
     Vector3 GetLinearVelocity() {return rigidBody_->GetLinearVelocity();}
+
+    void SetPosition(const Vector3& pos) { rootNode_->SetWorldPosition(pos); }
+
 private:
     float health_ = 1.0f;
     float initialHealth_ = 1.0f;

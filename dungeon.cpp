@@ -17,9 +17,12 @@
 */
 
 #include "dungeon.h"
+
+#include "floatingeye.h"
 #include "tile.h"
 #include "wallcollider.h"
 #include "kocam.h"
+#include "player.h"
 
 #include <Urho3D/Urho2D/TmxFile2D.h>
 
@@ -104,17 +107,20 @@ void Dungeon::InitializeRandom()
     //Add slots
     AddColliders();
     FixFringe();
+
+    for (int i = 0; i < 23; i++)
+        new FloatingEye(context_, masterControl_, Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
 }
 
 void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
 {
-    const TmxLayer2D* layer = tmxFile.GetLayer(0);
-    if (!layer)
+    const TmxLayer2D* layer0 = tmxFile.GetLayer(0);
+    if (!layer0)
         return;
-    if (layer->GetType() != LT_TILE_LAYER)
+    if (layer0->GetType() != LT_TILE_LAYER)
         return;
 
-    const TmxTileLayer2D& tileLayer = *static_cast<const TmxTileLayer2D*>(layer);
+    const TmxTileLayer2D& tileLayer = *static_cast<const TmxTileLayer2D*>(layer0);
 
     for (int y = 0; y < tileLayer.GetHeight(); ++y) {
         for (int x = 0; x < tileLayer.GetWidth(); ++x) {
@@ -122,6 +128,29 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
                 if (tile->HasProperty("floor"))
                     AddTile(IntVector2(x, y));
             }
+        }
+    }
+
+    const TmxLayer2D* layer1 = tmxFile.GetLayer(1);
+    if (!layer1)
+        return;
+    if (layer1->GetType() != LT_OBJECT_GROUP)
+        return;
+
+    const TmxObjectGroup2D& objectGroup = *static_cast<const TmxObjectGroup2D*>(layer1);
+
+    for (unsigned i = 0; i < objectGroup.GetNumObjects(); ++i) {
+        TileMapObject2D* object = objectGroup.GetObject(i);
+        int gid = object->GetTileGid();
+        PropertySet2D* properties = tmxFile.GetTilePropertySet(gid);
+        if (!properties)
+            continue;
+
+        Vector3 pos(object->GetPosition().x_ / 32.f, 0.0f, object->GetPosition().y_ / 32.f);
+        if (properties->HasProperty("FloatingEye")) {
+            new FloatingEye(context_, masterControl_, pos);
+        } else if (properties->HasProperty("Player")) {
+            masterControl_->world.player_->SetPosition(pos);
         }
     }
 
@@ -144,7 +173,7 @@ void Dungeon::AddColliders()
 void Dungeon::FixFringe()
 {
     Vector<SharedPtr<Tile> > tiles = tileMap_.Values();
-    for (int tile = 0; tile < tiles.Size(); tile++)
+    for (unsigned tile = 0; tile < tiles.Size(); tile++)
     {
         tiles[tile]->FixFringe();
     }

@@ -211,11 +211,9 @@ void MasterControl::CreateScene()
     //Create camera
     world.camera = new KOCam(context_, this);
 
-    new Dungeon(context_, Vector3::ZERO, this);
     world.player_ = new Player(context_, this);
-    for (int i = 0; i < 23; i++){
-        new FloatingEye(context_, this, Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
-    }
+
+    new Dungeon(context_, Vector3::ZERO, this);
 }
 
 void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
