@@ -37,7 +37,7 @@ class SceneObject : public Object
 public:
     SceneObject(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
 
-    Vector3 GetPosition() {return rootNode_->GetWorldPosition();}
+    Vector3 GetPosition() const {return rootNode_->GetWorldPosition();}
 protected:
     MasterControl* masterControl_;
     void HandleSceneUpdate(StringHash eventType, VariantMap &eventData);
