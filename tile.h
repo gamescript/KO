@@ -42,11 +42,13 @@ class Tile : public Object
     OBJECT(Tile);
 public:
     Tile(Context *context, IntVector2 coords, Dungeon *platform);
-
+    Tile(const Tile& other) = delete;
+    Tile& operator=(const Tile&) = delete;
+    ~Tile() {}
     IntVector2 coords_;
     TileType buildingType_ = TT_EMPTY;
     float GetHealth(){return health_;}
-    float ApplyDamage(float damage){health_ = Max(health_ - damage, 0.0f);}
+    void ApplyDamage(float damage){health_ = Max(health_ - damage, 0.0f);}
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
     MasterControl* masterControl_;

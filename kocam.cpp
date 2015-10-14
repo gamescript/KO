@@ -124,14 +124,14 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
 
     //Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     Vector3 camForward = rootNode_->GetDirection();
-    camForward = KO::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
+    camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
 
     Vector3 camForce = Vector3::ZERO;
-    Vector3 centerForce = KO::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized()*0.23f;
-    if (input->GetKeyDown('T')) camForce += KO::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized();
-    if (input->GetKeyDown('G')) camForce += KO::Scale( rootNode_->GetDirection(), -(Vector3::ONE - Vector3::UP) ).Normalized();
-    if (input->GetKeyDown('H')) camForce += KO::Scale( rootNode_->GetWorldRight(), Vector3::ONE - Vector3::UP ).Normalized() + centerForce;
-    if (input->GetKeyDown('F')) camForce += KO::Scale( rootNode_->GetWorldRight(), -(Vector3::ONE - Vector3::UP) ).Normalized() + centerForce;
+    Vector3 centerForce = LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized()*0.23f;
+    if (input->GetKeyDown('T')) camForce += LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized();
+    if (input->GetKeyDown('G')) camForce += LucKey::Scale( rootNode_->GetDirection(), -(Vector3::ONE - Vector3::UP) ).Normalized();
+    if (input->GetKeyDown('H')) camForce += LucKey::Scale( rootNode_->GetWorldRight(), Vector3::ONE - Vector3::UP ).Normalized() + centerForce;
+    if (input->GetKeyDown('F')) camForce += LucKey::Scale( rootNode_->GetWorldRight(), -(Vector3::ONE - Vector3::UP) ).Normalized() + centerForce;
     if (input->GetKeyDown('Y')) camForce += Vector3::UP;
     if (input->GetKeyDown('R') && rootNode_->GetPosition().y_ > 1.0f) camForce += Vector3::DOWN;
 

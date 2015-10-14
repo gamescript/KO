@@ -92,8 +92,8 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     //Orientation vectors
     Vector3 camRight = masterControl_->world.camera->rootNode_->GetRight();
     Vector3 camForward = masterControl_->world.camera->rootNode_->GetDirection();
-    camRight = KO::Scale(camRight, Vector3::ONE - Vector3::UP).Normalized();
-    camForward = KO::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
+    camRight = LucKey::Scale(camRight, Vector3::ONE - Vector3::UP).Normalized();
+    camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
     //Movement values
     Vector3 move = Vector3::ZERO;
     Vector3 moveJoy = Vector3::ZERO;

@@ -5,7 +5,7 @@ LIBS += ../KO/Urho3D/lib/libUrho3D.a \
 
 DEFINES += URHO3D_COMPILE_QT
 
-QMAKE_CXXFLAGS += -std=c++1y
+QMAKE_CXXFLAGS += -std=c++11
 
 INCLUDEPATH += \
     ../KO/Urho3D/include \
@@ -30,7 +30,7 @@ SOURCES += \
     wallcollider.cpp \
     floatingeye.cpp \
     npc.cpp \
-    helper.cpp
+    luckey.cpp
 
 HEADERS += \
     mastercontrol.h \
@@ -46,4 +46,4 @@ HEADERS += \
     wallcollider.h \
     floatingeye.h \
     npc.h \
-    helper.h
+    luckey.h

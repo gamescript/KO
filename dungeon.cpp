@@ -31,7 +31,7 @@
 namespace Urho3D {
 template <> unsigned MakeHash(const IntVector2& value)
   {
-    return KO::IntVector2ToHash(value);
+    return LucKey::IntVector2ToHash(value);
   }
 }
 
@@ -60,7 +60,7 @@ void Dungeon::HandleUpdate(StringHash eventType, VariantMap &eventData)
 
 void Dungeon::AddTile(IntVector2 newTileCoords)
 {
-    tileMap_[newTileCoords] = new Tile(context_, newTileCoords, this);
+    tileMap_[newTileCoords] = SharedPtr<Tile>(new Tile(context_, newTileCoords, this));
 }
 
 void Dungeon::InitializeRandom()
@@ -80,24 +80,24 @@ void Dungeon::InitializeRandom()
         //Check neighbours in random order
         char startDir = Random(1,4);
         for (int direction = startDir; direction < startDir+4; direction++){
-            int clampedDir = KO::Cycle(direction, 1, 4);
+            int clampedDir = LucKey::Cycle(direction, 1, 4);
             if (CheckEmptyNeighbour(randomTileCoords, (TileElement)clampedDir, true))
             {
                 IntVector2 newTileCoords = GetNeighbourCoords(randomTileCoords, (TileElement)clampedDir);
                 AddTile(newTileCoords);
                 addedTiles++;
                 if (newTileCoords.x_ != 0) {
-                    IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(-1,1));
+                    IntVector2 mirrorTileCoords = LucKey::Scale(newTileCoords, IntVector2(-1,1));
                     AddTile(mirrorTileCoords);
                     addedTiles++;
                 }
                 if (newTileCoords.y_ != 0) {
-                    IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(1,-1));
+                    IntVector2 mirrorTileCoords = LucKey::Scale(newTileCoords, IntVector2(1,-1));
                     AddTile(mirrorTileCoords);
                     addedTiles++;
                 }
                 if (newTileCoords.x_ != 0 && newTileCoords.y_ != 0) {
-                    IntVector2 mirrorTileCoords = KO::Scale(newTileCoords, IntVector2(-1,-1));
+                    IntVector2 mirrorTileCoords = LucKey::Scale(newTileCoords, IntVector2(-1,-1));
                     AddTile(mirrorTileCoords);
                     addedTiles++;
                 }

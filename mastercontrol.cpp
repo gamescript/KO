@@ -16,6 +16,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 #include "inputmaster.h"
 #include "kocam.h"
 #include "dungeon.h"
@@ -23,6 +27,7 @@
 #include "floatingeye.h"
 
 #include "mastercontrol.h"
+#pragma GCC diagnostic pop
 
 DEFINE_APPLICATION_MAIN(MasterControl);
 
@@ -223,7 +228,7 @@ void MasterControl::HandleSceneUpdate(StringHash eventType, VariantMap &eventDat
 {
     using namespace Update;
     double timeStep = eventData[P_TIMESTEP].GetFloat();
-    world.voidNode->SetPosition(KO::Scale(world.camera->GetWorldPosition(), Vector3::ONE - Vector3::UP));
+    world.voidNode->SetPosition(LucKey::Scale(world.camera->GetWorldPosition(), Vector3::ONE - Vector3::UP));
     UpdateCursor(timeStep);
 }
 
@@ -271,7 +276,7 @@ void MasterControl::CreateSineLookupTable()
 }
 
 float MasterControl::Sine(float x) {
-    return sine_[(int)round(sine_.Size() * KO::Cycle(x/M_PI, 0.0f, 1.0f))%sine_.Size()];
+    return sine_[(int)round(sine_.Size() * LucKey::Cycle(x/M_PI, 0.0f, 1.0f))%sine_.Size()];
 }
 
 float MasterControl::Sine(float freq, float min, float max, float shift)

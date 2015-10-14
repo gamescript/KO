@@ -31,7 +31,7 @@ Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
     rootNode_->SetPosition(Vector3((float)coords_.x_, 0.0f, -(float)coords_.y_));
 
     //Set up center and edge nodes.
-    for (int i = 0; i <= TE_LENGTH; i++){
+    for (int i = 0; i != TE_LENGTH; i++){
         elements_[i] = rootNode_->CreateChild("TilePart");
         int nthOfType = ((i-1)%4);
         if (i > 0) elements_[i]->Rotate(Quaternion(0.0f, 90.0f-nthOfType*90.0f, 0.0f));
@@ -60,7 +60,7 @@ Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
 //Fix this tile's element models and materials according to
 void Tile::FixFringe()
 {
-    for (int element = 1; element < TE_LENGTH; element++)
+    for (int element = 1; element != TE_LENGTH; element++)
     {
         StaticModel* model = elements_[element]->GetComponent<StaticModel>();
         //Fix sides
