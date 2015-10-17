@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="67" height="45" tilewidth="32" tileheight="32" nextobjectid="120">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="67" height="45" tilewidth="32" tileheight="32" nextobjectid="123">
  <tileset firstgid="1" name="Dungeon" tilewidth="32" tileheight="32" tilecount="64">
   <image source="TileSet2D.png" width="256" height="256"/>
   <tile id="1">
@@ -3146,5 +3146,6 @@
   <object id="117" gid="67" x="160" y="544" width="32" height="32"/>
   <object id="118" gid="67" x="160" y="608" width="32" height="32"/>
   <object id="119" gid="67" x="160" y="672" width="32" height="32"/>
+  <object id="122" gid="67" x="432" y="432" width="32" height="32"/>
  </objectgroup>
 </map>

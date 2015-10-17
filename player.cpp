@@ -20,6 +20,7 @@
 #include "player.h"
 #include "kocam.h"
 
+
 Player::Player(Context *context, MasterControl *masterControl):
     SceneObject(context, masterControl)
 {
@@ -32,11 +33,16 @@ Player::Player(Context *context, MasterControl *masterControl):
     model_->SetMaterial(4, masterControl_->resources.materials.hair);
     model_->SetMaterial(0, masterControl_->resources.materials.pants);
     model_->SetMaterial(3, masterControl_->resources.materials.metal);
-
     model_->SetCastShadows(true);
 
+    rightHand_ = rootNode_->GetChild("Sword",true)->CreateComponent<StaticModel>();
+    rightHand_->SetCastShadows(true);
+
+    leftHand_ = rootNode_->GetChild("Shield",true)->CreateComponent<StaticModel>();
+    leftHand_->SetCastShadows(true);
+
     animCtrl_ = rootNode_->CreateComponent<AnimationController>();
-    animCtrl_->PlayExclusive("Resources/Models/Walk.ani", 0, true);
+    animCtrl_->PlayExclusive("Resources/Models/Idle.ani", 0, true);
 
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
     rigidBody_->SetFriction(0.0f);
@@ -49,18 +55,11 @@ Player::Player(Context *context, MasterControl *masterControl):
     rigidBody_->SetLinearRestThreshold(0.01f);
     rigidBody_->SetAngularRestThreshold(0.1f);
 
-    StaticModel* rightHand = rootNode_->GetChild("Hand.R",true)->CreateComponent<StaticModel>();
-    rightHand->SetModel(masterControl_->resources.models.items.sword);
-    rightHand->SetMaterial(masterControl_->resources.materials.metal);
-    rightHand->SetCastShadows(true);
-    StaticModel* leftHand = rootNode_->GetChild("Hand.L",true)->CreateComponent<StaticModel>();
-    leftHand->SetModel(masterControl_->resources.models.items.shield);
-    leftHand->SetMaterial(1, masterControl_->resources.materials.leather);
-    leftHand->SetMaterial(0, masterControl_->resources.materials.metal);
-    leftHand->SetCastShadows(true);
-
     CollisionShape* collisionShape = rootNode_->CreateComponent<CollisionShape>();
     collisionShape->SetCylinder(0.3f, 0.5f);
+
+    EquipLeftHand();
+    EquipRightHand();
 
     SubscribeToEvent(E_UPDATE, HANDLER(Player, HandleUpdate));
 }
@@ -120,7 +119,16 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     //Deadzone
     else if (move.Length() < 0.01f) move *= 0.0f;
 
-    animCtrl_->SetSpeed("Resources/Models/Walk.ani", rigidBody_->GetLinearVelocity().Length());
+    //Update animation
+    if (rigidBody_->GetLinearVelocity().Length() > 0.05f){
+        animCtrl_->PlayExclusive("Resources/Models/Walk.ani", 0, true, 0.23f);
+        animCtrl_->SetSpeed("Resources/Models/Walk.ani", rigidBody_->GetLinearVelocity().Length()*2.63f);
+        animCtrl_->SetStartBone("Resources/Models/Walk.ani", "MasterBone");
+    }
+    else {
+        animCtrl_->PlayExclusive("Resources/Models/Idle.ani", 0, true, 0.23f);
+        animCtrl_->SetStartBone("Resources/Models/Idle.ani", "MasterBone");
+    }
 
     //Apply movement
     Vector3 force = move * thrust * timeStep;
@@ -134,6 +142,19 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
         aimRotation.FromLookRotation(velocity);
         rootNode_->SetRotation(rotation.Slerp(aimRotation, 7.0f * timeStep * velocity.Length()));
     }
+}
+
+void Player::EquipRightHand()
+{
+    rightHand_->SetModel(masterControl_->resources.models.items.sword);
+    rightHand_->SetMaterial(masterControl_->resources.materials.metal);
+}
+
+void Player::EquipLeftHand()
+{
+    leftHand_->SetModel(masterControl_->resources.models.items.shield);
+    leftHand_->SetMaterial(1, masterControl_->resources.materials.leather);
+    leftHand_->SetMaterial(0, masterControl_->resources.materials.metal);
 }
 
 void Player::Hack()

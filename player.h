@@ -48,6 +48,8 @@ public:
 
     void SetPosition(const Vector3& pos) { rootNode_->SetPosition(pos); }
 
+    void EquipRightHand();
+    void EquipLeftHand();
 private:
     float health_ = 1.0f;
     float initialHealth_ = 1.0f;
@@ -60,6 +62,9 @@ private:
 
     AnimatedModel* model_;
     AnimationController* animCtrl_;
+
+    StaticModel* leftHand_;
+    StaticModel* rightHand_;
 
     RigidBody* rigidBody_;
 

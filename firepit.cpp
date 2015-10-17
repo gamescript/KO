@@ -66,7 +66,7 @@ void FirePit::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
     for (int i = 1; i < 9; i++)
         z += masterControl_->Sine(6.0f + i, -range, range, i+(i*randomizer_ * 2.0f*M_PI))/(i*0.666f);
     lightNode_->SetPosition(Vector3(x, y, z));
-    float brightness = 1.0f;
+    float brightness = 1.23f;
     for (int i = 1; i < 5; i++)
     {
         brightness += masterControl_->Sine(randomizer_ + 7.123f + i, -0.001f, 0.023f, (randomizer_ * 2.0f*M_PI) + i*(0.2f+randomizer_));//((5+i)*0.2f);
