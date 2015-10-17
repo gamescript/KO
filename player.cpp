@@ -28,11 +28,7 @@ Player::Player(Context *context, MasterControl *masterControl):
 
     model_ = rootNode_->CreateComponent<AnimatedModel>();
     model_->SetModel(masterControl_->resources.models.ko);
-    model_->SetMaterial(1, masterControl_->resources.materials.cloth);
-    model_->SetMaterial(2, masterControl_->resources.materials.skin);
-    model_->SetMaterial(4, masterControl_->resources.materials.hair);
-    model_->SetMaterial(0, masterControl_->resources.materials.pants);
-    model_->SetMaterial(3, masterControl_->resources.materials.metal);
+    model_->SetMaterial(0, masterControl_->resources.materials.ko);
     model_->SetCastShadows(true);
 
     rightHand_ = rootNode_->GetChild("Sword",true)->CreateComponent<StaticModel>();

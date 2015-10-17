@@ -1,0 +1,7 @@
+<material>
+	<technique name="CoreData/Techniques/DiffNormalSpec.xml" quality="1"/>
+	<texture name="Resources/Textures/KODiffuse.png" unit="diffuse"/>
+	<texture name="Resources/Textures/KONormals.png" unit="normal"/>
+	<texture name="Resources/Textures/KOSpecular.png" unit="specular"/>
+<parameter name="MatSpecColor" value="0.5 0.5 0.5 32"/>
+</material>

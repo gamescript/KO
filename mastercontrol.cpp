@@ -42,7 +42,7 @@ void MasterControl::Setup()
     engineParameters_["WindowTitle"] = "KO: The Curse of Greyface";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
 //    engineParameters_["FullScreen"] = false;
-    engineParameters_["Headless"] = false;
+//    engineParameters_["Headless"] = true;
     engineParameters_["WindowWidth"] = 960;
     engineParameters_["WindowHeight"] = 540;
 }
@@ -156,6 +156,7 @@ void MasterControl::LoadResources()
     resources.models.tileParts.blockTween = cache_->GetResource<Model>("Resources/Models/Block_tween.mdl");
     resources.models.tileParts.blockTweenCorner = cache_->GetResource<Model>("Resources/Models/Block_tweencorner.mdl");
 
+    resources.materials.ko = cache_->GetResource<Material>("Resources/Materials/KO.xml");
     resources.materials.cloth = cache_->GetResource<Material>("Resources/Materials/Cloth.xml");
     resources.materials.darkness = cache_->GetResource<Material>("Resources/Materials/Darkness.xml");
     resources.materials.floor = cache_->GetResource<Material>("Resources/Materials/Floor.xml");

@@ -19,7 +19,7 @@
 #include "firepit.h"
 
 FirePit::FirePit(Context* context, MasterControl* masterControl, Vector3 position):
-    Deco(context, masterControl, position)
+    SceneObject(context, masterControl, position)
 {
     rootNode_->SetRotation(Quaternion(0.0f, randomizer_ * 360.0f, 0.0f));
 
@@ -55,6 +55,12 @@ FirePit::FirePit(Context* context, MasterControl* masterControl, Vector3 positio
 
 void FirePit::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
 {
+    UpdateLightPosition();
+    UpdateBrightness();
+}
+
+void FirePit::UpdateLightPosition()
+{
     float range = 0.001f;
     float x = 0.0f;
     for (int i = 1; i < 9; i++)
@@ -66,10 +72,14 @@ void FirePit::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
     for (int i = 1; i < 9; i++)
         z += masterControl_->Sine(6.0f + i, -range, range, i+(i*randomizer_ * 2.0f*M_PI))/(i*0.666f);
     lightNode_->SetPosition(Vector3(x, y, z));
+}
+
+void FirePit::UpdateBrightness()
+{
     float brightness = 1.23f;
     for (int i = 1; i < 5; i++)
     {
-        brightness += masterControl_->Sine(randomizer_ + 7.123f + i, -0.001f, 0.023f, (randomizer_ * 2.0f*M_PI) + i*(0.2f+randomizer_));//((5+i)*0.2f);
+        brightness += masterControl_->Sine(randomizer_ + 7.123f + i, -0.001f, 0.023f, (randomizer_ * 2.0f*M_PI) + i*(0.2f+randomizer_));
     }
     light_->SetBrightness(brightness);
 }

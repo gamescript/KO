@@ -22,7 +22,7 @@
 #include <Urho3D/Urho3D.h>
 
 #include "mastercontrol.h"
-#include "deco.h"
+#include "sceneobject.h"
 
 namespace Urho3D {
 class Drawable;
@@ -33,12 +33,14 @@ class Sprite;
 
 using namespace Urho3D;
 
-class FirePit : public Deco
+class FirePit : public SceneObject
 {
     OBJECT(FirePit);
 public:
     FirePit(Context* context, MasterControl *masterControl, Vector3 position = Vector3::ZERO);
     void HandleSceneUpdate(StringHash eventType, VariantMap &eventData);
+    void UpdateLightPosition();
+    void UpdateBrightness();
 private:
     Node* lightNode_;
     Light* light_;

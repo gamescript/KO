@@ -3134,11 +3134,11 @@
   <object id="97" gid="66" x="1120" y="1120" width="32" height="32"/>
   <object id="100" gid="66" x="1376" y="928" width="32" height="32"/>
   <object id="102" gid="66" x="1408" y="928" width="32" height="32"/>
-  <object id="103" gid="66" x="192" y="164" width="32" height="32"/>
-  <object id="106" gid="66" x="202" y="266" width="32" height="32"/>
-  <object id="109" gid="66" x="125" y="172" width="32" height="32"/>
-  <object id="111" gid="66" x="137" y="203" width="32" height="32"/>
-  <object id="112" gid="66" x="102" y="229" width="32" height="32"/>
+  <object id="103" gid="66" x="173" y="168" width="32" height="32"/>
+  <object id="106" gid="66" x="227" y="228" width="32" height="32"/>
+  <object id="109" gid="66" x="110" y="192" width="32" height="32"/>
+  <object id="111" gid="66" x="182" y="286" width="32" height="32"/>
+  <object id="112" gid="66" x="110" y="268" width="32" height="32"/>
   <object id="113" gid="67" x="229" y="294" width="32" height="32"/>
   <object id="114" gid="67" x="159" y="351" width="32" height="32"/>
   <object id="115" gid="67" x="160" y="416" width="32" height="32"/>

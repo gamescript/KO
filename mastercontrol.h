@@ -77,6 +77,7 @@ typedef struct Resources
         } tileParts;
     } models;
     struct {
+        SharedPtr<Material> ko;
         SharedPtr<Material> darkness;
         SharedPtr<Material> cloth;
         SharedPtr<Material> skin;
