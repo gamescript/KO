@@ -183,9 +183,7 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
     Quaternion camRot = rootNode_->GetWorldRotation();
     Quaternion aimRotation = camRot;
     aimRotation.FromLookRotation(smoothTargetPosition_ - rootNode_->GetWorldPosition());
-    rootNode_->SetRotation(camRot.Slerp(aimRotation, 2.0f*timeStep));
-
-
+    rootNode_->SetRotation(camRot.Slerp(aimRotation, 3.0f*timeStep));
 }
 
 void KOCam::Lock(SharedPtr<Dungeon> platform)
