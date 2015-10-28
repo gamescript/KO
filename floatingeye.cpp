@@ -39,7 +39,7 @@ FloatingEye::FloatingEye(Context *context, MasterControl *masterControl, Vector3
     corneaModel_->SetMaterial(masterControl_->resources.materials.cornea);
     corneaModel_->SetCastShadows(false);
 
-    SubscribeToEvent(E_UPDATE, HANDLER(FloatingEye, HandleUpdate));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(FloatingEye, HandleUpdate));
 }
 
 void FloatingEye::HandleUpdate(StringHash eventType, VariantMap &eventData)

@@ -35,7 +35,7 @@ using namespace Urho3D;
 
 class FloatingEye : public NPC
 {
-    OBJECT(FloatingEye);
+    URHO3D_OBJECT(FloatingEye, NPC);
 public:
     FloatingEye(Context *context, MasterControl* masterControl, Vector3 pos);
 protected:

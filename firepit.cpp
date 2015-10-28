@@ -50,7 +50,7 @@ FirePit::FirePit(Context* context, MasterControl* masterControl, Vector3 positio
     light_->SetShadowCascade(CascadeParameters(1.0f, 2.0f, 3.0f, 5.0f, 0.5f));
     light_->SetShadowResolution(0.25f);
 
-    SubscribeToEvent(E_SCENEUPDATE, HANDLER(FirePit, HandleSceneUpdate));
+    SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(FirePit, HandleSceneUpdate));
 }
 
 void FirePit::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)

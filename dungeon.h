@@ -42,7 +42,7 @@ enum TileType {TT_SPACE, TT_EMPTY, TT_ENGINE};
 
 class Dungeon : public Object
 {
-    OBJECT(Dungeon);
+    URHO3D_OBJECT(Dungeon, Object);
     friend class InputMaster;
 public:
     Dungeon(Context *context, MasterControl* masterControl);

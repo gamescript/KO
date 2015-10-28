@@ -120,7 +120,7 @@ enum JoyStickButton {JB_SELECT, JB_LEFTSTICK, JB_RIGHTSTICK, JB_START, JB_DPAD_U
 class MasterControl : public Application
 {
     /// Enable type information.
-    OBJECT(MasterControl);
+    URHO3D_OBJECT(MasterControl, Application);
     friend class InputMaster;
     friend class KOCam;
 public:

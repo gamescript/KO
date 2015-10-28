@@ -28,7 +28,7 @@ KOCam::KOCam(Context *context, MasterControl *masterControl):
 {
     float viewRange = 32.0f;
     masterControl_ = masterControl;
-    SubscribeToEvent(E_UPDATE, HANDLER(KOCam, HandleUpdate));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(KOCam, HandleUpdate));
 
     //Create the camera. Limit far clip distance to match the fog
     rootNode_ = masterControl_->world.scene->CreateChild("CamTrans");

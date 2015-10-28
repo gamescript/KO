@@ -29,7 +29,7 @@
 #include "mastercontrol.h"
 #pragma GCC diagnostic pop
 
-DEFINE_APPLICATION_MAIN(MasterControl);
+URHO3D_DEFINE_APPLICATION_MAIN(MasterControl);
 
 MasterControl::MasterControl(Context *context):
     Application(context),
@@ -43,8 +43,8 @@ void MasterControl::Setup()
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
 //    engineParameters_["FullScreen"] = false;
 //    engineParameters_["Headless"] = true;
-//    engineParameters_["WindowWidth"] = 960;
-//    engineParameters_["WindowHeight"] = 540;
+    engineParameters_["WindowWidth"] = 960;
+    engineParameters_["WindowHeight"] = 540;
 }
 void MasterControl::Start()
 {
@@ -79,11 +79,11 @@ void MasterControl::Stop()
 void MasterControl::SubscribeToEvents()
 {
     //Subscribe scene update event.
-    SubscribeToEvent(E_SCENEUPDATE, HANDLER(MasterControl, HandleSceneUpdate));
+    SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(MasterControl, HandleSceneUpdate));
     //Subscribe HandleUpdate() function for processing update events
-    SubscribeToEvent(E_UPDATE, HANDLER(MasterControl, HandleUpdate));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(MasterControl, HandleUpdate));
     //Subscribe scene update event.
-    SubscribeToEvent(E_SCENEUPDATE, HANDLER(MasterControl, HandleSceneUpdate));
+    SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(MasterControl, HandleSceneUpdate));
 }
 
 void MasterControl::SetWindowTitleAndIcon()

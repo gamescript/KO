@@ -36,7 +36,7 @@ using namespace Urho3D;
 
 class WallCollider: public Object
 {
-    OBJECT(WallCollider);
+    URHO3D_OBJECT(WallCollider, Object);
 public:
     WallCollider(Context *context, Dungeon* dungeon, IntVector2 coords);
 };

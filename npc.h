@@ -35,7 +35,7 @@ using namespace Urho3D;
 
 class NPC : public SceneObject
 {
-    OBJECT(NPC);
+    URHO3D_OBJECT(NPC, SceneObject);
 public:
     NPC(Context *context, MasterControl* masterControl, Vector3 pos);
 protected:

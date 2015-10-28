@@ -38,7 +38,7 @@ using namespace Urho3D;
 
 class KOCam : public Object
 {
-    OBJECT(KOCam);
+    URHO3D_OBJECT(KOCam, Object);
     friend class MasterControl;
     friend class InputMaster;
     friend class Player;

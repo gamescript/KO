@@ -1,6 +1,6 @@
 #:four_leaf_clover: KO : The Curse of Greyface
 ###Summary:
-Storm the Black Iron Prison, trip your oculi inside-out and lift the Curse of Greyface.
+Storm the Black Iron Prison, trip your balls inside-out and lift the Curse of Greyface.
 
 ###Controls:
 Dual analog game controller or WASD.

@@ -39,7 +39,7 @@ class Tile : public Object
 {
     friend class Dungeon;
     friend class Deco;
-    OBJECT(Tile);
+    URHO3D_OBJECT(Tile, Object);
 public:
     Tile(Context *context, IntVector2 coords, Dungeon *platform);
     Tile(const Tile& other) = delete;

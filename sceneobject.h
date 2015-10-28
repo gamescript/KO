@@ -33,7 +33,7 @@ using namespace Urho3D;
 
 class SceneObject : public Object
 {
-    OBJECT(SceneObject);
+    URHO3D_OBJECT(SceneObject, Object);
 public:
     SceneObject(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
 

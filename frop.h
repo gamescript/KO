@@ -34,7 +34,7 @@ using namespace Urho3D;
 
 class Frop : public Deco
 {
-    OBJECT(Frop);
+    URHO3D_OBJECT(Frop, Deco);
 public:
     Frop(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
 private:

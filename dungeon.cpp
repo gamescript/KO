@@ -39,7 +39,7 @@ Dungeon::Dungeon(Context *context, MasterControl* masterControl):
     Object(context)
 {
     masterControl_ = masterControl;
-    SubscribeToEvent(E_UPDATE, HANDLER(Dungeon, HandleUpdate));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Dungeon, HandleUpdate));
     rootNode_ = masterControl_->world.scene->CreateChild("Dungeon");
 
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();

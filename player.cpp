@@ -57,7 +57,7 @@ Player::Player(Context *context, MasterControl *masterControl):
     EquipLeftHand();
     EquipRightHand();
 
-    SubscribeToEvent(E_UPDATE, HANDLER(Player, HandleUpdate));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Player, HandleUpdate));
 }
 
 void Player::AddScore(int points)

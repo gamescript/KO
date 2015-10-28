@@ -35,7 +35,7 @@ using namespace Urho3D;
 
 class FirePit : public SceneObject
 {
-    OBJECT(FirePit);
+    URHO3D_OBJECT(FirePit, SceneObject);
 public:
     FirePit(Context* context, MasterControl *masterControl, Vector3 position = Vector3::ZERO);
     void HandleSceneUpdate(StringHash eventType, VariantMap &eventData);

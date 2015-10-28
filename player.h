@@ -34,7 +34,7 @@ using namespace Urho3D;
 
 class Player : public SceneObject
 {
-    OBJECT(Player);
+    URHO3D_OBJECT(Player, SceneObject);
     friend class KOCam;
     friend class FloatingEye;
 public:
