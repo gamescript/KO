@@ -25,6 +25,7 @@ Player::Player(Context *context, MasterControl *masterControl):
     SceneObject(context, masterControl)
 {
     rootNode_->SetName("KO");
+    rootNode_->SetRotation(Quaternion(160.0f, Vector3::UP));
 
     model_ = rootNode_->CreateComponent<AnimatedModel>();
     model_->SetModel(masterControl_->resources.models.ko);
@@ -138,6 +139,11 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
         aimRotation.FromLookRotation(velocity);
         rootNode_->SetRotation(rotation.Slerp(aimRotation, 7.0f * timeStep * velocity.Length()));
     }
+
+    //Breathe
+    float mouthClosed = masterControl_->Sine(0.1f, 0.0f, 0.9f, masterControl_->Sine(0.23f, -1.0f, 1.0f));
+    model_->SetMorphWeight(0, mouthClosed);
+
 }
 
 void Player::EquipRightHand()

@@ -45,15 +45,12 @@ class KOCam : public Object
 public:
     KOCam(Context *context, MasterControl* masterControl);
 
-    virtual void Start();
-    virtual void Stop();
-
     SharedPtr<Camera> camera_;
     SharedPtr<Viewport> viewport_;
     SharedPtr<RenderPath> effectRenderPath;
 
-    Vector3 GetWorldPosition();
-    Quaternion GetRotation();
+    Vector3 GetWorldPosition() const;
+    Quaternion GetRotation() const;
 private:
     MasterControl* masterControl_;
     void HandleUpdate(StringHash eventType, VariantMap &eventData);
@@ -61,13 +58,18 @@ private:
     Vector3 smoothTargetPosition_;
     Vector3 smoothTargetVelocity_;
 
-    SharedPtr<RigidBody> rigidBody_;
     float yaw_;
     float pitch_;
-    //double roll_ = 0.0;
-    float yawDelta_ = 0.0;
-    float pitchDelta_ = 0.0;
-    float forceMultiplier = 1.0;
+    float yawDelta_ = 0.0f;
+    float pitchDelta_ = 0.0f;
+    Vector3 velocity_;
+    const float maxVelocity_;
+    float acceleration_;
+    float rotationSpeed_;
+    const float maxRotationSpeed_;
+    const float angularAcceleration_;
+    float velocityMultiplier_;
+
     void SetupViewport();
     void Lock(SharedPtr<Dungeon> platform);
 };

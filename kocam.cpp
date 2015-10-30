@@ -16,53 +16,45 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "kocam.h"
 #include "player.h"
+#include "kocam.h"
+
+using namespace LucKey;
 
 KOCam::KOCam(Context *context, MasterControl *masterControl):
     Object(context),
-    yaw_(0.0f),
-    pitch_(60.0f),
+    masterControl_{masterControl},
     smoothTargetPosition_{Vector3::ZERO},
-    smoothTargetVelocity_{Vector3::ZERO}
+    smoothTargetVelocity_{Vector3::ZERO},
+    yaw_{0.0f},
+    pitch_{60.0f},
+    velocity_{Vector3::ZERO},
+    maxVelocity_{23.0f},
+    acceleration_{7.0f},
+    rotationSpeed_{0.0f},
+    maxRotationSpeed_{512.0f},
+    angularAcceleration_{128.0f},
+    velocityMultiplier_{1.0f}
 {
-    float viewRange = 32.0f;
-    masterControl_ = masterControl;
-    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(KOCam, HandleUpdate));
+    float viewRange{128.0f};
 
     //Create the camera. Limit far clip distance to match the fog
-    rootNode_ = masterControl_->world.scene->CreateChild("CamTrans");
+    rootNode_ = masterControl_->world.scene->CreateChild("Camera");
+    rootNode_->SetPosition(masterControl_->world.player_->GetPosition() + Vector3(0.5f, 2.0f, -1.0f));
+    rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
     camera_ = rootNode_->CreateComponent<Camera>();
-    camera_->SetFarClip(1024.0f);//viewRange);
-    camera_->SetNearClip(0.1f);
+    camera_->SetFarClip(viewRange);
+    camera_->SetNearClip(0.023f);
 
     Zone* zone = rootNode_->CreateComponent<Zone>();
     zone->SetBoundingBox(BoundingBox(Vector3(-100.0f, -50.0f, -100.0f), Vector3(100.0f, 50.0f, 100.0f)));
     zone->SetFogColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
     zone->SetFogStart(10.0f);
-    //zone->SetFogEnd(viewRange);
+    zone->SetFogEnd(viewRange-5.0f);
 
-    rootNode_->SetPosition(masterControl_->world.player_->GetPosition() + Vector3(0.5f, 5.0f, -2.8f));
-    rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
-    rigidBody_ = rootNode_->CreateComponent<RigidBody>();
-    rigidBody_->SetAngularDamping(10.0f);
-    rigidBody_->SetLinearDamping(0.9f);
-    rigidBody_->SetUseGravity(false);
-    CollisionShape* collisionShape = rootNode_->CreateComponent<CollisionShape>();
-    collisionShape->SetSphere(0.1f);
-    rigidBody_->SetMass(1.0f);
 
     SetupViewport();
-}
-
-
-
-void KOCam::Start()
-{
-}
-
-void KOCam::Stop()
-{
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(KOCam, HandleUpdate));
 }
 
 void KOCam::SetupViewport()
@@ -87,94 +79,71 @@ void KOCam::SetupViewport()
     renderer->SetViewport(0, viewport);
 }
 
-Vector3 KOCam::GetWorldPosition()
+Vector3 KOCam::GetWorldPosition() const
 {
     return rootNode_->GetWorldPosition();
 }
 
-Quaternion KOCam::GetRotation()
+Quaternion KOCam::GetRotation() const
 {
     return rootNode_->GetRotation();
 }
 
 void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
+    float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
+
     Vector3 targetPosition = masterControl_->world.player_->GetPosition();
     Vector3 targetVelocity = masterControl_->world.player_->GetLinearVelocity();
 
-    using namespace Update;
-
-    //Take the frame time step, which is stored as a double
-    float timeStep = eventData[P_TIMESTEP].GetFloat();
-    //Movement speed as world units per second
-    const double MOVE_SPEED = 1024.0;
-    //Mouse sensitivity as degrees per pixel
-    const double MOUSE_SENSITIVITY = 0.1;
-
-    //Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch between -90 and 90 degrees. Only move the camera when the cursor is hidden.
     Input* input = GetSubsystem<Input>();
-    IntVector2 mouseMove = input->GetMouseMove();
-    yawDelta_ = 0.5*(yawDelta_ + MOUSE_SENSITIVITY * mouseMove.x_);
-    pitchDelta_ = 0.5*(pitchDelta_ + MOUSE_SENSITIVITY * mouseMove.y_);
-    yaw_ += rootNode_->GetRotation().y_ + yawDelta_;
-    pitch_ += rootNode_->GetRotation().x_ + pitchDelta_;
-    pitch_ = Clamp(pitch_, -89.0, 89.0);
-    //Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    //rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
 
     //Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     Vector3 camForward = rootNode_->GetDirection();
     camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
 
-    Vector3 camForce = Vector3::ZERO;
-    Vector3 centerForce = LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized()*0.23f;
-    if (input->GetKeyDown('T')) camForce += LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized();
-    if (input->GetKeyDown('G')) camForce += LucKey::Scale( rootNode_->GetDirection(), -(Vector3::ONE - Vector3::UP) ).Normalized();
-    if (input->GetKeyDown('H')) camForce += LucKey::Scale( rootNode_->GetWorldRight(), Vector3::ONE - Vector3::UP ).Normalized() + centerForce;
-    if (input->GetKeyDown('F')) camForce += LucKey::Scale( rootNode_->GetWorldRight(), -(Vector3::ONE - Vector3::UP) ).Normalized() + centerForce;
-    if (input->GetKeyDown('Y')) camForce += Vector3::UP;
-    if (input->GetKeyDown('R') && rootNode_->GetPosition().y_ > 1.0f) camForce += Vector3::DOWN;
+    Vector3 normalizedPlanarDirection = LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized();
+    if (input->GetKeyDown('T')) velocity_ +=  normalizedPlanarDirection * acceleration_ * timeStep;
+    if (input->GetKeyDown('G')) velocity_ += -normalizedPlanarDirection * acceleration_ * timeStep;
+    if (input->GetKeyDown('H')) rotationSpeed_ -= angularAcceleration_ * timeStep;//camForce += LucKey::Scale( rootNode_->GetWorldRight(), Vector3::ONE - Vector3::UP ).Normalized() + centerForce;
+    if (input->GetKeyDown('F')) rotationSpeed_ += angularAcceleration_ * timeStep;//camForce += LucKey::Scale( rootNode_->GetWorldRight(), -(Vector3::ONE - Vector3::UP) ).Normalized() + centerForce;
+    if (input->GetKeyDown('Y')) velocity_ += Vector3::UP * acceleration_ * timeStep;
+    if (input->GetKeyDown('R') && rootNode_->GetPosition().y_ > 1.5f) velocity_ += Vector3::DOWN * acceleration_ * timeStep;
+
 
     //Read joystick input
     JoystickState* joystickState = input->GetJoystickByIndex(0);
     if (joystickState){
-        rootNode_->RotateAround(targetPosition, Quaternion(-joystickState->GetAxisPosition(2) * timeStep * 0.1f*MOVE_SPEED, Vector3::UP), TS_WORLD);
-        camForce -= joystickState->GetAxisPosition(3) * camForward * timeStep * MOVE_SPEED;
-        if (joystickState->GetButtonDown(JB_R2)) camForce += Vector3::UP;
-        if (joystickState->GetButtonDown(JB_L2) && rootNode_->GetPosition().y_ > 1.0f) camForce += Vector3::DOWN;
+        ///Should be handled different now
+        //        rootNode_->RotateAround(targetPosition, Quaternion(-joystickState->GetAxisPosition(2) * timeStep * 0.1f*MOVE_SPEED, Vector3::UP), TS_WORLD);
+        //        velocity_ -= joystickState->GetAxisPosition(3) * camForward * timeStep * MOVE_SPEED;
+        //        if (joystickState->GetButtonDown(JB_R2)) velocity_ += Vector3::UP;
+        //        if (joystickState->GetButtonDown(JB_L2) && rootNode_->GetPosition().y_ > 1.0f) velocity_ += Vector3::DOWN;
 
-        /*Joystick buttons:
-0: Select
-1: Left stick
-2: Right stick
-3: Start
-4: D-Pad Up
-5: D-Pad Right
-6: D-Pad Down
-7: D-Pad Left
-8: L2
-9: R2
-10: L1
-11: R1
-12: Triangle
-13: Circle
-14: Cross
-15: Square
-*/
     }
 
-    camForce = camForce.Normalized() * MOVE_SPEED;
+    velocity_ *= 0.95f;
+    rotationSpeed_ *= 0.95f;
 
-    if ( forceMultiplier < 8.0 && (input->GetKeyDown(KEY_LSHIFT)||input->GetKeyDown(KEY_RSHIFT)) ){
-        forceMultiplier += 0.23;
-    } else forceMultiplier = pow(forceMultiplier, 0.75);
-    rigidBody_->ApplyForce(forceMultiplier * camForce * timeStep);
+
+    if ( velocityMultiplier_ < 8.0f && (input->GetKeyDown(KEY_LSHIFT)||input->GetKeyDown(KEY_RSHIFT)) ){
+        velocityMultiplier_ += 0.23f;
+    } else velocityMultiplier_ = pow(velocityMultiplier_, 0.75f);
+    rootNode_->Translate(velocity_ * velocityMultiplier_ * timeStep, TS_WORLD);
+
+    //Rotate left and right
+    Clamp(rotationSpeed_, -maxRotationSpeed_, maxRotationSpeed_);
+    rootNode_->RotateAround(targetPosition, Quaternion(rotationSpeed_ * velocityMultiplier_ * timeStep, Vector3::UP), TS_WORLD);
 
     //Prevent camera from going too low
-    if (rootNode_->GetPosition().y_ < 1.5f)
+    float yPos{rootNode_->GetPosition().y_};
+    if (yPos < 1.5f)
     {
-        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, 1.5f, rootNode_->GetPosition().z_));
-        rigidBody_->SetLinearVelocity(Vector3(rigidBody_->GetLinearVelocity().x_, 0.0f, rigidBody_->GetLinearVelocity().z_));
+        velocity_.y_ = velocity_.y_ < 0.0f ? 0.0f : velocity_.y_;
+        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-1.5f)*0.23f+1.5f, rootNode_->GetPosition().z_));
+    } else if (yPos > 23.0f){
+        velocity_.y_ = velocity_.y_ > 0.0f ? 0.0f : velocity_.y_;
+        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-23.0f)*0.23f+23.0f, rootNode_->GetPosition().z_));
     }
 
     smoothTargetPosition_ = 0.1f * (9.0f * smoothTargetPosition_ + targetPosition);
@@ -183,7 +152,7 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
     Quaternion camRot = rootNode_->GetWorldRotation();
     Quaternion aimRotation = camRot;
     aimRotation.FromLookRotation(smoothTargetPosition_ - rootNode_->GetWorldPosition());
-    rootNode_->SetRotation(camRot.Slerp(aimRotation, 3.0f*timeStep));
+    rootNode_->SetRotation(aimRotation);
 }
 
 void KOCam::Lock(SharedPtr<Dungeon> platform)

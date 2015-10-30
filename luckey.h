@@ -89,6 +89,8 @@ class Camera;
 using namespace Urho3D;
 namespace LucKey {
 
+enum JoyStickButton {JB_SELECT, JB_LEFTSTICK, JB_RIGHTSTICK, JB_START, JB_DPAD_UP, JB_DPAD_RIGHT, JB_DPAD_DOWN, JB_DPAD_LEFT, JB_L2, JB_R2, JB_L1, JB_R1, JB_TRIANGLE, JB_CIRCLE, JB_CROSS, JB_SQUARE};
+
 template <class T>
 T Cycle(T x, T min, T max){
     return (x < min) ?

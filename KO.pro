@@ -5,7 +5,7 @@ LIBS += ../KO/Urho3D/lib/libUrho3D.a \
 
 DEFINES += URHO3D_COMPILE_QT
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++1y
 
 INCLUDEPATH += \
     ../KO/Urho3D/include \
