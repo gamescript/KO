@@ -41,7 +41,7 @@ void MasterControl::Setup()
 {
     engineParameters_["WindowTitle"] = "KO: The Curse of Greyface";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
-    engineParameters_["FullScreen"] = false;
+//    engineParameters_["FullScreen"] = false;
 //    engineParameters_["Headless"] = true;
 //    engineParameters_["WindowWidth"] = 960;
 //    engineParameters_["WindowHeight"] = 540;

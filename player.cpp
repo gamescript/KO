@@ -125,7 +125,7 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     }
 
     //Apply movement
-    Vector3 force = move * thrust * timeStep;
+    Vector3 force = move * thrust * timeStep * (1+0.42f*input->GetKeyDown(KEY_SHIFT));
     rigidBody_->ApplyForce(force);
 
     //Update rotation according to direction of the player's movement.
