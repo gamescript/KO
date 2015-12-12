@@ -5,6 +5,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
 // (at your option) any later version.
+// Commercial licenses are available through frode@lindeijer.nl
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,55 +18,134 @@
 */
 
 #include "inputmaster.h"
-#include "dungeon.h"
 #include "kocam.h"
+#include "player.h"
 
-InputMaster::InputMaster(Context* context, MasterControl* masterControl) : Object(context)
+using namespace LucKey;
+
+InputMaster::InputMaster(Context* context, MasterControl* masterControl) : Object(context),
+    masterControl_{masterControl},
+    input_{GetSubsystem<Input>()}
 {
-    masterControl_ = masterControl;
-    input_ = GetSubsystem<Input>();
-    //Subscribe mouse down event
-    SubscribeToEvent(E_MOUSEBUTTONDOWN, URHO3D_HANDLER(InputMaster, HandleMouseDown));
-    //Subscribe key down event.
+    keyBindingsMaster_[KEY_UP]     = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_UP)]    = MasterInputAction::UP;
+    keyBindingsMaster_[KEY_RIGHT]  = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_RIGHT)] = MasterInputAction::RIGHT;
+    keyBindingsMaster_[KEY_DOWN]   = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_DOWN)]  = MasterInputAction::DOWN;
+    keyBindingsMaster_[KEY_LEFT]   = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_LEFT)]  = MasterInputAction::LEFT;
+    keyBindingsMaster_[KEY_RETURN] = buttonBindingsMaster_[static_cast<int>(SixaxisButton::CROSS)]      = MasterInputAction::CONFIRM;
+    keyBindingsMaster_[KEY_ESC]    = buttonBindingsMaster_[static_cast<int>(SixaxisButton::CIRCLE)]     = MasterInputAction::CANCEL;
+    keyBindingsMaster_[KEY_PAUSE]  = buttonBindingsMaster_[static_cast<int>(SixaxisButton::START)]      = MasterInputAction::PAUSE;
+    keyBindingsMaster_[KEY_ESC]    = MasterInputAction::MENU;
+
+    keyBindingsPlayer1_[KEY_W] = keyBindingsPlayer1_[KEY_UP]    = PlayerInputAction::UP;
+    keyBindingsPlayer1_[KEY_D] = keyBindingsPlayer1_[KEY_RIGHT] = PlayerInputAction::RIGHT;
+    keyBindingsPlayer1_[KEY_S] = keyBindingsPlayer1_[KEY_DOWN]  = PlayerInputAction::DOWN;
+    keyBindingsPlayer1_[KEY_A] = keyBindingsPlayer1_[KEY_LEFT]  = PlayerInputAction::LEFT;
+    keyBindingsPlayer1_[KEY_C] = keyBindingsPlayer1_[KEY_LSHIFT] = PlayerInputAction::RUN;
+    keyBindingsPlayer1_[KEY_V] = keyBindingsPlayer1_[KEY_ALT]   = PlayerInputAction::HACK;
+    keyBindingsPlayer1_[KEY_B] = keyBindingsPlayer1_[KEY_SPACE] = PlayerInputAction::CAST;
+
     SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(InputMaster, HandleKeyDown));
+    SubscribeToEvent(E_KEYUP, URHO3D_HANDLER(InputMaster, HandleKeyUp));
+    SubscribeToEvent(E_JOYSTICKBUTTONDOWN, URHO3D_HANDLER(InputMaster, HandleJoyButtonDown));
+    SubscribeToEvent(E_JOYSTICKBUTTONUP, URHO3D_HANDLER(InputMaster, HandleJoyButtonUp));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(InputMaster, HandleUpdate));
 }
 
-void InputMaster::HandleMouseDown(StringHash eventType, VariantMap &eventData)
+void InputMaster::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
-    using namespace MouseButtonDown;
-    int button = eventData[P_BUTTON].GetInt();
-    if (button == MOUSEB_LEFT){
+    InputActions activeActions{};
+    //Convert key presses to actions
+    for (int k = 0; k < static_cast<int>(pressedKeys_.Size()); k++){
+        int key = pressedKeys_[k];
+        if (keyBindingsMaster_.Contains(key)){
+            MasterInputAction action = keyBindingsMaster_[key];
+            if (!activeActions.master_.Contains(action))
+                activeActions.master_.Push(action);
+        }
+        if (keyBindingsPlayer1_.Contains(key)){
+            PlayerInputAction action = keyBindingsPlayer1_[key];
+            if (!activeActions.player1_.Contains(action))
+                activeActions.player1_.Push(action);
+        }
     }
-    else if (button == MOUSEB_RIGHT){
-        //Dungeon move command for each selected platform
-    }
+    HandleActions(activeActions);
 }
 
-void InputMaster::HandleMouseUp(StringHash eventType, VariantMap &eventData)
+void InputMaster::HandleActions(const InputActions& actions)
 {
-    using namespace MouseButtonUp;
-    int button = eventData[P_BUTTON].GetInt();
-    if (button == MOUSEB_LEFT) {}//Deselect when mouse did not move during click on N_VOID
+    //Handle master actions
+    if (actions.master_.Contains(MasterInputAction::MENU)) masterControl_->Exit();
+
+//    //Handle player actions
+//    if (masterControl_->PlayerIsAlive(BLIP) && masterControl_->PlayerIsHuman(BLIP)){
+//        Fish* player1 = masterControl_->GetPlayer(BLIP);
+//        Vector2 player1Movement
+//                = (Vector2::RIGHT *
+//                   (actions.player1_.Contains(PlayerInputAction::RIGHT) -
+//                    actions.player1_.Contains(PlayerInputAction::LEFT)))
+//                + (Vector2::UP *
+//                   (actions.player1_.Contains(PlayerInputAction::UP) -
+//                    actions.player1_.Contains(PlayerInputAction::DOWN)));
+//        player1Movement = LucKey::Rotate(player1Movement, -masterControl_->world_.camera->GetRotation().EulerAngles().y_);
+//        player1->SetRunning(actions.player1_.Contains(PlayerInputAction::RUN));
+//        player1->SetMovement(player1Movement);
+//        if (actions.player1_.Contains(PlayerInputAction::HACK)) player1->Jump();
+//        else player1->JumpRelease();
+//    }
+//    if (masterControl_->PlayerIsAlive(BLUP) && masterControl_->PlayerIsHuman(BLUP)){
+//        Fish* player2 = masterControl_->GetPlayer(BLUP);
+//        Vector2 player2Movement
+//                = (Vector2::RIGHT *
+//                   (actions.player2_.Contains(PlayerInputAction::RIGHT) -
+//                    actions.player2_.Contains(PlayerInputAction::LEFT)))
+//                + (Vector2::UP *
+//                   (actions.player2_.Contains(PlayerInputAction::UP) -
+//                    actions.player2_.Contains(PlayerInputAction::DOWN)));
+//        player2Movement = LucKey::Rotate(player2Movement, -masterControl_->world_.camera->GetRotation().EulerAngles().y_);
+//        player2->SetRunning(actions.player2_.Contains(PlayerInputAction::RUN));
+//        player2->SetMovement(player2Movement);
+//        if (actions.player2_.Contains(PlayerInputAction::HACK)) player2->Jump();
+//        else player2->JumpRelease();
+//    }
 }
 
 void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
 {
-    using namespace KeyDown;
-    int key = eventData[P_KEY].GetInt();
+    int key = eventData[KeyDown::P_KEY].GetInt();
+    if (!pressedKeys_.Contains(key)) pressedKeys_.Push(key);
 
-    //Exit when ESC is pressed
-    if (key == KEY_ESC) masterControl_->Exit();
-
-    //Take screenshot
-    else if (key == KEY_9)
-    {
-        Graphics* graphics = GetSubsystem<Graphics>();
+    switch (key){
+    case KEY_ESC:{
+        masterControl_->Exit();
+    } break;
+    case KEY_9:{
         Image screenshot(context_);
+        Graphics* graphics = GetSubsystem<Graphics>();
         graphics->TakeScreenShot(screenshot);
         //Here we save in the Data folder with date and time appended
         String fileName = GetSubsystem<FileSystem>()->GetProgramDir() + "Screenshots/Screenshot_" +
                 Time::GetTimeStamp().Replaced(':', '_').Replaced('.', '_').Replaced(' ', '_')+".png";
         //Log::Write(1, fileName);
         screenshot.SavePNG(fileName);
+    } break;
+    default: break;
     }
 }
+
+void InputMaster::HandleKeyUp(StringHash eventType, VariantMap &eventData)
+{
+    int key = eventData[KeyUp::P_KEY].GetInt();
+    if (pressedKeys_.Contains(key)) pressedKeys_.Remove(key);
+}
+
+void InputMaster::HandleJoyButtonDown(StringHash eventType, VariantMap &eventData)
+{
+    SixaxisButton button = static_cast<SixaxisButton>(eventData[JoystickButtonDown::P_BUTTON].GetInt());
+    if (!pressedJoystickButtons_.Contains(button)) pressedJoystickButtons_.Push(button);
+}
+void InputMaster::HandleJoyButtonUp(StringHash eventType, VariantMap &eventData)
+{
+    SixaxisButton button = static_cast<SixaxisButton>(eventData[JoystickButtonUp::P_BUTTON].GetInt());
+    if (pressedJoystickButtons_.Contains(button)) pressedJoystickButtons_.Remove(button);
+}
+

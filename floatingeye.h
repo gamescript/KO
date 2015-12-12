@@ -24,20 +24,13 @@
 #include "mastercontrol.h"
 #include "npc.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class FloatingEye : public NPC
 {
     URHO3D_OBJECT(FloatingEye, NPC);
 public:
-    FloatingEye(Context *context, MasterControl* masterControl, Vector3 pos);
+    FloatingEye(Context *context, MasterControl* masterControl);
 protected:
     Node* modelNode_;
     StaticModel* ballModel_;

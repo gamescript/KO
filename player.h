@@ -23,13 +23,6 @@
 
 #include "sceneobject.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class Player : public SceneObject
@@ -39,7 +32,6 @@ class Player : public SceneObject
     friend class FloatingEye;
 public:
     Player(Context* context, MasterControl* masterControl);
-    //SharedPtr<Text> scoreText_;
 
     double GetHealth(){return health_;}
     void Hit(float damage, int ownerID);
@@ -51,14 +43,14 @@ public:
     void EquipRightHand();
     void EquipLeftHand();
 private:
-    float health_ = 1.0f;
-    float initialHealth_ = 1.0f;
+    float health_ = 1.f;
+    float initialHealth_ = 1.f;
     int firstHitBy_ = 0;
     int lastHitBy_ = 0;
     int score_ = 0;
 
     const float shotInterval_ = 0.23f;
-    float sinceLastShot_ = 0.0f;
+    float sinceLastShot_ = 0.f;
 
     AnimatedModel* model_;
     AnimationController* animCtrl_;

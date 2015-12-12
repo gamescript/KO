@@ -22,20 +22,13 @@
 #include "mastercontrol.h"
 #include "sceneobject.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class Deco : public SceneObject
 {
     URHO3D_OBJECT(Deco, SceneObject);
 public:
-    Deco(Context *context, MasterControl* masterControl, Vector3 position);
+    Deco(Context *context, MasterControl* masterControl);
 protected:
 };
 

@@ -18,7 +18,7 @@
 
 #include "deco.h"
 
-Deco::Deco(Context* context, MasterControl *masterControl, Vector3 position):
-    SceneObject(context, masterControl, position)
+Deco::Deco(Context* context, MasterControl *masterControl):
+    SceneObject(context, masterControl)
 {
 }

@@ -2,7 +2,7 @@
 <particleeffect>
 	<material name="Resources/Materials/explosion.xml" />
 	<numparticles value="32" />
-	<updateinvisible enable="false" />
+	<updateinvisible enable="true" />
 	<relative enable="false" />
 	<scaled enable="true" />
 	<sorted enable="false" />

@@ -24,20 +24,13 @@
 #include "mastercontrol.h"
 #include "sceneobject.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class NPC : public SceneObject
 {
     URHO3D_OBJECT(NPC, SceneObject);
 public:
-    NPC(Context *context, MasterControl* masterControl, Vector3 pos);
+    NPC(Context *context, MasterControl* masterControl);
 protected:
     RigidBody* rigidBody_;
     CollisionShape* collisionShape_;

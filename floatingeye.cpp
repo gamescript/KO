@@ -19,13 +19,13 @@
 #include "floatingeye.h"
 #include "player.h"
 
-FloatingEye::FloatingEye(Context *context, MasterControl *masterControl, Vector3 pos):
-    NPC(context, masterControl, pos),
+FloatingEye::FloatingEye(Context *context, MasterControl *masterControl):
+    NPC(context, masterControl),
     smoothTargetPosition_{Vector3::ZERO}
 {
     rootNode_->SetName("FloatingEye");
 
-    rigidBody_->SetMass(1.0f);
+    rigidBody_->SetMass(1.f);
 
     modelNode_ = rootNode_->CreateChild("ModelNode");
 
@@ -45,9 +45,9 @@ FloatingEye::FloatingEye(Context *context, MasterControl *masterControl, Vector3
 void FloatingEye::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
     float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
-    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, randomizer_*M_PI*2.0f),
-                                    masterControl_->Sine(1.0f, -0.05f, 0.075f, -randomizer_*M_PI*2.0f),
-                                    masterControl_->Sine(0.91f, -0.023f, 0.023f, randomizer_*M_PI)));
+    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, variator_*M_PI*2.f),
+                                    masterControl_->Sine(1.f, -0.05f, 0.075f, -variator_*M_PI*2.f),
+                                    masterControl_->Sine(0.91f, -0.023f, 0.023f, variator_*M_PI)));
 
     Vector3 targetPosition = masterControl_->world.player_->GetPosition();
 

@@ -24,16 +24,6 @@
 #include "mastercontrol.h"
 #include "dungeon.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-class Viewport;
-class RenderPath;
-class Camera;
-}
-
 using namespace Urho3D;
 
 class KOCam : public Object
@@ -60,8 +50,6 @@ private:
 
     float yaw_;
     float pitch_;
-    float yawDelta_ = 0.0f;
-    float pitchDelta_ = 0.0f;
     Vector3 velocity_;
     const float maxVelocity_;
     float acceleration_;
@@ -71,7 +59,7 @@ private:
     float velocityMultiplier_;
 
     void SetupViewport();
-    void Lock(SharedPtr<Dungeon> platform);
+    void Lock(const Node &target);
 };
 
 #endif // KOCAM_H

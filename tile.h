@@ -24,13 +24,6 @@
 #include "mastercontrol.h"
 #include "dungeon.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class Dungeon;
@@ -48,7 +41,7 @@ public:
     IntVector2 coords_;
     TileType buildingType_ = TT_EMPTY;
     float GetHealth(){return health_;}
-    void ApplyDamage(float damage){health_ = Max(health_ - damage, 0.0f);}
+    void ApplyDamage(float damage){health_ = Max(health_ - damage, 0.f);}
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
     MasterControl* masterControl_;
@@ -56,7 +49,7 @@ private:
     Node* rootNode_;
     CollisionShape* collisionShape_;
     Node* elements_[TE_LENGTH];
-    float health_ = 1.0f;
+    float health_ = 1.f;
     void FixFringe();
 };
 

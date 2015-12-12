@@ -23,20 +23,13 @@
 #include "deco.h"
 #include "mastercontrol.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class Frop : public Deco
 {
     URHO3D_OBJECT(Frop, Deco);
 public:
-    Frop(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
+    Frop(Context *context, MasterControl* masterControl);
 private:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
     StaticModel* fropModel_;

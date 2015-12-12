@@ -76,20 +76,14 @@
 
 #include <Urho3D/DebugNew.h>
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-class Viewport;
-class RenderPath;
-class Camera;
-}
-
 using namespace Urho3D;
 namespace LucKey {
 
-enum JoyStickButton {JB_SELECT, JB_LEFTSTICK, JB_RIGHTSTICK, JB_START, JB_DPAD_UP, JB_DPAD_RIGHT, JB_DPAD_DOWN, JB_DPAD_LEFT, JB_L2, JB_R2, JB_L1, JB_R1, JB_TRIANGLE, JB_CIRCLE, JB_CROSS, JB_SQUARE};
+enum class SixaxisButton {  SELECT, LEFTSTICK, RIGHTSTICK, START,
+                            DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT,
+                            L2, R2, L1, R1, TRIANGLE, CIRCLE, CROSS, SQUARE,
+                            PS
+                         };
 
 template <class T>
 T Cycle(T x, T min, T max){

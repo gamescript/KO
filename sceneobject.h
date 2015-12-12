@@ -23,28 +23,22 @@
 
 #include "mastercontrol.h"
 
-namespace Urho3D {
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class SceneObject : public Object
 {
     URHO3D_OBJECT(SceneObject, Object);
 public:
-    SceneObject(Context *context, MasterControl* masterControl, Vector3 position = Vector3::ZERO);
+    SceneObject(Context *context, MasterControl* masterControl);
 
+    void Set(Vector3 position);
     Vector3 GetPosition() const {return rootNode_->GetWorldPosition();}
 protected:
     MasterControl* masterControl_;
-    void HandleSceneUpdate(StringHash eventType, VariantMap &eventData);
-    SharedPtr<Node> rootNode_;
+    Node* rootNode_;
+
     void Disable();
-    void Set(Vector3 position);
-    float randomizer_;
+    const float variator_;
 };
 
 #endif // SCENEOBJECT_H

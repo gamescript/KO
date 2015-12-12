@@ -22,6 +22,6 @@ WallCollider::WallCollider(Context* context, Dungeon* dungeon, IntVector2 coords
     Object(context)
 {
     CollisionShape* collider = dungeon->rootNode_->CreateComponent<CollisionShape>();
-    Vector3 position = Vector3(coords.x_, 0.0f, -coords.y_);
-    collider->SetBox(Vector3(1.25f, 1.0f, 1.25f), position);
+    Vector3 position = Vector3(coords.x_, 0.f, -coords.y_);
+    collider->SetBox(Vector3(1.25f, 1.f, 1.25f), position);
 }

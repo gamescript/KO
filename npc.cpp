@@ -18,19 +18,18 @@
 
 #include "npc.h"
 
-NPC::NPC(Context *context, MasterControl *masterControl, Vector3 pos):
+NPC::NPC(Context *context, MasterControl *masterControl):
     SceneObject(context, masterControl),
-    maxHealth_{100.0f},
+    maxHealth_{100.f},
     health_{maxHealth_}
 {
     rootNode_->SetName("NPC");
-    rootNode_->SetPosition(pos);
 
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
     rigidBody_->SetLinearFactor(Vector3::ONE - Vector3::UP);
     rigidBody_->SetLinearDamping(0.5f);
     rigidBody_->SetAngularFactor(Vector3::UP);
-    rigidBody_->SetAngularDamping(1.0f);
+    rigidBody_->SetAngularDamping(1.f);
     rigidBody_->SetLinearRestThreshold(0.023f);
 
     collisionShape_ = rootNode_->CreateComponent<CollisionShape>();

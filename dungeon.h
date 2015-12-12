@@ -24,11 +24,7 @@
 #include "mastercontrol.h"
 
 namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-class TmxFile2D;
+    class TmxFile2D;
 }
 
 using namespace Urho3D;

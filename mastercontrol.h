@@ -23,13 +23,6 @@
 
 #include "luckey.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class KOCam;
@@ -140,7 +133,7 @@ public:
 
     void CreateSineLookupTable();
     float Sine(float x);
-    float Sine(float freq, float min, float max, float shift = 0.0f);
+    float Sine(float freq, float min, float max, float shift = 0.f);
 private:
     SharedPtr<UI> ui_;
     SharedPtr<Renderer> renderer_;

@@ -25,13 +25,6 @@
 #include "mastercontrol.h"
 #include "dungeon.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
 using namespace Urho3D;
 
 class WallCollider: public Object

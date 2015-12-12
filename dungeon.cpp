@@ -70,7 +70,7 @@ void Dungeon::InitializeRandom()
     tileMap_[firstCoordPair] = new Tile(context_, firstCoordPair, this);
     // Add random tiles
     int addedTiles = 1;
-    int dungeonSize = 32;//Random(32, 128);
+    int dungeonSize = 32;
 
     while (addedTiles < dungeonSize){
         //Pick a random existing tile from a list.
@@ -109,8 +109,10 @@ void Dungeon::InitializeRandom()
     AddColliders();
     FixFringe();
 
-    for (int i = 0; i < 23; i++)
-        new FloatingEye(context_, masterControl_, Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
+    for (int i = 0; i < 23; i++){
+        FloatingEye* fe = new FloatingEye(context_, masterControl_);
+        fe->Set(Vector3(Random(-5.f, 5.f), 0.f, Random(-5.f, 5.f)));
+    }
 }
 
 void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
@@ -147,15 +149,18 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
         if (!properties)
             continue;
 
-        Vector3 pos(object->GetPosition().x_ * 3.12f, 0.0f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.0f);
+        Vector3 pos(object->GetPosition().x_ * 3.12f, 0.f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.f);
         if (properties->HasProperty("FloatingEye")) {
-            new FloatingEye(context_, masterControl_, pos);
+            FloatingEye* fe = new FloatingEye(context_, masterControl_);
+            fe->Set(pos);
         } else if (properties->HasProperty("Player")) {
-            masterControl_->world.player_->SetPosition(pos);
+            masterControl_->world.player_->Set(pos);
         } else if (properties->HasProperty("FirePit")) {
-            new FirePit(context_, masterControl_, pos);
+            FirePit* fp = new FirePit(context_, masterControl_);
+            fp->Set(pos);
         } else if (properties->HasProperty("Plant")) {
-            new Frop(context_, masterControl_, pos);
+            Frop* f = new Frop(context_, masterControl_);
+            f->Set(pos);
         }
     }
 

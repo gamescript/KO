@@ -18,21 +18,19 @@
 
 #include "sceneobject.h"
 
-SceneObject::SceneObject(Context* context, MasterControl* masterControl, Vector3 position):
+SceneObject::SceneObject(Context* context, MasterControl* masterControl):
     Object(context),
-    masterControl_{masterControl}
+    masterControl_{masterControl},
+    variator_{Random()}
 {
-    //Create the root node.
     rootNode_ = masterControl_->world.scene->CreateChild("SceneObject");
-    rootNode_->SetPosition(position);
-    //Random float between 0.0f and 1.0f used for variation
-    randomizer_ = Random();
+    rootNode_->SetEnabled(false);
 }
 
 void SceneObject::Set(Vector3 position)
 {
     rootNode_->SetPosition(position);
-    rootNode_->SetEnabledRecursive(true);
+    rootNode_->SetEnabled(true);
 }
 
 void SceneObject::Disable()
