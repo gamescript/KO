@@ -28,13 +28,13 @@ Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
     coords_ = coords;
 
     rootNode_ = dungeon_->rootNode_->CreateChild("Tile");
-    rootNode_->SetPosition(Vector3((float)coords_.x_, 0.f, -(float)coords_.y_));
+    rootNode_->SetPosition(Vector3((float)coords_.x_, 0.0f, -(float)coords_.y_));
 
     //Set up center and edge nodes.
     for (int i = 0; i != TE_LENGTH; i++){
         elements_[i] = rootNode_->CreateChild("TilePart");
         int nthOfType = ((i-1)%4);
-        if (i > 0) elements_[i]->Rotate(Quaternion(0.f, 90.f-nthOfType*90.f, 0.f));
+        if (i > 0) elements_[i]->Rotate(Quaternion(0.0f, 90.0f-nthOfType*90.0f, 0.0f));
         //Add the right model to the node
         StaticModel* model = elements_[i]->CreateComponent<StaticModel>();
         switch (i){

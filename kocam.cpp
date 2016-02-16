@@ -26,31 +26,31 @@ KOCam::KOCam(Context *context, MasterControl *masterControl):
     masterControl_{masterControl},
     smoothTargetPosition_{Vector3::ZERO},
     smoothTargetVelocity_{Vector3::ZERO},
-    yaw_{0.f},
-    pitch_{60.f},
+    yaw_{0.0f},
+    pitch_{60.0f},
     velocity_{Vector3::ZERO},
-    maxVelocity_{23.f},
-    acceleration_{7.f},
-    rotationSpeed_{0.f},
-    maxRotationSpeed_{512.f},
-    angularAcceleration_{128.f},
-    velocityMultiplier_{1.f}
+    maxVelocity_{23.0f},
+    acceleration_{7.0f},
+    rotationSpeed_{0.0f},
+    maxRotationSpeed_{512.0f},
+    angularAcceleration_{128.0f},
+    velocityMultiplier_{1.0f}
 {
-    float viewRange{128.f};
+    float viewRange{128.0f};
 
     //Create the camera. Limit far clip distance to match the fog
     rootNode_ = masterControl_->world.scene->CreateChild("Camera");
     rootNode_->SetPosition(masterControl_->world.player_->GetPosition() + Vector3(0.23f, 8.8f, -4.2f));
-    rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.f));
+    rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
     camera_ = rootNode_->CreateComponent<Camera>();
     camera_->SetFarClip(viewRange);
     camera_->SetNearClip(0.023f);
 
     Zone* zone = rootNode_->CreateComponent<Zone>();
-    zone->SetBoundingBox(BoundingBox(Vector3(-100.f, -50.f, -100.f), Vector3(100.f, 50.f, 100.f)));
-    zone->SetFogColor(Color(0.f, 0.f, 0.f, 1.f));
-    zone->SetFogStart(10.f);
-    zone->SetFogEnd(viewRange-5.f);
+    zone->SetBoundingBox(BoundingBox(Vector3(-100.0f, -50.0f, -100.0f), Vector3(100.0f, 50.0f, 100.0f)));
+    zone->SetFogColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
+    zone->SetFogStart(10.0f);
+    zone->SetFogEnd(viewRange-5.0f);
 
     SetupViewport();
     SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(KOCam, HandleUpdate));
@@ -117,14 +117,14 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
         rotationSpeed_ += joystickState->GetAxisPosition(2) * timeStep * angularAcceleration_;
         velocity_ -= joystickState->GetAxisPosition(3) * camForward * acceleration_ * timeStep;
 //        if (joystickState->GetButtonDown(JB_R2)) velocity_ += Vector3::UP;
-//        if (joystickState->GetButtonDown(JB_L2) && rootNode_->GetPosition().y_ > 1.f) velocity_ += Vector3::DOWN;
+//        if (joystickState->GetButtonDown(JB_L2) && rootNode_->GetPosition().y_ > 1.0f) velocity_ += Vector3::DOWN;
     }
 
     velocity_ *= 0.95f;
     rotationSpeed_ *= 0.95f;
 
 
-    if ( velocityMultiplier_ < 8.f && (input->GetKeyDown(KEY_LSHIFT)||input->GetKeyDown(KEY_RSHIFT)) ){
+    if ( velocityMultiplier_ < 8.0f && (input->GetKeyDown(KEY_LSHIFT)||input->GetKeyDown(KEY_RSHIFT)) ){
         velocityMultiplier_ += 0.23f;
     } else velocityMultiplier_ = pow(velocityMultiplier_, 0.75f);
     rootNode_->Translate(velocity_ * velocityMultiplier_ * timeStep, TS_WORLD);
@@ -137,15 +137,15 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
     float yPos{rootNode_->GetPosition().y_};
     if (yPos < 1.5f)
     {
-        velocity_.y_ = velocity_.y_ < 0.f ? 0.f : velocity_.y_;
+        velocity_.y_ = velocity_.y_ < 0.0f ? 0.0f : velocity_.y_;
         rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-1.5f)*0.23f+1.5f, rootNode_->GetPosition().z_));
-    } else if (yPos > 23.f){
-        velocity_.y_ = velocity_.y_ > 0.f ? 0.f : velocity_.y_;
-        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-23.f)*0.23f+23.f, rootNode_->GetPosition().z_));
+    } else if (yPos > 23.0f){
+        velocity_.y_ = velocity_.y_ > 0.0f ? 0.0f : velocity_.y_;
+        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-23.0f)*0.23f+23.0f, rootNode_->GetPosition().z_));
     }
 
-    smoothTargetPosition_ = 0.1f * (9.f * smoothTargetPosition_ + targetPosition);
-    smoothTargetVelocity_ = 0.1f * (9.f * smoothTargetVelocity_ + targetVelocity);
+    smoothTargetPosition_ = 0.1f * (9.0f * smoothTargetPosition_ + targetPosition);
+    smoothTargetVelocity_ = 0.1f * (9.0f * smoothTargetVelocity_ + targetVelocity);
     rootNode_->Translate(smoothTargetVelocity_ * timeStep, TS_WORLD);
     Quaternion camRot = rootNode_->GetWorldRotation();
     Quaternion aimRotation = camRot;

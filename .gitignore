@@ -27,12 +27,11 @@
 *.out
 *.app
 
-#QtCtreator Qml
+#Qt
+*.user
+*.user*
 *.qmlproject.user
 *.qmlproject.user.*
 
 # Urho3D
 /Urho3D
-/Data
-/CoreData
-KO

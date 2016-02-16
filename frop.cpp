@@ -21,11 +21,11 @@
 Frop::Frop(Context *context, MasterControl *masterControl) :
     Deco(context, masterControl)
 {
-    growthStart_ = Random(0.f, 5.f);
-    rootNode_->Rotate(Quaternion(Random(-10.f, 10.f),Random(360.f),Random(-10.f, 10.f)));
-    rootNode_->SetScale(0.f);
-    float randomWidth = Random(0.5f,2.f);
-    scale_ = Vector3(randomWidth, Random(0.5f,1.f+randomWidth), randomWidth);
+    growthStart_ = Random(0.0f, 5.0f);
+    rootNode_->Rotate(Quaternion(Random(-10.0f, 10.0f),Random(360.0f),Random(-10.0f, 10.0f)));
+    rootNode_->SetScale(0.0f);
+    float randomWidth = Random(0.5f,2.0f);
+    scale_ = Vector3(randomWidth, Random(0.5f,1.0f+randomWidth), randomWidth);
     fropModel_ = rootNode_->CreateComponent<StaticModel>();
     fropModel_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Frop.mdl"));
     fropModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Resources/Materials/Frop.xml"));

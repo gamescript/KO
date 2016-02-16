@@ -25,7 +25,7 @@ Player::Player(Context *context, MasterControl *masterControl):
     SceneObject(context, masterControl)
 {
     rootNode_->SetName("KO");
-    rootNode_->SetRotation(Quaternion(160.f, Vector3::UP));
+    rootNode_->SetRotation(Quaternion(160.0f, Vector3::UP));
 
     model_ = rootNode_->CreateComponent<AnimatedModel>();
     model_->SetModel(masterControl_->resources.models.ko);
@@ -41,13 +41,13 @@ Player::Player(Context *context, MasterControl *masterControl):
     animCtrl_ = rootNode_->CreateComponent<AnimationController>();
 
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
-    rigidBody_->SetFriction(0.f);
-    rigidBody_->SetRestitution(0.f);
-    rigidBody_->SetMass(1.f);
+    rigidBody_->SetFriction(0.0f);
+    rigidBody_->SetRestitution(0.0f);
+    rigidBody_->SetMass(1.0f);
     rigidBody_->SetLinearFactor(Vector3::ONE - Vector3::UP);
     rigidBody_->SetLinearDamping(0.99f);
     rigidBody_->SetAngularFactor(Vector3::UP);
-    rigidBody_->SetAngularDamping(1.f);
+    rigidBody_->SetAngularDamping(1.0f);
     rigidBody_->SetLinearRestThreshold(0.01f);
     rigidBody_->SetAngularRestThreshold(0.1f);
 
@@ -93,8 +93,8 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     Vector3 move = Vector3::ZERO;
     Vector3 moveJoy = Vector3::ZERO;
     Vector3 moveKey = Vector3::ZERO;
-    float thrust = 300.f;
-    float maxSpeed = 18.f;
+    float thrust = 300.0f;
+    float maxSpeed = 18.0f;
 
     //Read input
     JoystickState* joystickState = input->GetJoystickByIndex(0);
@@ -111,9 +111,9 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
     moveJoy.Length() > moveKey.Length() ? move = moveJoy : move = moveKey;
 
     //Restrict move vector length
-    if (move.Length() > 1.f) move.Normalize();
+    if (move.Length() > 1.0f) move.Normalize();
     //Deadzone
-    else if (move.Length() < 0.01f) move *= 0.f;
+    else if (move.Length() < 0.01f) move *= 0.0f;
 
     //Update animation
     if (rigidBody_->GetLinearVelocity().Length() > 0.05f){
@@ -134,11 +134,11 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
         Quaternion rotation = rootNode_->GetWorldRotation();
         Quaternion aimRotation = rotation;
         aimRotation.FromLookRotation(velocity);
-        rootNode_->SetRotation(rotation.Slerp(aimRotation, 7.f * timeStep * velocity.Length()));
+        rootNode_->SetRotation(rotation.Slerp(aimRotation, 7.0f * timeStep * velocity.Length()));
     }
 
     //Breathe
-    float mouthClosed = masterControl_->Sine(0.1f, 0.f, 0.9f, masterControl_->Sine(0.23f, -1.f, 1.f));
+    float mouthClosed = masterControl_->Sine(0.1f, 0.0f, 0.9f, masterControl_->Sine(0.23f, -1.0f, 1.0f));
     model_->SetMorphWeight(0, mouthClosed);
 
 }

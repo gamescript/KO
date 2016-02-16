@@ -43,14 +43,14 @@ public:
     void EquipRightHand();
     void EquipLeftHand();
 private:
-    float health_ = 1.f;
-    float initialHealth_ = 1.f;
+    float health_ = 1.0f;
+    float initialHealth_ = 1.0f;
     int firstHitBy_ = 0;
     int lastHitBy_ = 0;
     int score_ = 0;
 
     const float shotInterval_ = 0.23f;
-    float sinceLastShot_ = 0.f;
+    float sinceLastShot_ = 0.0f;
 
     AnimatedModel* model_;
     AnimationController* animCtrl_;

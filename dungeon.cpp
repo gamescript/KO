@@ -111,7 +111,7 @@ void Dungeon::InitializeRandom()
 
     for (int i = 0; i < 23; i++){
         FloatingEye* fe = new FloatingEye(context_, masterControl_);
-        fe->Set(Vector3(Random(-5.f, 5.f), 0.f, Random(-5.f, 5.f)));
+        fe->Set(Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
     }
 }
 
@@ -149,7 +149,7 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
         if (!properties)
             continue;
 
-        Vector3 pos(object->GetPosition().x_ * 3.12f, 0.f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.f);
+        Vector3 pos(object->GetPosition().x_ * 3.12f, 0.0f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.0f);
         if (properties->HasProperty("FloatingEye")) {
             FloatingEye* fe = new FloatingEye(context_, masterControl_);
             fe->Set(pos);

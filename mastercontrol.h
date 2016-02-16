@@ -133,7 +133,7 @@ public:
 
     void CreateSineLookupTable();
     float Sine(float x);
-    float Sine(float freq, float min, float max, float shift = 0.f);
+    float Sine(float freq, float min, float max, float shift = 0.0f);
 private:
     SharedPtr<UI> ui_;
     SharedPtr<Renderer> renderer_;

@@ -21,7 +21,7 @@
 FirePit::FirePit(Context* context, MasterControl* masterControl):
     SceneObject(context, masterControl)
 {
-    rootNode_->SetRotation(Quaternion(0.f, variator_ * 360.f, 0.f));
+    rootNode_->SetRotation(Quaternion(0.0f, variator_ * 360.0f, 0.0f));
 
     StaticModel* model_ = rootNode_->CreateComponent<StaticModel>();
     model_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/FirePit.mdl"));
@@ -43,11 +43,11 @@ FirePit::FirePit(Context* context, MasterControl* masterControl):
 
     lightNode_ = rootNode_->CreateChild("LightNode");
     light_ = lightNode_->CreateComponent<Light>();
-    light_->SetColor(Color(1.f, 0.6f, 0.4f));
-    light_->SetRange(5.f);
+    light_->SetColor(Color(1.0f, 0.6f, 0.4f));
+    light_->SetRange(5.0f);
     light_->SetCastShadows(true);
     light_->SetShadowBias(BiasParameters(0.00005f, 0.5f));    
-    light_->SetShadowCascade(CascadeParameters(1.f, 2.f, 3.f, 5.f, 0.5f));
+    light_->SetShadowCascade(CascadeParameters(1.0f, 2.0f, 3.0f, 5.0f, 0.5f));
     light_->SetShadowResolution(0.25f);
 
     SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(FirePit, HandleSceneUpdate));
@@ -62,15 +62,15 @@ void FirePit::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
 void FirePit::UpdateLightPosition()
 {
     float range = 0.001f;
-    float x = 0.f;
+    float x = 0.0f;
     for (int i = 1; i < 9; i++)
-        x += masterControl_->Sine(4.f + i, -range, range, i+(i*variator_ * 1.f*M_PI))/(i*0.666f);
+        x += masterControl_->Sine(4.0f + i, -range, range, i+(i*variator_ * 1.0f*M_PI))/(i*0.666f);
     float y = 0.5f;
     for (int i = 1; i < 9; i++)
-        y += masterControl_->Sine(5.f + i, -range, range, i+(i*variator_ * 1.5f*M_PI))/(i*0.666f);
-    float z = 0.f;
+        y += masterControl_->Sine(5.0f + i, -range, range, i+(i*variator_ * 1.5f*M_PI))/(i*0.666f);
+    float z = 0.0f;
     for (int i = 1; i < 9; i++)
-        z += masterControl_->Sine(6.f + i, -range, range, i+(i*variator_ * 2.f*M_PI))/(i*0.666f);
+        z += masterControl_->Sine(6.0f + i, -range, range, i+(i*variator_ * 2.0f*M_PI))/(i*0.666f);
     lightNode_->SetPosition(Vector3(x, y, z));
 }
 
@@ -79,7 +79,7 @@ void FirePit::UpdateBrightness()
     float brightness = 1.23f;
     for (int i = 1; i < 5; i++)
     {
-        brightness += masterControl_->Sine(variator_ + 7.123f + i, -0.001f, 0.023f, (variator_ * 2.f*M_PI) + i*(0.2f+variator_));
+        brightness += masterControl_->Sine(variator_ + 7.123f + i, -0.001f, 0.023f, (variator_ * 2.0f*M_PI) + i*(0.2f+variator_));
     }
     light_->SetBrightness(brightness);
 }
