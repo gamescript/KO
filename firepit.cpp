@@ -24,10 +24,10 @@ FirePit::FirePit(Context* context, MasterControl* masterControl):
     rootNode_->SetRotation(Quaternion(0.0f, variator_ * 360.0f, 0.0f));
 
     StaticModel* model_ = rootNode_->CreateComponent<StaticModel>();
-    model_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/FirePit.mdl"));
-    model_->SetMaterial(0, masterControl_->cache_->GetResource<Material>("Resources/Materials/Metal.xml"));
+    model_->SetModel(masterControl_->cache_->GetResource<Model>("Models/FirePit.mdl"));
+    model_->SetMaterial(0, masterControl_->cache_->GetResource<Material>("Materials/Metal.xml"));
     model_->SetMaterial(1, masterControl_->resources.materials.darkness);
-    model_->SetMaterial(2, masterControl_->cache_->GetResource<Material>("Resources/Materials/Amber.xml"));
+    model_->SetMaterial(2, masterControl_->cache_->GetResource<Material>("Materials/Amber.xml"));
     model_->SetCastShadows(true);
 
     rootNode_->CreateComponent<RigidBody>();
@@ -37,9 +37,9 @@ FirePit::FirePit(Context* context, MasterControl* masterControl):
     Node* particleNode = rootNode_->CreateChild("Fire");
     particleNode->SetPosition(Vector3::UP * 0.16f);
     ParticleEmitter* flameEmitter = particleNode->CreateComponent<ParticleEmitter>();
-    flameEmitter->SetEffect(masterControl_->cache_->GetResource<ParticleEffect>("Resources/Particles/fire1.xml"));
+    flameEmitter->SetEffect(masterControl_->cache_->GetResource<ParticleEffect>("Particles/fire1.xml"));
     ParticleEmitter* sparkEmitter = particleNode->CreateComponent<ParticleEmitter>();
-    sparkEmitter->SetEffect(masterControl_->cache_->GetResource<ParticleEffect>("Resources/Particles/fire_sparks.xml"));
+    sparkEmitter->SetEffect(masterControl_->cache_->GetResource<ParticleEffect>("Particles/fire_sparks.xml"));
 
     lightNode_ = rootNode_->CreateChild("LightNode");
     light_ = lightNode_->CreateComponent<Light>();

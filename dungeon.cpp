@@ -26,8 +26,6 @@
 #include "kocam.h"
 #include "player.h"
 
-#include <Urho3D/Urho2D/TmxFile2D.h>
-
 namespace Urho3D {
 template <> unsigned MakeHash(const IntVector2& value)
   {
@@ -46,7 +44,7 @@ Dungeon::Dungeon(Context *context, MasterControl* masterControl):
 
     //InitializeRandom();
 
-    TmxFile2D* tmxFile = masterControl_->cache_->GetResource<TmxFile2D>("Resources/Maps/test.tmx");
+    TmxFile2D* tmxFile = masterControl_->cache_->GetResource<TmxFile2D>("Maps/test.tmx");
     if (tmxFile)
         InitializeFromMap(*tmxFile);
     else
@@ -105,7 +103,7 @@ void Dungeon::InitializeRandom()
         }
     }
 
-    //Add slots
+    //Add Colliders
     AddColliders();
     FixFringe();
 

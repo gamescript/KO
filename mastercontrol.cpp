@@ -36,6 +36,8 @@ void MasterControl::Setup()
 {
     engineParameters_["WindowTitle"] = "KO: The Curse of Greyface";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
+    engineParameters_["ResourcePaths"] = "Data;CoreData;Resources";
+    engineParameters_["WindowIcon"] = "icon.png";
 //    engineParameters_["FullScreen"] = false;
 //    engineParameters_["Headless"] = true;
 //    engineParameters_["WindowWidth"] = 960;
@@ -58,7 +60,7 @@ void MasterControl::Start()
     CreateUI();
     SubscribeToEvents();
 
-    Sound* music = cache_->GetResource<Sound>("Resources/Music/Pantera_Negra_-_Sumerian_Speech.ogg");
+    Sound* music = cache_->GetResource<Sound>("Music/Pantera_Negra_-_Sumerian_Speech.ogg");
     music->SetLooped(true);
     Node* musicNode = world.scene->CreateChild("Music");
     SoundSource* musicSource = musicNode->CreateComponent<SoundSource>();
@@ -117,7 +119,7 @@ void MasterControl::CreateUI()
     //Construct new Text object, set string to display and font to use
     Text* instructionText = ui->GetRoot()->CreateChild<Text>();
     instructionText->SetText("KO");
-    instructionText->SetFont(cache->GetResource<Font>("Resources/Fonts/ChaosTimes_lig.ttf"), 32);
+    instructionText->SetFont(cache->GetResource<Font>("Fonts/ChaosTimes_lig.ttf"), 32);
     //The text has multiple rows. Center them in relation to each other
     instructionText->SetHorizontalAlignment(HA_CENTER);
     instructionText->SetVerticalAlignment(VA_CENTER);
@@ -130,38 +132,38 @@ void MasterControl::LoadResources()
     // Get default style
     defaultStyle_ = cache_->GetResource<XMLFile>("UI/DefaultStyle.xml");
 
-    resources.models.ko = cache_->GetResource<Model>("Resources/Models/KO.mdl");
-    resources.models.items.shield = cache_->GetResource<Model>("Resources/Models/Shield.mdl");
-    resources.models.items.sword = cache_->GetResource<Model>("Resources/Models/Sword.mdl");
+    resources.models.ko = cache_->GetResource<Model>("Models/KO.mdl");
+    resources.models.items.shield = cache_->GetResource<Model>("Models/Shield.mdl");
+    resources.models.items.sword = cache_->GetResource<Model>("Models/Sword.mdl");
 
-    resources.models.enemies.floatingEye = cache_->GetResource<Model>("Resources/Models/FloatingEye.mdl");
-    resources.models.enemies.cornea = cache_->GetResource<Model>("Resources/Models/Cornea.mdl");
-    resources.models.doodads.firePit = cache_->GetResource<Model>("Resources/Models/FirePit.mdl");
+    resources.models.enemies.floatingEye = cache_->GetResource<Model>("Models/FloatingEye.mdl");
+    resources.models.enemies.cornea = cache_->GetResource<Model>("Models/Cornea.mdl");
+    resources.models.doodads.firePit = cache_->GetResource<Model>("Models/FirePit.mdl");
 
-    resources.models.tileParts.blockCenter = cache_->GetResource<Model>("Resources/Models/Block_center.mdl");
-    resources.models.tileParts.blockDoubleCorner = cache_->GetResource<Model>("Resources/Models/Block_doublecorner.mdl");
-    resources.models.tileParts.blockFillCorner = cache_->GetResource<Model>("Resources/Models/Block_fillcorner.mdl");
-    resources.models.tileParts.blockInCorner = cache_->GetResource<Model>("Resources/Models/Block_incorner.mdl");
-    resources.models.tileParts.blockOutCorner = cache_->GetResource<Model>("Resources/Models/Block_outcorner.mdl");
-    resources.models.tileParts.blockSide = cache_->GetResource<Model>("Resources/Models/Block_side.mdl");
-    resources.models.tileParts.blockTween = cache_->GetResource<Model>("Resources/Models/Block_tween.mdl");
-    resources.models.tileParts.blockTweenCorner = cache_->GetResource<Model>("Resources/Models/Block_tweencorner.mdl");
+    resources.models.tileParts.blockCenter = cache_->GetResource<Model>("Models/Block_center.mdl");
+    resources.models.tileParts.blockDoubleCorner = cache_->GetResource<Model>("Models/Block_doublecorner.mdl");
+    resources.models.tileParts.blockFillCorner = cache_->GetResource<Model>("Models/Block_fillcorner.mdl");
+    resources.models.tileParts.blockInCorner = cache_->GetResource<Model>("Models/Block_incorner.mdl");
+    resources.models.tileParts.blockOutCorner = cache_->GetResource<Model>("Models/Block_outcorner.mdl");
+    resources.models.tileParts.blockSide = cache_->GetResource<Model>("Models/Block_side.mdl");
+    resources.models.tileParts.blockTween = cache_->GetResource<Model>("Models/Block_tween.mdl");
+    resources.models.tileParts.blockTweenCorner = cache_->GetResource<Model>("Models/Block_tweencorner.mdl");
 
-    resources.materials.ko = cache_->GetResource<Material>("Resources/Materials/KO.xml");
-    resources.materials.cloth = cache_->GetResource<Material>("Resources/Materials/Cloth.xml");
-    resources.materials.darkness = cache_->GetResource<Material>("Resources/Materials/Darkness.xml");
-    resources.materials.floor = cache_->GetResource<Material>("Resources/Materials/Floor.xml");
-    resources.materials.metal = cache_->GetResource<Material>("Resources/Materials/Metal.xml");
-    resources.materials.leather = cache_->GetResource<Material>("Resources/Materials/Leather.xml");
-    resources.materials.skin = cache_->GetResource<Material>("Resources/Materials/Skin.xml");
-    resources.materials.wall = cache_->GetResource<Material>("Resources/Materials/Wall.xml");
-    resources.materials.hair = cache_->GetResource<Material>("Resources/Materials/Hair.xml");
-    resources.materials.pants = cache_->GetResource<Material>("Resources/Materials/Pants.xml");
-    resources.materials.blood = cache_->GetResource<Material>("Resources/Materials/Blood.xml");
-    resources.materials.floatingEye = cache_->GetResource<Material>("Resources/Materials/FloatingEye.xml");
-    resources.materials.cornea = cache_->GetResource<Material>("Resources/Materials/Cornea.xml");
+    resources.materials.ko = cache_->GetResource<Material>("Materials/KO.xml");
+    resources.materials.cloth = cache_->GetResource<Material>("Materials/Cloth.xml");
+    resources.materials.darkness = cache_->GetResource<Material>("Materials/Darkness.xml");
+    resources.materials.floor = cache_->GetResource<Material>("Materials/Floor.xml");
+    resources.materials.metal = cache_->GetResource<Material>("Materials/Metal.xml");
+    resources.materials.leather = cache_->GetResource<Material>("Materials/Leather.xml");
+    resources.materials.skin = cache_->GetResource<Material>("Materials/Skin.xml");
+    resources.materials.wall = cache_->GetResource<Material>("Materials/Wall.xml");
+    resources.materials.hair = cache_->GetResource<Material>("Materials/Hair.xml");
+    resources.materials.pants = cache_->GetResource<Material>("Materials/Pants.xml");
+    resources.materials.blood = cache_->GetResource<Material>("Materials/Blood.xml");
+    resources.materials.floatingEye = cache_->GetResource<Material>("Materials/FloatingEye.xml");
+    resources.materials.cornea = cache_->GetResource<Material>("Materials/Cornea.xml");
 
-    resources.animations.ko.walk = cache_->GetResource<Animation>("Resources/Models/Walk.ani");
+    resources.animations.ko.walk = cache_->GetResource<Animation>("Models/Walk.ani");
 }
 
 void MasterControl::CreateScene()
@@ -178,8 +180,8 @@ void MasterControl::CreateScene()
     world.cursor.sceneCursor = world.scene->CreateChild("Cursor");
     world.cursor.sceneCursor->SetPosition(Vector3(0.0f,0.0f,0.0f));
     /*StaticModel* cursorObject = */world.cursor.sceneCursor->CreateComponent<StaticModel>();
-    //cursorObject->SetModel(cache_->GetResource<Model>("Resources/Models/Cursor.mdl"));
-    //cursorObject->SetMaterial(cache_->GetResource<Material>("Resources/Materials/glow.xml"));
+    //cursorObject->SetModel(cache_->GetResource<Model>("Models/Cursor.mdl"));
+    //cursorObject->SetMaterial(cache_->GetResource<Material>("Materials/glow.xml"));
 
     //Create an invisible plane for mouse raycasting
     world.voidNode = world.scene->CreateChild("Void");
@@ -187,7 +189,7 @@ void MasterControl::CreateScene()
     world.voidNode->SetScale(Vector3(1000.0f, 1.0f, 1000.0f));
     StaticModel* planeObject = world.voidNode->CreateComponent<StaticModel>();
     planeObject->SetModel(cache_->GetResource<Model>("Models/Plane.mdl"));
-    planeObject->SetMaterial(cache_->GetResource<Material>("Resources/Materials/Invisible.xml"));
+    planeObject->SetMaterial(cache_->GetResource<Material>("Materials/Invisible.xml"));
 
     //Create a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");

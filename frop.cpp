@@ -27,8 +27,8 @@ Frop::Frop(Context *context, MasterControl *masterControl) :
     float randomWidth = Random(0.5f,2.0f);
     scale_ = Vector3(randomWidth, Random(0.5f,1.0f+randomWidth), randomWidth);
     fropModel_ = rootNode_->CreateComponent<StaticModel>();
-    fropModel_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Frop.mdl"));
-    fropModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Resources/Materials/Frop.xml"));
+    fropModel_->SetModel(masterControl_->cache_->GetResource<Model>("Models/Frop.mdl"));
+    fropModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Materials/Frop.xml"));
     fropModel_->SetCastShadows(true);
 
     SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Frop, HandleUpdate));

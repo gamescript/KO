@@ -117,11 +117,11 @@ void Player::HandleUpdate(StringHash eventType, VariantMap &eventData)
 
     //Update animation
     if (rigidBody_->GetLinearVelocity().Length() > 0.05f){
-        animCtrl_->PlayExclusive("Resources/Models/Walk.ani", 0, true, 0.23f);
-        animCtrl_->SetSpeed("Resources/Models/Walk.ani", rigidBody_->GetLinearVelocity().Length()*2.63f);
+        animCtrl_->PlayExclusive("Models/Walk.ani", 0, true, 0.23f);
+        animCtrl_->SetSpeed("Models/Walk.ani", rigidBody_->GetLinearVelocity().Length()*2.63f);
     }
     else {
-        animCtrl_->PlayExclusive("Resources/Models/Idle.ani", 0, true, 0.23f);
+        animCtrl_->PlayExclusive("Models/Idle.ani", 0, true, 0.23f);
     }
 
     //Apply movement

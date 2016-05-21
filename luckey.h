@@ -73,6 +73,7 @@
 #include <Urho3D/UI/Font.h>
 #include <Urho3D/UI/Text.h>
 #include <Urho3D/UI/UI.h>
+#include <Urho3D/Urho2D/TmxFile2D.h>
 
 #include <Urho3D/DebugNew.h>
 
