@@ -27,14 +27,14 @@ InputMaster::InputMaster(Context* context, MasterControl* masterControl) : Objec
     masterControl_{masterControl},
     input_{GetSubsystem<Input>()}
 {
-    keyBindingsMaster_[KEY_UP]     = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_UP)]    = MasterInputAction::UP;
-    keyBindingsMaster_[KEY_RIGHT]  = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_RIGHT)] = MasterInputAction::RIGHT;
-    keyBindingsMaster_[KEY_DOWN]   = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_DOWN)]  = MasterInputAction::DOWN;
-    keyBindingsMaster_[KEY_LEFT]   = buttonBindingsMaster_[static_cast<int>(SixaxisButton::DPAD_LEFT)]  = MasterInputAction::LEFT;
-    keyBindingsMaster_[KEY_RETURN] = buttonBindingsMaster_[static_cast<int>(SixaxisButton::CROSS)]      = MasterInputAction::CONFIRM;
-    keyBindingsMaster_[KEY_ESC]    = buttonBindingsMaster_[static_cast<int>(SixaxisButton::CIRCLE)]     = MasterInputAction::CANCEL;
-    keyBindingsMaster_[KEY_PAUSE]  = buttonBindingsMaster_[static_cast<int>(SixaxisButton::START)]      = MasterInputAction::PAUSE;
-    keyBindingsMaster_[KEY_ESC]    = MasterInputAction::MENU;
+    keyBindingsMaster_[KEY_UP]     = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_DPAD_UP)]    = MasterInputAction::UP;
+    keyBindingsMaster_[KEY_RIGHT]  = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_DPAD_RIGHT)] = MasterInputAction::RIGHT;
+    keyBindingsMaster_[KEY_DOWN]   = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_DPAD_DOWN)]  = MasterInputAction::DOWN;
+    keyBindingsMaster_[KEY_LEFT]   = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_DPAD_LEFT)]  = MasterInputAction::LEFT;
+    keyBindingsMaster_[KEY_RETURN] = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_CROSS)]      = MasterInputAction::CONFIRM;
+    keyBindingsMaster_[KEY_ESCAPE]    = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_CIRCLE)]     = MasterInputAction::CANCEL;
+    keyBindingsMaster_[KEY_PAUSE]  = buttonBindingsMaster_[static_cast<int>(SixaxisButton::SB_START)]      = MasterInputAction::PAUSE;
+    keyBindingsMaster_[KEY_ESCAPE]    = MasterInputAction::MENU;
 
     keyBindingsPlayer1_[KEY_W] = keyBindingsPlayer1_[KEY_UP]    = PlayerInputAction::UP;
     keyBindingsPlayer1_[KEY_D] = keyBindingsPlayer1_[KEY_RIGHT] = PlayerInputAction::RIGHT;
@@ -115,7 +115,7 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
     if (!pressedKeys_.Contains(key)) pressedKeys_.Push(key);
 
     switch (key){
-    case KEY_ESC:{
+    case KEY_ESCAPE:{
         masterControl_->Exit();
     } break;
     case KEY_9:{
