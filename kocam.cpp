@@ -65,14 +65,14 @@ void KOCam::SetupViewport()
     SharedPtr<Viewport> viewport(new Viewport(context_, masterControl_->world.scene, camera_));
     viewport_ = viewport;
 
-    //Add anti-asliasing and bloom
+    //Add anti-asliasing and HDR bloom
     effectRenderPath = viewport_->GetRenderPath()->Clone();
     effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/FXAA3.xml"));
     effectRenderPath->SetEnabled("FXAA3", true);
-    effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/Bloom.xml"));
-    effectRenderPath->SetShaderParameter("BloomThreshold", 0.8f);
-    effectRenderPath->SetShaderParameter("BloomMix", Vector2(0.75f, 0.75f));
-    effectRenderPath->SetEnabled("Bloom", true);
+    effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
+    effectRenderPath->SetShaderParameter("BloomHDRThreshold", 0.42f);
+    effectRenderPath->SetShaderParameter("BloomHDRMix", Vector2(0.8f, 0.7f));
+    effectRenderPath->SetEnabled("BloomHDR", true);
 
     viewport_->SetRenderPath(effectRenderPath);
     renderer->SetViewport(0, viewport);

@@ -1,3 +1,5 @@
+TARGET = ko
+
 LIBS += ../KO/Urho3D/lib/libUrho3D.a \
     -lpthread \
     -ldl \

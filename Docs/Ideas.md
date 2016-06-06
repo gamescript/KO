@@ -9,6 +9,25 @@
  
 ## World
  
+#### Story and Environment
+
+- The Last Tree
+
+> The existence of this plant hangs in the balance. The thing that has kept it standing is a community of 23 people living inside a giant tree house that they built in its branches. But now an order came from beyond the mist for eviction of the tree house. Whether or not they comply, within 5 days the tree will be nuked for being abnormal.
+> KO/Dizzy becomes really angry and decides to find the source of this unacceptable demand.
+
+- Fake Forest
+
+> Fake Forest is what covers most of the world, _the last tree_ is surrounded by it. Everything is very brightly colored and plastic. There's furries and swarms of fleyes everywhere. Tutorial land.
+
+- Black Iron Prison
+
+> At the end of Mainstreet lies number 101, a giant black pyramid with a golden tip covered in circuitry and barred windows [+]. KO is sent here to file a complaint and kick bubblegum. Upward staircases lead deeper into the dungeon, with every floor decreasing in size, but increasing in complexity and difficulty.
+
+> The first floor has a downwards ladder that leads to a floor with deserted shops and a collapsed downward staircase. (Rogue-like reference a la Diablo2)
+
+> This is the main dungeon for The Curse of Greyface.
+ 
 #### Playable characters
 
  Character | Default weapon | Magic focus | Skill theme
@@ -75,22 +94,3 @@
 	+ Restores health and mana
 - Throw
 	+ Most items can be thrown
-
-#### Story and Environment
-
-- The Last Tree
-
-> The existence of this plant hangs in the balance. The thing that has kept it standing is a community of 23 people living inside a giant tree house that they built in its branches. But now an order came from beyond the mist for eviction of the tree house. If they don't comply within 5 days the tree will be nuked.
-> KO/Dizzy becomes really angry and decides to find the source of this unacceptable demand.
-
-- Fake Forest
-
-> Fake Forest is what covers most of the world, _the last tree_ is surrounded by it. Everything is very brightly colored and plastic. There's furries and swarms of fleyes everywhere. Tutorial land.
-
-- Black Iron Prison
-
-> A giant black pyramid with a golden tip, covered in circuitry and barred windows. KO is sent here to file a complaint and to kick bubblegum. Upward staircases lead deeper into the dungeon, with every floor decreasing in size, but increasing in complexity and difficulty.
-
-> The first floor has a downwards ladder that leads to a floor with deserted shops and a collapsed downward staircase.
-
-> This is the main dungeon for The Curse of Greyface.
