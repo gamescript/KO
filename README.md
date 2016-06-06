@@ -10,7 +10,7 @@ Dual analog game controller or WASD.
 * ...
 
 ### Screenshot
-![KO facing five eyes](https://raw.githubusercontent.com/LucKeyProductions/KO/master/Screenshots/Screenshot_Fri_Oct_30_19_50_06_2015.png)
+![KO facing five eyes](https://raw.githubusercontent.com/LucKeyProductions/KO/master/Screenshots/Screenshot_Mon_Jun__6_21_23_32_2016.png)
 
 ### Tools
 [Urho3D](http://urho3d.github.io), [QtCreator](http://wiki.qt.io/Category:Tools::QtCreator), [Blender](http://www.blender.org/), [Inkscape](http://inkscape.org/), [GIMP](http://gimp.org), [SuperCollider](http://supercollider.github.io/), [Audacity](http://web.audacityteam.org/)

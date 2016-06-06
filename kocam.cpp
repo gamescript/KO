@@ -71,7 +71,7 @@ void KOCam::SetupViewport()
     effectRenderPath->SetEnabled("FXAA3", true);
     effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
     effectRenderPath->SetShaderParameter("BloomHDRThreshold", 0.42f);
-    effectRenderPath->SetShaderParameter("BloomHDRMix", Vector2(0.8f, 0.7f));
+    effectRenderPath->SetShaderParameter("BloomHDRMix", Vector2(0.8f, 0.6f));
     effectRenderPath->SetEnabled("BloomHDR", true);
 
     viewport_->SetRenderPath(effectRenderPath);

@@ -76,21 +76,33 @@
 
 ##### Usable
 
-- Strawberry syrup
+Syrups can be used to make lemonade at fountains; a less potent potion with a slower effect but no mana drain and multiple uses.  
+
+- **Strawberry syrup** (In a spherical bottle)
 	+ Restores health
 	+ Drains mana
-- Magic mushroom
+- **Magic mushroom**
 	+ Restores mana
 	+ Reveals hidden doors
 	+ Critical damage
 	+ Increased spell casting rate
 	+ Colorful surroundings
 
+#### Shops
+
+##### Super Mark
+Some hero who's in it for the money. Does not sell lemonade
+
 #### Actions
 
 - Combat
-	+ Simple button bash combos and skills (like magic)
+	+ Button bash combos
+	  * Sword: Pierce and hack/slash
+	  * Shield: Block and bash
+	  * Magic
 - Meditation
 	+ Restores health and mana
 - Throw
-	+ Most items can be thrown
+	+ Most items can be thrown, with some it as effect. Like with Grenades or Bottles. Bottles leave glass
+- Kick
+   + For interacting with the environment
