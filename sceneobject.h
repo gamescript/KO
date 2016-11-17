@@ -25,18 +25,16 @@
 
 using namespace Urho3D;
 
-class SceneObject : public Object
+class SceneObject : public LogicComponent
 {
-    URHO3D_OBJECT(SceneObject, Object);
+    URHO3D_OBJECT(SceneObject, LogicComponent);
 public:
-    SceneObject(Context *context, MasterControl* masterControl);
+    SceneObject(Context *context);
+    virtual void OnNodeSet(Node *node);
 
     void Set(Vector3 position);
-    Vector3 GetPosition() const {return rootNode_->GetWorldPosition();}
+    Vector3 GetPosition() const {return node_->GetWorldPosition();}
 protected:
-    MasterControl* masterControl_;
-    Node* rootNode_;
-
     void Disable();
     const float variator_;
 };

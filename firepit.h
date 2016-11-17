@@ -30,8 +30,11 @@ class FirePit : public SceneObject
 {
     URHO3D_OBJECT(FirePit, SceneObject);
 public:
-    FirePit(Context* context, MasterControl *masterControl);
-    void HandleSceneUpdate(StringHash eventType, VariantMap &eventData);
+    static void RegisterObject(Context *context);
+    FirePit(Context* context);
+    void OnNodeSet(Node *node);
+
+    void Update(float timeStep);
     void UpdateLightPosition();
     void UpdateBrightness();
 private:

@@ -38,13 +38,13 @@ Dungeon::Dungeon(Context *context, MasterControl* masterControl):
 {
     masterControl_ = masterControl;
     SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Dungeon, HandleUpdate));
-    rootNode_ = masterControl_->world.scene->CreateChild("Dungeon");
+    rootNode_ = MC->world.scene->CreateChild("Dungeon");
 
     rigidBody_ = rootNode_->CreateComponent<RigidBody>();
 
     //InitializeRandom();
 
-    TmxFile2D* tmxFile = masterControl_->cache_->GetResource<TmxFile2D>("Maps/test.tmx");
+    TmxFile2D* tmxFile = MC->cache_->GetResource<TmxFile2D>("Maps/test.tmx");
     if (tmxFile)
         InitializeFromMap(*tmxFile);
     else
@@ -107,8 +107,9 @@ void Dungeon::InitializeRandom()
     AddColliders();
     FixFringe();
 
-    for (int i = 0; i < 23; i++){
-        FloatingEye* fe = new FloatingEye(context_, masterControl_);
+    for (int i{0}; i < 23; i++){
+
+        FloatingEye* fe{ MC->world.scene->CreateChild("FloatingEye")->CreateComponent<FloatingEye>() };
         fe->Set(Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
     }
 }
@@ -149,15 +150,16 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
 
         Vector3 pos(object->GetPosition().x_ * 3.12f, 0.0f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.0f);
         if (properties->HasProperty("FloatingEye")) {
-            FloatingEye* fe = new FloatingEye(context_, masterControl_);
+
+            FloatingEye* fe{ MC->world.scene->CreateChild()->CreateComponent<FloatingEye>() };
             fe->Set(pos);
         } else if (properties->HasProperty("Player")) {
-            masterControl_->world.player_->Set(pos);
+            MC->world.player_->Set(pos);
         } else if (properties->HasProperty("FirePit")) {
-            FirePit* fp = new FirePit(context_, masterControl_);
+            FirePit* fp{ MC->world.scene->CreateChild()->CreateComponent<FirePit>() };
             fp->Set(pos);
         } else if (properties->HasProperty("Plant")) {
-            Frop* f = new Frop(context_, masterControl_);
+            Frop* f{ MC->world.scene->CreateChild()->CreateComponent<Frop>() };
             f->Set(pos);
         }
     }

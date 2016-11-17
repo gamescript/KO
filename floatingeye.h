@@ -30,7 +30,11 @@ class FloatingEye : public NPC
 {
     URHO3D_OBJECT(FloatingEye, NPC);
 public:
-    FloatingEye(Context *context, MasterControl* masterControl);
+    static void RegisterObject(Context *context);
+    FloatingEye(Context *context);
+    virtual void OnNodeSet(Node *node);
+
+    virtual void Update(float timeStep);
 protected:
     Node* modelNode_;
     StaticModel* ballModel_;
@@ -38,7 +42,6 @@ protected:
 private:
     Vector3 smoothTargetPosition_;
 
-    void HandleUpdate(StringHash eventType, VariantMap &eventData);
 };
 
 #endif // FLOATINGEYE_H

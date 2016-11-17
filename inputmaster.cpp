@@ -74,11 +74,11 @@ void InputMaster::HandleUpdate(StringHash eventType, VariantMap &eventData)
 void InputMaster::HandleActions(const InputActions& actions)
 {
     //Handle master actions
-    if (actions.master_.Contains(MasterInputAction::MENU)) masterControl_->Exit();
+    if (actions.master_.Contains(MasterInputAction::MENU)) MC->Exit();
 
 //    //Handle player actions
-//    if (masterControl_->PlayerIsAlive(BLIP) && masterControl_->PlayerIsHuman(BLIP)){
-//        Fish* player1 = masterControl_->GetPlayer(BLIP);
+//    if (MC->PlayerIsAlive(BLIP) && MC->PlayerIsHuman(BLIP)){
+//        Fish* player1 = MC->GetPlayer(BLIP);
 //        Vector2 player1Movement
 //                = (Vector2::RIGHT *
 //                   (actions.player1_.Contains(PlayerInputAction::RIGHT) -
@@ -86,14 +86,14 @@ void InputMaster::HandleActions(const InputActions& actions)
 //                + (Vector2::UP *
 //                   (actions.player1_.Contains(PlayerInputAction::UP) -
 //                    actions.player1_.Contains(PlayerInputAction::DOWN)));
-//        player1Movement = LucKey::Rotate(player1Movement, -masterControl_->world_.camera->GetRotation().EulerAngles().y_);
+//        player1Movement = LucKey::Rotate(player1Movement, -MC->world_.camera->GetRotation().EulerAngles().y_);
 //        player1->SetRunning(actions.player1_.Contains(PlayerInputAction::RUN));
 //        player1->SetMovement(player1Movement);
 //        if (actions.player1_.Contains(PlayerInputAction::HACK)) player1->Jump();
 //        else player1->JumpRelease();
 //    }
-//    if (masterControl_->PlayerIsAlive(BLUP) && masterControl_->PlayerIsHuman(BLUP)){
-//        Fish* player2 = masterControl_->GetPlayer(BLUP);
+//    if (MC->PlayerIsAlive(BLUP) && MC->PlayerIsHuman(BLUP)){
+//        Fish* player2 = MC->GetPlayer(BLUP);
 //        Vector2 player2Movement
 //                = (Vector2::RIGHT *
 //                   (actions.player2_.Contains(PlayerInputAction::RIGHT) -
@@ -101,7 +101,7 @@ void InputMaster::HandleActions(const InputActions& actions)
 //                + (Vector2::UP *
 //                   (actions.player2_.Contains(PlayerInputAction::UP) -
 //                    actions.player2_.Contains(PlayerInputAction::DOWN)));
-//        player2Movement = LucKey::Rotate(player2Movement, -masterControl_->world_.camera->GetRotation().EulerAngles().y_);
+//        player2Movement = LucKey::Rotate(player2Movement, -MC->world_.camera->GetRotation().EulerAngles().y_);
 //        player2->SetRunning(actions.player2_.Contains(PlayerInputAction::RUN));
 //        player2->SetMovement(player2Movement);
 //        if (actions.player2_.Contains(PlayerInputAction::HACK)) player2->Jump();
@@ -116,7 +116,7 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
 
     switch (key){
     case KEY_ESCAPE:{
-        masterControl_->Exit();
+        MC->Exit();
     } break;
     case KEY_9:{
         Image screenshot(context_);

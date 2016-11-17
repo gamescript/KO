@@ -29,9 +29,12 @@ class Frop : public Deco
 {
     URHO3D_OBJECT(Frop, Deco);
 public:
-    Frop(Context *context, MasterControl* masterControl);
+    static void RegisterObject(Context *context);
+    Frop(Context *context);
+    virtual void OnNodeSet(Node *node);
+
+    virtual void Update(float timeStep);
 private:
-    void HandleUpdate(StringHash eventType, VariantMap& eventData);
     StaticModel* fropModel_;
     Vector3 scale_;
 

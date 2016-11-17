@@ -21,9 +21,13 @@
 
 using namespace LucKey;
 
-KOCam::KOCam(Context *context, MasterControl *masterControl):
-    Object(context),
-    masterControl_{masterControl},
+void KOCam::RegisterObject(Context *context)
+{
+    context->RegisterFactory<KOCam>();
+}
+
+KOCam::KOCam(Context *context):
+    LogicComponent(context),
     smoothTargetPosition_{Vector3::ZERO},
     smoothTargetVelocity_{Vector3::ZERO},
     yaw_{0.0f},
@@ -36,24 +40,28 @@ KOCam::KOCam(Context *context, MasterControl *masterControl):
     angularAcceleration_{128.0f},
     velocityMultiplier_{1.0f}
 {
-    float viewRange{128.0f};
+}
+
+void KOCam::OnNodeSet(Node *node)
+{
+    float viewRange{ 128.0f };
 
     //Create the camera. Limit far clip distance to match the fog
-    rootNode_ = masterControl_->world.scene->CreateChild("Camera");
-    rootNode_->SetPosition(masterControl_->world.player_->GetPosition() + Vector3(0.23f, 8.8f, -4.2f));
+    rootNode_ = MC->world.scene->CreateChild("Camera");
+    rootNode_->SetPosition(MC->world.player_->GetPosition() + Vector3(0.23f, 8.8f, -4.2f));
     rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
     camera_ = rootNode_->CreateComponent<Camera>();
     camera_->SetFarClip(viewRange);
     camera_->SetNearClip(0.023f);
 
-    Zone* zone = rootNode_->CreateComponent<Zone>();
+    Zone* zone{ rootNode_->CreateComponent<Zone>() };
     zone->SetBoundingBox(BoundingBox(Vector3(-100.0f, -50.0f, -100.0f), Vector3(100.0f, 50.0f, 100.0f)));
     zone->SetFogColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
     zone->SetFogStart(10.0f);
     zone->SetFogEnd(viewRange-5.0f);
 
     SetupViewport();
-    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(KOCam, HandleUpdate));
+
 }
 
 void KOCam::SetupViewport()
@@ -62,7 +70,7 @@ void KOCam::SetupViewport()
     Renderer* renderer = GetSubsystem<Renderer>();
 
     //Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
-    SharedPtr<Viewport> viewport(new Viewport(context_, masterControl_->world.scene, camera_));
+    SharedPtr<Viewport> viewport(new Viewport(context_, MC->world.scene, camera_));
     viewport_ = viewport;
 
     //Add anti-asliasing and HDR bloom
@@ -88,21 +96,18 @@ Quaternion KOCam::GetRotation() const
     return rootNode_->GetRotation();
 }
 
-void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
+void KOCam::Update(float timeStep)
 {
-    assert(eventType);
-    float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
+    Vector3 targetPosition{ MC->world.player_->GetPosition() };
+    Vector3 targetVelocity{ MC->world.player_->GetLinearVelocity() };
 
-    Vector3 targetPosition = masterControl_->world.player_->GetPosition();
-    Vector3 targetVelocity = masterControl_->world.player_->GetLinearVelocity();
-
-    Input* input = GetSubsystem<Input>();
+    Input* input{ GetSubsystem<Input>() };
 
     //Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
-    Vector3 camForward = rootNode_->GetDirection();
+    Vector3 camForward{ rootNode_->GetDirection() };
     camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
 
-    Vector3 normalizedPlanarDirection = LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized();
+    Vector3 normalizedPlanarDirection{ LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized() };
     if (input->GetKeyDown('T')) velocity_ +=  normalizedPlanarDirection * acceleration_ * timeStep;
     if (input->GetKeyDown('G')) velocity_ += -normalizedPlanarDirection * acceleration_ * timeStep;
     if (input->GetKeyDown('H')) rotationSpeed_ -= angularAcceleration_ * timeStep;
@@ -112,7 +117,7 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
 
 
     //Read joystick input
-    JoystickState* joystickState = input->GetJoystickByIndex(0);
+    JoystickState* joystickState{ input->GetJoystickByIndex(0) };
     if (joystickState){
         rotationSpeed_ += joystickState->GetAxisPosition(2) * timeStep * angularAcceleration_;
         velocity_ -= joystickState->GetAxisPosition(3) * camForward * acceleration_ * timeStep;
@@ -147,8 +152,8 @@ void KOCam::HandleUpdate(StringHash eventType, VariantMap &eventData)
     smoothTargetPosition_ = 0.1f * (9.0f * smoothTargetPosition_ + targetPosition);
     smoothTargetVelocity_ = 0.1f * (9.0f * smoothTargetVelocity_ + targetVelocity);
     rootNode_->Translate(smoothTargetVelocity_ * timeStep, TS_WORLD);
-    Quaternion camRot = rootNode_->GetWorldRotation();
-    Quaternion aimRotation = camRot;
+    Quaternion camRot{ rootNode_->GetWorldRotation() };
+    Quaternion aimRotation{ camRot };
     aimRotation.FromLookRotation(smoothTargetPosition_ - rootNode_->GetWorldPosition());
     rootNode_->SetRotation(aimRotation);
 }

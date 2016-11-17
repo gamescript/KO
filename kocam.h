@@ -26,14 +26,16 @@
 
 using namespace Urho3D;
 
-class KOCam : public Object
+class KOCam : public LogicComponent
 {
-    URHO3D_OBJECT(KOCam, Object);
+    URHO3D_OBJECT(KOCam, LogicComponent);
     friend class MasterControl;
     friend class InputMaster;
     friend class Player;
 public:
-    KOCam(Context *context, MasterControl* masterControl);
+    static void RegisterObject(Context *context);
+    KOCam(Context *context);
+    virtual void OnNodeSet(Node *node);
 
     SharedPtr<Camera> camera_;
     SharedPtr<Viewport> viewport_;
@@ -43,7 +45,7 @@ public:
     Quaternion GetRotation() const;
 private:
     MasterControl* masterControl_;
-    void HandleUpdate(StringHash eventType, VariantMap &eventData);
+    void Update(float timeStep);
     SharedPtr<Node> rootNode_;
     Vector3 smoothTargetPosition_;
     Vector3 smoothTargetVelocity_;

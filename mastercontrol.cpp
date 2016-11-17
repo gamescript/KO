@@ -21,15 +21,25 @@
 #include "dungeon.h"
 #include "player.h"
 #include "floatingeye.h"
+#include "firepit.h"
+#include "frop.h"
 
 #include "mastercontrol.h"
 
 URHO3D_DEFINE_APPLICATION_MAIN(MasterControl);
 
+MasterControl* MasterControl::instance_ = NULL;
+
+MasterControl* MasterControl::GetInstance()
+{
+    return MasterControl::instance_;
+}
+
 MasterControl::MasterControl(Context *context):
     Application(context),
     paused_(false)
 {
+    instance_ = this;
 }
 
 void MasterControl::Setup()
@@ -45,6 +55,12 @@ void MasterControl::Setup()
 }
 void MasterControl::Start()
 {
+    Player::RegisterObject(context_);
+    FloatingEye::RegisterObject(context_);
+    FirePit::RegisterObject(context_);
+    Frop::RegisterObject(context_);
+    KOCam::RegisterObject(context_);
+
     new InputMaster(context_, this);
     cache_ = GetSubsystem<ResourceCache>();
     graphics_ = GetSubsystem<Graphics>();
@@ -60,10 +76,10 @@ void MasterControl::Start()
     CreateUI();
     SubscribeToEvents();
 
-    Sound* music = cache_->GetResource<Sound>("Music/Pantera_Negra_-_Sumerian_Speech.ogg");
+    Sound* music{ cache_->GetResource<Sound>("Music/Pantera_Negra_-_Sumerian_Speech.ogg") };
     music->SetLooped(true);
-    Node* musicNode = world.scene->CreateChild("Music");
-    SoundSource* musicSource = musicNode->CreateComponent<SoundSource>();
+    Node* musicNode{ world.scene->CreateChild("Music") };
+    SoundSource* musicSource{ musicNode->CreateComponent<SoundSource>() };
     musicSource->SetSoundType(SOUND_MUSIC);
     musicSource->Play(music);
 }
@@ -76,37 +92,36 @@ void MasterControl::SubscribeToEvents()
 {
     SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(MasterControl, HandleSceneUpdate));
     SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(MasterControl, HandleUpdate));
-    SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(MasterControl, HandleSceneUpdate));
 }
 
 void MasterControl::SetWindowTitleAndIcon()
 {
     //Create console
-    Console* console = engine_->CreateConsole();
+    Console* console{ engine_->CreateConsole() };
     console->SetDefaultStyle(defaultStyle_);
     console->GetBackground()->SetOpacity(0.0f);
 
     //Create debug HUD
-    DebugHud* debugHud = engine_->CreateDebugHud();
+    DebugHud* debugHud{ engine_->CreateDebugHud() };
     debugHud->SetDefaultStyle(defaultStyle_);
 }
 
 void MasterControl::CreateConsoleAndDebugHud()
 {
     // Create console
-    Console* console = engine_->CreateConsole();
+    Console* console{ engine_->CreateConsole() };
     console->SetDefaultStyle(defaultStyle_);
     console->GetBackground()->SetOpacity(0.8f);
 
     // Create debug HUD.
-    DebugHud* debugHud = engine_->CreateDebugHud();
+    DebugHud* debugHud{ engine_->CreateDebugHud() };
     debugHud->SetDefaultStyle(defaultStyle_);
 }
 
 void MasterControl::CreateUI()
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
-    UI* ui = GetSubsystem<UI>();
+    ResourceCache* cache{ GetSubsystem<ResourceCache>() };
+    UI* ui{ GetSubsystem<UI>() };
 
     //Create a Cursor UI element because we want to be able to hide and show it at will. When hidden, the mouse cursor will control the camera
     world.cursor.uiCursor = new Cursor(context_);
@@ -117,7 +132,7 @@ void MasterControl::CreateUI()
     world.cursor.uiCursor->SetPosition(graphics_->GetWidth()/2, graphics_->GetHeight()/2);
 
     //Construct new Text object, set string to display and font to use
-    Text* instructionText = ui->GetRoot()->CreateChild<Text>();
+    Text* instructionText{ ui->GetRoot()->CreateChild<Text>() };
     instructionText->SetText("KO");
     instructionText->SetFont(cache->GetResource<Font>("Fonts/ChaosTimes_lig.ttf"), 32);
     //The text has multiple rows. Center them in relation to each other
@@ -207,10 +222,13 @@ void MasterControl::CreateScene()
     //Set cascade splits at 10, 50, 200 world unitys, fade shadows at 80% of maximum shadow distance
     light->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
 
-    world.player_ = new Player(context_, this);
+    world.player_ = world.scene->CreateChild()
+            ->CreateComponent<Player>();
 
     new Dungeon(context_, this);
-    world.camera = new KOCam(context_, this);
+
+    Node* camNode{ world.scene->CreateChild("Camera") };
+    world.camera = camNode->CreateComponent<KOCam>();
 }
 
 void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
@@ -221,7 +239,7 @@ void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
 void MasterControl::HandleSceneUpdate(StringHash eventType, VariantMap &eventData)
 {
     using namespace Update;
-    double timeStep = eventData[P_TIMESTEP].GetFloat();
+    float timeStep{ eventData[P_TIMESTEP].GetFloat() };
     world.voidNode->SetPosition(LucKey::Scale(world.camera->GetWorldPosition(), Vector3::ONE - Vector3::UP));
     UpdateCursor(timeStep);
 }

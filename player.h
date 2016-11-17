@@ -31,14 +31,16 @@ class Player : public SceneObject
     friend class KOCam;
     friend class FloatingEye;
 public:
-    Player(Context* context, MasterControl* masterControl);
+    static void RegisterObject(Context *context);
+    Player(Context* context);
+    virtual void OnNodeSet(Node *node);
 
-    double GetHealth(){return health_;}
+    float GetHealth(){ return health_; }
     void Hit(float damage, int ownerID);
     void AddScore(int points);
     Vector3 GetLinearVelocity() {return rigidBody_->GetLinearVelocity();}
 
-    void SetPosition(const Vector3& pos) { rootNode_->SetPosition(pos); }
+    void SetPosition(const Vector3& pos) { node_->SetPosition(pos); }
 
     void EquipRightHand();
     void EquipLeftHand();
@@ -63,7 +65,7 @@ private:
     SharedPtr<Sound> sample_;
     Vector<SharedPtr<SoundSource> > sampleSources_;
 
-    void HandleUpdate(StringHash eventType, VariantMap &eventData);
+    void Update(float timeStep);
     void PlaySample(Sound *sample);
     void Hack();
 };

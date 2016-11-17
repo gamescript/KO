@@ -5,7 +5,7 @@
 - Pathfinding
 - 2D Line of Sight
 - in-game eReader
-- Read plant radius and height from TMX
+- Switch to EMP map format once that is usable.
  
 ## World
  
@@ -14,17 +14,17 @@
 - The Last Tree
 
 > The existence of this plant hangs in the balance. The thing that has kept it standing is a community of 23 people living inside a giant tree house that they built in its branches. But now an order came from beyond the mist for eviction of the tree house. Whether or not they comply, within 5 days the tree will be nuked for being abnormal.
-> KO/Dizzy becomes really angry and decides to find the source of this unacceptable demand.
+> KO/Dizzy becomes really angry and sets off to have a chat with the source of this unacceptable demand.
 
 - Fake Forest
 
-> Fake Forest is what covers most of the world, _the last tree_ is surrounded by it. Everything is very brightly colored and plastic. There's furries and swarms of fleyes everywhere. Tutorial land.
+> Fake Forest is what covers most of the world, _the last tree_ is surrounded by it. Everything is very brightly colored and plastic. The trees have screens in their canopies and card operated replicators in their trunks. There's furries and swarms of fleyenears everywhere. This is tutorial land.
 
 - Black Iron Prison
 
-> At the end of Mainstreet lies number 101, a giant black pyramid with a golden tip covered in circuitry and barred windows [+]. KO is sent here to file a complaint and kick bubblegum. Upward staircases lead deeper into the dungeon, with every floor decreasing in size, but increasing in complexity and difficulty.
+> At the end of Mainstreet lies number 101, a giant black cast iron pyramid with surface circuitry, a golden top and cross-barred square windows. KO is sent here to file a complaint and kick bubblegum. Upward staircases lead deeper into the dungeon, with every floor decreasing in size, but increasing in complexity and difficulty.
 
-> The first floor has a downwards ladder that leads to a floor with deserted shops and a collapsed downward staircase. (Rogue-like reference a la Diablo2)
+> The first floor has a downwards ladder that leads to a floor with deserted shops and a collapsed downward staircase. (Rogue-like/Angband reference a la Tristam in Diablo 2)
 
 > This is the main dungeon for The Curse of Greyface.
  
@@ -37,21 +37,31 @@
 
 #### NPCs
 
-- Kerrence Mantenna
+##### Kerrence Mantenna
 
-> "Welcome to Language"
-> "Language controls the universe"
-> "Ashroomushroom"
+A incarnation of Terrence McKenna.
+
+> "Welcome to Language"  
+> "Language controls the universe"  
+> "Ashroo-mushroom"  
+
+
+##### Super Mark  
+
+Some hero who's in it for the money. Does not sell lemonade.  
+
+> "Good deals, bad deals, you name it!"
 
 #### Monsters
 
-- Fleyes
+- Fleyenears
 - Zombies
 	+ Native American
 	+ Construction worker
 	+ Cop
 	+ GI
 	+ Cowboy
+- Rare chinpokomon
 - Vishna Kanya
 - Hells angels
 
@@ -88,10 +98,11 @@ Syrups can be used to make lemonade at fountains; a less potent potion with a sl
 	+ Increased spell casting rate
 	+ Colorful surroundings
 
-#### Shops
+Increased awareness (shrooms or meditation) adds a kind of 4th dimension. An overlay hinting at buffs. This 4th dimension consists of visualized belief systems that can can be traversed by the player within the scope of the magic they learned about.
+This may have downsides too like stronger or faster monsters, but more experience in any case.
 
-##### Super Mark
-Some hero who's in it for the money. Does not sell lemonade
+Another idea:
+You can meditate on your mindset before taking mushrooms and it will determine the relation between positive and negative effects.
 
 #### Actions
 

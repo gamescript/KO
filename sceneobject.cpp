@@ -18,22 +18,25 @@
 
 #include "sceneobject.h"
 
-SceneObject::SceneObject(Context* context, MasterControl* masterControl):
-    Object(context),
-    masterControl_{masterControl},
+SceneObject::SceneObject(Context* context):
+    LogicComponent(context),
     variator_{Random()}
 {
-    rootNode_ = masterControl_->world.scene->CreateChild("SceneObject");
-    rootNode_->SetEnabled(false);
+}
+
+void SceneObject::OnNodeSet(Node *node)
+{ (void)node;
+
+    node_->SetEnabled(false);
 }
 
 void SceneObject::Set(Vector3 position)
 {
-    rootNode_->SetPosition(position);
-    rootNode_->SetEnabled(true);
+    node_->SetPosition(position);
+    node_->SetEnabled(true);
 }
 
 void SceneObject::Disable()
 {
-    rootNode_->SetEnabledRecursive(false);
+    node_->SetEnabledRecursive(false);
 }

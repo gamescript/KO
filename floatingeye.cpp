@@ -19,40 +19,48 @@
 #include "floatingeye.h"
 #include "player.h"
 
-FloatingEye::FloatingEye(Context *context, MasterControl *masterControl):
-    NPC(context, masterControl),
+void FloatingEye::RegisterObject(Context *context)
+{
+    context->RegisterFactory<FloatingEye>();
+}
+
+FloatingEye::FloatingEye(Context *context):
+    NPC(context),
     smoothTargetPosition_{Vector3::ZERO}
 {
-    rootNode_->SetName("FloatingEye");
+}
+
+void FloatingEye::OnNodeSet(Node *node)
+{
+    NPC::OnNodeSet(node);
+
+    node_->SetName("FloatingEye");
 
     rigidBody_->SetMass(1.0f);
 
-    modelNode_ = rootNode_->CreateChild("ModelNode");
+    modelNode_ = node_->CreateChild("ModelNode");
 
     ballModel_ = modelNode_->CreateComponent<StaticModel>();
-    ballModel_->SetModel(masterControl_->resources.models.enemies.floatingEye);
-    ballModel_->SetMaterial(masterControl_->resources.materials.floatingEye);
+    ballModel_->SetModel(MC->resources.models.enemies.floatingEye);
+    ballModel_->SetMaterial(MC->resources.materials.floatingEye);
     ballModel_->SetCastShadows(true);
 
     corneaModel_ = modelNode_->CreateComponent<StaticModel>();
-    corneaModel_->SetModel(masterControl_->resources.models.enemies.cornea);
-    corneaModel_->SetMaterial(masterControl_->resources.materials.cornea);
+    corneaModel_->SetModel(MC->resources.models.enemies.cornea);
+    corneaModel_->SetMaterial(MC->resources.materials.cornea);
     corneaModel_->SetCastShadows(false);
-
-    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(FloatingEye, HandleUpdate));
 }
 
-void FloatingEye::HandleUpdate(StringHash eventType, VariantMap &eventData)
+void FloatingEye::Update(float timeStep)
 {
-    float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
-    modelNode_->SetPosition(Vector3(masterControl_->Sine(0.9f, -0.023f, 0.023f, variator_*M_PI*2.0f),
-                                    masterControl_->Sine(1.0f, -0.05f, 0.075f, -variator_*M_PI*2.0f),
-                                    masterControl_->Sine(0.91f, -0.023f, 0.023f, variator_*M_PI)));
+    modelNode_->SetPosition(Vector3(MC->Sine(0.9f, -0.023f, 0.023f, variator_*M_PI*2.0f),
+                                    MC->Sine(1.0f, -0.05f, 0.075f, -variator_*M_PI*2.0f),
+                                    MC->Sine(0.91f, -0.023f, 0.023f, variator_*M_PI)));
 
-    Vector3 targetPosition = masterControl_->world.player_->GetPosition();
+    Vector3 targetPosition{ MC->world.player_->GetPosition() };
 
-    Quaternion rotation = rootNode_->GetWorldRotation();
+    Quaternion rotation{ node_->GetWorldRotation() };
     Quaternion aimRotation;
-    if (aimRotation.FromLookRotation(targetPosition - rootNode_->GetWorldPosition()))
-        rootNode_->SetRotation(rotation.Slerp(aimRotation, 1.5f*timeStep));
+    if (aimRotation.FromLookRotation(targetPosition - node_->GetWorldPosition()))
+        node_->SetRotation(rotation.Slerp(aimRotation, 1.5f*timeStep));
 }

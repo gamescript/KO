@@ -56,6 +56,7 @@
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/IO/FileSystem.h>
 #include <Urho3D/IO/Log.h>
+#include <Urho3D/IO/MemoryBuffer.h>
 #include <Urho3D/Math/MathDefs.h>
 #include <Urho3D/Math/Plane.h>
 #include <Urho3D/Math/Sphere.h>
@@ -69,6 +70,7 @@
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Resource/XMLFile.h>
 #include <Urho3D/Scene/LogicComponent.h>
+#include <Urho3D/Scene/Component.h>
 #include <Urho3D/Scene/Node.h>
 #include <Urho3D/Scene/SceneEvents.h>
 #include <Urho3D/Scene/Scene.h>
@@ -81,13 +83,19 @@
 
 #include <Urho3D/DebugNew.h>
 
+#include <initializer_list>
+#include "mastercontrol.h"
+
 #define FILES GetSubsystem<FileSystem>()
 #define ENGINE GetSubsystem<Engine>()
 #define TIME GetSubsystem<Time>()
 #define CACHE GetSubsystem<ResourceCache>()
 #define INPUT GetSubsystem<Input>()
 #define GRAPHICS GetSubsystem<Graphics>()
+#define RENDERER GetSubsystem<Renderer>()
 #define AUDIO GetSubsystem<Audio>()
+
+#define MC GetSubsystem<MasterControl>()
 
 namespace Urho3D {
 class Drawable;

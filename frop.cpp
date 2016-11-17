@@ -18,27 +18,36 @@
 
 #include "frop.h"
 
-Frop::Frop(Context *context, MasterControl *masterControl) :
-    Deco(context, masterControl)
+void Frop::RegisterObject(Context *context)
 {
-    growthStart_ = Random(0.0f, 5.0f);
-    rootNode_->Rotate(Quaternion(Random(-10.0f, 10.0f),Random(360.0f),Random(-10.0f, 10.0f)));
-    rootNode_->SetScale(0.0f);
-    float randomWidth = Random(0.5f,2.0f);
-    scale_ = Vector3(randomWidth, Random(0.5f,1.0f+randomWidth), randomWidth);
-    fropModel_ = rootNode_->CreateComponent<StaticModel>();
-    fropModel_->SetModel(masterControl_->cache_->GetResource<Model>("Models/Frop.mdl"));
-    fropModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Materials/Frop.xml"));
-    fropModel_->SetCastShadows(true);
-
-    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Frop, HandleUpdate));
+    context->RegisterFactory<Frop>();
 }
 
-void Frop::HandleUpdate(StringHash eventType, VariantMap &eventData)
+Frop::Frop(Context *context) :
+    Deco(context)
 {
-    using namespace Update;
-    double timeStep = eventData[P_TIMESTEP].GetFloat();
+}
+
+void Frop::OnNodeSet(Node *node)
+{
+    Deco::OnNodeSet(node);
+
+    growthStart_ = Random(0.0f, 5.0f);
+    node_->Rotate(Quaternion(Random(-10.0f, 10.0f),
+                             Random(360.0f),
+                             Random(-10.0f, 10.0f)));
+    node_->SetScale(0.0f);
+    float randomWidth{ Random(0.5f, 2.0f) };
+    scale_ = Vector3(randomWidth, Random(0.5f,1.0f+randomWidth), randomWidth);
+    fropModel_ = node_->CreateComponent<StaticModel>();
+    fropModel_->SetModel(MC->cache_->GetResource<Model>("Models/Frop.mdl"));
+    fropModel_->SetMaterial(MC->cache_->GetResource<Material>("Materials/Frop.xml"));
+    fropModel_->SetCastShadows(true);
+}
+
+void Frop::Update(float timeStep)
+{
     age_ += timeStep;
-    if (age_ > growthStart_ && rootNode_->GetScale().Length() < scale_.Length()-0.01f)
-        rootNode_->SetScale(rootNode_->GetScale()+(timeStep*(scale_ - rootNode_->GetScale())));
+    if (age_ > growthStart_ && node_->GetScale().Length() < scale_.Length()-0.01f)
+        node_->SetScale(node_->GetScale()+(timeStep*(scale_ - node_->GetScale())));
 }

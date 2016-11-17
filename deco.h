@@ -28,7 +28,7 @@ class Deco : public SceneObject
 {
     URHO3D_OBJECT(Deco, SceneObject);
 public:
-    Deco(Context *context, MasterControl* masterControl);
+    Deco(Context *context);
 protected:
 };
 

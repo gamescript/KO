@@ -107,6 +107,8 @@ StringHash const N_SLOT = StringHash("Slot");
 StringHash const N_FLOATINGEYE = StringHash("FloatingEye");
 }
 
+#define MC MasterControl::GetInstance()
+
 class MasterControl : public Application
 {
     /// Enable type information.
@@ -116,6 +118,7 @@ class MasterControl : public Application
 public:
     /// Constructor.
     MasterControl(Context* context);
+    static MasterControl* GetInstance();
     GameWorld world;
     Resources resources;
     SharedPtr<ResourceCache> cache_;
@@ -135,6 +138,7 @@ public:
     float Sine(float x);
     float Sine(float freq, float min, float max, float shift = 0.0f);
 private:
+    static MasterControl* instance_;
     SharedPtr<UI> ui_;
     SharedPtr<Renderer> renderer_;
     SharedPtr<XMLFile> defaultStyle_;

@@ -30,7 +30,8 @@ class NPC : public SceneObject
 {
     URHO3D_OBJECT(NPC, SceneObject);
 public:
-    NPC(Context *context, MasterControl* masterControl);
+    NPC(Context *context);
+    virtual void OnNodeSet(Node *node);
 protected:
     RigidBody* rigidBody_;
     CollisionShape* collisionShape_;
