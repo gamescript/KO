@@ -35,3 +35,6 @@
 
 # Urho3D
 /Urho3D
+
+# Blender
+*.blend*
