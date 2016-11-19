@@ -29,25 +29,28 @@ FirePit::FirePit(Context* context):
 }
 
 void FirePit::OnNodeSet(Node *node)
-{
+{ (void)node;
+
     node_->SetRotation(Quaternion(0.0f, variator_ * 360.0f, 0.0f));
 
-    StaticModel* model_ = node_->CreateComponent<StaticModel>();
+    StaticModel* model_{ node_->CreateComponent<StaticModel>() };
     model_->SetModel(MC->cache_->GetResource<Model>("Models/FirePit.mdl"));
     model_->SetMaterial(0, MC->cache_->GetResource<Material>("Materials/Metal.xml"));
     model_->SetMaterial(1, MC->resources.materials.darkness);
     model_->SetMaterial(2, MC->cache_->GetResource<Material>("Materials/Amber.xml"));
     model_->SetCastShadows(true);
 
-    node_->CreateComponent<RigidBody>();
-    CollisionShape* collider = node_->CreateComponent<CollisionShape>();
+    RigidBody* rigidBody{ node_->CreateComponent<RigidBody>() };
+//    rigidBody->SetMass(1.0f);
+//    rigidBody->SetLinearFactor(Vector3::ONE - Vector3::UP);
+    CollisionShape* collider{ node_->CreateComponent<CollisionShape>() };
     collider->SetCylinder(0.4f, 0.5f);
 
-    Node* particleNode = node_->CreateChild("Fire");
+    Node* particleNode{ node_->CreateChild("Fire") };
     particleNode->SetPosition(Vector3::UP * 0.16f);
-    ParticleEmitter* flameEmitter = particleNode->CreateComponent<ParticleEmitter>();
+    ParticleEmitter* flameEmitter{ particleNode->CreateComponent<ParticleEmitter>() };
     flameEmitter->SetEffect(MC->cache_->GetResource<ParticleEffect>("Particles/fire1.xml"));
-    ParticleEmitter* sparkEmitter = particleNode->CreateComponent<ParticleEmitter>();
+    ParticleEmitter* sparkEmitter{ particleNode->CreateComponent<ParticleEmitter>() };
     sparkEmitter->SetEffect(MC->cache_->GetResource<ParticleEffect>("Particles/fire_sparks.xml"));
 
     lightNode_ = node_->CreateChild("LightNode");
@@ -61,30 +64,35 @@ void FirePit::OnNodeSet(Node *node)
 }
 
 void FirePit::Update(float timeStep)
-{
+{ (void)timeStep;
+
     UpdateLightPosition();
     UpdateBrightness();
 }
 
 void FirePit::UpdateLightPosition()
 {
-    float range = 0.001f;
-    float x = 0.0f;
-    for (int i = 1; i < 9; i++)
-        x += MC->Sine(4.0f + i, -range, range, i+(i*variator_ * 1.0f*M_PI))/(i*0.666f);
-    float y = 0.5f;
-    for (int i = 1; i < 9; i++)
-        y += MC->Sine(5.0f + i, -range, range, i+(i*variator_ * 1.5f*M_PI))/(i*0.666f);
-    float z = 0.0f;
-    for (int i = 1; i < 9; i++)
-        z += MC->Sine(6.0f + i, -range, range, i+(i*variator_ * 2.0f*M_PI))/(i*0.666f);
+    float range{ 0.001f };
+
+    float x{ 0.0f };
+    for (int i{1}; i < 9; ++i)
+        x += MC->Sine(4.0f + i, -range, range, i + (i * variator_ * 1.0f * M_PI)) / (i * 0.666f);
+
+    float y{ 0.5f };
+    for (int i{1}; i < 9; ++i)
+        y += MC->Sine(5.0f + i, -range, range, i + (i * variator_ * 1.5f * M_PI)) / (i * 0.666f);
+
+    float z{ 0.0f };
+    for (int i{1}; i < 9; ++i)
+        z += MC->Sine(6.0f + i, -range, range, i + (i * variator_ * 2.0f * M_PI)) / (i * 0.666f);
+
     lightNode_->SetPosition(Vector3(x, y, z));
 }
 
 void FirePit::UpdateBrightness()
 {
-    float brightness = 1.23f;
-    for (int i = 1; i < 5; i++)
+    float brightness{ 1.23f };
+    for (int i{1}; i < 5; ++i)
     {
         brightness += MC->Sine(variator_ + 7.123f + i, -0.001f, 0.023f, (variator_ * 2.0f*M_PI) + i*(0.2f+variator_));
     }

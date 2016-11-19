@@ -27,7 +27,7 @@ void Player::RegisterObject(Context *context)
 }
 
 Player::Player(Context *context):
-    SceneObject(context)
+    Controllable(context)
 {
 }
 
@@ -77,7 +77,7 @@ void Player::PlaySample(Sound* sample)
     for (unsigned i{0}; i < sampleSources_.Size(); ++i){
         if (!sampleSources_[i]->IsPlaying()) {
 
-            sampleSources_[i]->Play(sample_);
+            sampleSources_[i]->Play(sample);
             break;
         }
     }
@@ -102,6 +102,7 @@ void Player::Update(float timeStep)
     //Read input
     JoystickState* joystickState{ input->GetJoystickByIndex(0) };
     if (joystickState){
+
         moveJoy = camRight * joystickState->GetAxisPosition(0) +
                -camForward * joystickState->GetAxisPosition(1);
     }
@@ -121,24 +122,41 @@ void Player::Update(float timeStep)
     else if (move.Length() < 0.01f) move *= 0.0f;
 
     //Update animation
-    if (rigidBody_->GetLinearVelocity().Length() > 0.05f){
-        animCtrl_->SetStartBone("Models/Swing1.ani", "UpperBack");
-        animCtrl_->PlayExclusive("Models/Swing1.ani", 0, true, 0.23f);
-        animCtrl_->SetSpeed("Models/Swing1.ani", rigidBody_->GetLinearVelocity().Length()*2.63f);
+    if (rigidBody_->GetLinearVelocity().Length() > 0.05f) {
+
+        animCtrl_->SetStartBone("Models/Walk.ani", "RootBone");
+        animCtrl_->Play("Models/Walk.ani", 0, true, 0.23f);
+        animCtrl_->SetSpeed("Models/Walk.ani", rigidBody_->GetLinearVelocity().Length() * 2.63f);
+
+        animCtrl_->SetStartBone("Models/Swing1.ani", "LowerBack");
     }
     else {
-        animCtrl_->PlayExclusive("Models/Idle.ani", 0, true, 0.23f);
+
+        animCtrl_->PlayExclusive("Models/Idle.ani", 0, true, 0.42f);
+        animCtrl_->SetStartBone("Models/Swing1.ani", "RootBone");
+    }
+
+    if (GetSubsystem<Input>()->GetKeyDown(KEY_SPACE))
+    {
+
+        animCtrl_->Play("Models/Swing1.ani", 1, false, 0.23f);
+        animCtrl_->SetSpeed("Models/Swing1.ani", 1.42f);
+
+//        >= animCtrl_->GetLength("Models/Swing1.ani") animCtrl_->GetAnimationsAttr
+    } else {
+        animCtrl_->Stop("Models/Swing1.ani", 0.23f);
     }
 
     //Apply movement
-    Vector3 force{ move * thrust * timeStep * (1+0.42f*input->GetKeyDown(KEY_SHIFT)) };
+    Vector3 force{ move * thrust * timeStep * (1 + 0.42f * input->GetKeyDown(KEY_SHIFT)) };
     rigidBody_->ApplyForce(force);
 
     //Update rotation according to direction of the player's movement.
-    if (rigidBody_->GetLinearVelocity().Length() > 0.01f){
-        Vector3 velocity = rigidBody_->GetLinearVelocity();
-        Quaternion rotation = node_->GetWorldRotation();
-        Quaternion aimRotation = rotation;
+    if (rigidBody_->GetLinearVelocity().Length() > 0.01f) {
+
+        Vector3 velocity{ rigidBody_->GetLinearVelocity() };
+        Quaternion rotation{ node_->GetWorldRotation() };
+        Quaternion aimRotation{ rotation };
         aimRotation.FromLookRotation(velocity);
         node_->SetRotation(rotation.Slerp(aimRotation, 7.0f * timeStep * velocity.Length()));
     }

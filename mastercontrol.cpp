@@ -202,14 +202,14 @@ void MasterControl::CreateScene()
     world.voidNode = world.scene->CreateChild("Void");
     //Location is set in update since the plane moves with the camera.
     world.voidNode->SetScale(Vector3(1000.0f, 1.0f, 1000.0f));
-    StaticModel* planeObject = world.voidNode->CreateComponent<StaticModel>();
+    StaticModel* planeObject{ world.voidNode->CreateComponent<StaticModel>() };
     planeObject->SetModel(cache_->GetResource<Model>("Models/Plane.mdl"));
     planeObject->SetMaterial(cache_->GetResource<Material>("Materials/Invisible.xml"));
 
     //Create a directional light to the world. Enable cascaded shadows on it
-    Node* lightNode = world.scene->CreateChild("DirectionalLight");
+    Node* lightNode{ world.scene->CreateChild("DirectionalLight") };
     lightNode->SetDirection(Vector3(0.0f, -1.0f, 0.0f));
-    Light* light = lightNode->CreateComponent<Light>();
+    Light* light{ lightNode->CreateComponent<Light>() };
     light->SetLightType(LIGHT_DIRECTIONAL);
     light->SetBrightness(0.23f);
     light->SetColor(Color(1.0f, 0.8f, 0.7f));
@@ -233,7 +233,6 @@ void MasterControl::CreateScene()
 
 void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
 {
-
 }
 
 void MasterControl::HandleSceneUpdate(StringHash eventType, VariantMap &eventData)
@@ -266,7 +265,7 @@ void MasterControl::UpdateCursor(double timeStep)
 
 bool MasterControl::CursorRayCast(double maxDistance, PODVector<RayQueryResult> &hitResults)
 {
-    Ray cameraRay = world.camera->camera_->GetScreenRay(0.5f,0.5f);
+    Ray cameraRay{ world.camera->camera_->GetScreenRay(0.5f,0.5f) };
     RayOctreeQuery query(hitResults, cameraRay, RAY_TRIANGLE, maxDistance, DRAWABLE_GEOMETRY);
     world.scene->GetComponent<Octree>()->Raycast(query);
     if (hitResults.Size()) return true;
@@ -281,8 +280,8 @@ void MasterControl::Exit()
 void MasterControl::CreateSineLookupTable()
 {
     //Generate sine lookup array
-    int maxi = 256;
-    for (int i = 0; i < maxi; i++){
+    int maxi{256};
+    for (int i{0}; i < maxi; ++i){
         sine_.Push((float)sin((i/(float)maxi)*2.0f*M_PI));
     }
 }
@@ -293,8 +292,8 @@ float MasterControl::Sine(float x) {
 
 float MasterControl::Sine(float freq, float min, float max, float shift)
 {
-    float phase = freq * world.scene->GetElapsedTime() + shift;
-    float add = 0.5f*(min+max);
+    float phase{ freq * world.scene->GetElapsedTime() + shift };
+    float add{ 0.5f*(min+max) };
     return Sine(phase) * 0.5f * (max - min) + add;
 }
 

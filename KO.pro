@@ -25,6 +25,7 @@ SOURCES += \
     tile.cpp \
     dungeon.cpp \
     kocam.cpp \
+    controllable.cpp \
     inputmaster.cpp \
     frop.cpp \
     firepit.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     tile.h \
     dungeon.h \
     kocam.h \
+    controllable.h \
     inputmaster.h \
     frop.h \
     firepit.h \

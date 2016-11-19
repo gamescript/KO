@@ -21,13 +21,13 @@
 
 #include <Urho3D/Urho3D.h>
 
-#include "sceneobject.h"
+#include "controllable.h"
 
 using namespace Urho3D;
 
-class Player : public SceneObject
+class Player : public Controllable
 {
-    URHO3D_OBJECT(Player, SceneObject);
+    URHO3D_OBJECT(Player, Controllable);
     friend class KOCam;
     friend class FloatingEye;
 public:
