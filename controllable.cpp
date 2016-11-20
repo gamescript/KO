@@ -1,4 +1,4 @@
-/* heXon
+/* KO
 // Copyright (C) 2016 LucKey Productions (luckeyproductions.nl)
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,9 +17,10 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "player.h"
+//#include "ko.h"
 #include "inputmaster.h"
 #include "controllable.h"
+#include "player.h"
 
 Controllable::Controllable(Context* context) : SceneObject(context),
     controlled_{false},
@@ -43,26 +44,28 @@ void Controllable::OnNodeSet(Node *node)
 { (void)node;
 
     model_ = node_->CreateComponent<AnimatedModel>();
-    rigidBody_ = node_->CreateComponent<RigidBody>();
-    collisionShape_ = node_->CreateComponent<CollisionShape>();
+    model_->SetCastShadows(true);
+
     animCtrl_ = node_->CreateComponent<AnimationController>();
 
-    model_->SetCastShadows(true);
+    rigidBody_ = node_->CreateComponent<RigidBody>();
+    collisionShape_ = node_->CreateComponent<CollisionShape>();
+
 }
 void Controllable::Update(float timeStep)
 {
-//    if (!GetPlayer())
-//        return;
+    for (int a{0}; a < static_cast<int>(actions_.size()); ++a){
 
-//    if (GetPlayer()->IsHuman())
-//        for (int a{0}; a < static_cast<int>(actions_.size()); ++a){
+        if (actions_[a])
+            actionSince_[a] += timeStep;
+    }
 
-//            if (actions_[a])
-//                actionSince_[a] += timeStep;
-//        }
-//    else {
-//        Think();
-//    }
+    if (GetPlayer() && GetPlayer()->IsHuman()) {
+
+    }
+    else {
+        Think();
+    }
 }
 
 void Controllable::SetMove(Vector3 move)
@@ -94,9 +97,6 @@ void Controllable::SetActions(std::bitset<4> actions)
             }
         }
 }
-void Controllable::HandleAction(int actionId)
-{ (void)actionId;
-}
 
 void Controllable::AlignWithMovement(float timeStep)
 {
@@ -113,7 +113,7 @@ void Controllable::AlignWithVelocity(float timeStep)
     targetRot.FromLookRotation(rigidBody_->GetLinearVelocity());
     ClampPitch(targetRot);
     float horizontalVelocity{(rigidBody_->GetLinearVelocity() * Vector3(1.0f, 0.0f, 1.0f)).Length()};
-    node_->SetRotation(rot.Slerp(targetRot, Clamp(timeStep * horizontalVelocity, 0.0f, 1.0f)));
+    node_->SetRotation(rot.Slerp(targetRot, Clamp(7.0f * timeStep * horizontalVelocity, 0.0f, 1.0f)));
 }
 
 void Controllable::ClampPitch(Quaternion& rot)
@@ -132,8 +132,7 @@ void Controllable::ClearControl()
     ResetInput();
 }
 
-//Player *Controllable::GetPlayer()
-//{
-//    GetSubsystem<InputMaster>()->GetPlayerByControllable(this);
-//}
-
+Player* Controllable::GetPlayer()
+{
+    return INPUTMASTER->GetPlayerByControllable(this);
+}

@@ -20,8 +20,9 @@ CONFIG -= qt
 
 SOURCES += \
     mastercontrol.cpp \
-    player.cpp \
     sceneobject.cpp \
+    player.cpp \
+    ko.cpp \
     tile.cpp \
     dungeon.cpp \
     kocam.cpp \
@@ -37,8 +38,9 @@ SOURCES += \
 
 HEADERS += \
     mastercontrol.h \
-    player.h \
     sceneobject.h \
+    player.h \
+    ko.h \
     tile.h \
     dungeon.h \
     kocam.h \

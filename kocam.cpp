@@ -16,7 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "player.h"
+#include "ko.h"
 #include "kocam.h"
 
 using namespace LucKey;
@@ -47,26 +47,24 @@ void KOCam::OnNodeSet(Node *node)
     float viewRange{ 128.0f };
 
     //Create the camera. Limit far clip distance to match the fog
-    rootNode_ = MC->world.scene->CreateChild("Camera");
-    rootNode_->SetPosition(MC->world.player_->GetPosition() + Vector3(0.23f, 8.8f, -4.2f));
-    rootNode_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
-    camera_ = rootNode_->CreateComponent<Camera>();
+    node_ = MC->world.scene->CreateChild("Camera");
+    node_->SetPosition(MC->world.ko->GetPosition() + Vector3(0.23f, 8.8f, -4.2f));
+    node_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
+    camera_ = node_->CreateComponent<Camera>();
     camera_->SetFarClip(viewRange);
     camera_->SetNearClip(0.023f);
 
-    Zone* zone{ rootNode_->CreateComponent<Zone>() };
+    Zone* zone{ node_->CreateComponent<Zone>() };
     zone->SetBoundingBox(BoundingBox(Vector3(-100.0f, -50.0f, -100.0f), Vector3(100.0f, 50.0f, 100.0f)));
     zone->SetFogColor(Color(0.0f, 0.0f, 0.0f, 1.0f));
     zone->SetFogStart(10.0f);
     zone->SetFogEnd(viewRange-5.0f);
 
     SetupViewport();
-
 }
 
 void KOCam::SetupViewport()
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
     Renderer* renderer = GetSubsystem<Renderer>();
 
     //Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
@@ -75,9 +73,9 @@ void KOCam::SetupViewport()
 
     //Add anti-asliasing and HDR bloom
     effectRenderPath = viewport_->GetRenderPath()->Clone();
-    effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/FXAA3.xml"));
+    effectRenderPath->Append(CACHE->GetResource<XMLFile>("PostProcess/FXAA3.xml"));
     effectRenderPath->SetEnabled("FXAA3", true);
-    effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
+    effectRenderPath->Append(CACHE->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
     effectRenderPath->SetShaderParameter("BloomHDRThreshold", 0.42f);
     effectRenderPath->SetShaderParameter("BloomHDRMix", Vector2(0.8f, 0.6f));
     effectRenderPath->SetEnabled("BloomHDR", true);
@@ -88,32 +86,32 @@ void KOCam::SetupViewport()
 
 Vector3 KOCam::GetWorldPosition() const
 {
-    return rootNode_->GetWorldPosition();
+    return node_->GetWorldPosition();
 }
 
 Quaternion KOCam::GetRotation() const
 {
-    return rootNode_->GetRotation();
+    return node_->GetRotation();
 }
 
 void KOCam::Update(float timeStep)
 {
-    Vector3 targetPosition{ MC->world.player_->GetPosition() };
-    Vector3 targetVelocity{ MC->world.player_->GetLinearVelocity() };
+    Vector3 targetPosition{ MC->world.ko->GetPosition() };
+    Vector3 targetVelocity{ MC->world.ko->GetLinearVelocity() };
 
     Input* input{ GetSubsystem<Input>() };
 
     //Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
-    Vector3 camForward{ rootNode_->GetDirection() };
+    Vector3 camForward{ node_->GetDirection() };
     camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
 
-    Vector3 normalizedPlanarDirection{ LucKey::Scale( rootNode_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized() };
+    Vector3 normalizedPlanarDirection{ LucKey::Scale( node_->GetDirection(), Vector3::ONE - Vector3::UP ).Normalized() };
     if (input->GetKeyDown('T')) velocity_ +=  normalizedPlanarDirection * acceleration_ * timeStep;
     if (input->GetKeyDown('G')) velocity_ += -normalizedPlanarDirection * acceleration_ * timeStep;
     if (input->GetKeyDown('H')) rotationSpeed_ -= angularAcceleration_ * timeStep;
     if (input->GetKeyDown('F')) rotationSpeed_ += angularAcceleration_ * timeStep;
     if (input->GetKeyDown('Y')) velocity_ += Vector3::UP * acceleration_ * timeStep;
-    if (input->GetKeyDown('R') && rootNode_->GetPosition().y_ > 1.5f) velocity_ += Vector3::DOWN * acceleration_ * timeStep;
+    if (input->GetKeyDown('R') && node_->GetPosition().y_ > 1.5f) velocity_ += Vector3::DOWN * acceleration_ * timeStep;
 
 
     //Read joystick input
@@ -132,30 +130,30 @@ void KOCam::Update(float timeStep)
     if ( velocityMultiplier_ < 8.0f && (input->GetKeyDown(KEY_LSHIFT)||input->GetKeyDown(KEY_RSHIFT)) ){
         velocityMultiplier_ += 0.23f;
     } else velocityMultiplier_ = pow(velocityMultiplier_, 0.75f);
-    rootNode_->Translate(velocity_ * velocityMultiplier_ * timeStep, TS_WORLD);
+    node_->Translate(velocity_ * velocityMultiplier_ * timeStep, TS_WORLD);
 
     //Rotate left and right
     Clamp(rotationSpeed_, -maxRotationSpeed_, maxRotationSpeed_);
-    rootNode_->RotateAround(targetPosition, Quaternion(rotationSpeed_ * velocityMultiplier_ * timeStep, Vector3::UP), TS_WORLD);
+    node_->RotateAround(targetPosition, Quaternion(rotationSpeed_ * velocityMultiplier_ * timeStep, Vector3::UP), TS_WORLD);
 
     //Prevent camera from going too low
-    float yPos{rootNode_->GetPosition().y_};
+    float yPos{node_->GetPosition().y_};
     if (yPos < 1.5f)
     {
         velocity_.y_ = velocity_.y_ < 0.0f ? 0.0f : velocity_.y_;
-        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-1.5f)*0.23f+1.5f, rootNode_->GetPosition().z_));
+        node_->SetPosition(Vector3(node_->GetPosition().x_, (yPos-1.5f)*0.23f+1.5f, node_->GetPosition().z_));
     } else if (yPos > 23.0f){
         velocity_.y_ = velocity_.y_ > 0.0f ? 0.0f : velocity_.y_;
-        rootNode_->SetPosition(Vector3(rootNode_->GetPosition().x_, (yPos-23.0f)*0.23f+23.0f, rootNode_->GetPosition().z_));
+        node_->SetPosition(Vector3(node_->GetPosition().x_, (yPos-23.0f)*0.23f+23.0f, node_->GetPosition().z_));
     }
 
     smoothTargetPosition_ = 0.1f * (9.0f * smoothTargetPosition_ + targetPosition);
     smoothTargetVelocity_ = 0.1f * (9.0f * smoothTargetVelocity_ + targetVelocity);
-    rootNode_->Translate(smoothTargetVelocity_ * timeStep, TS_WORLD);
-    Quaternion camRot{ rootNode_->GetWorldRotation() };
+    node_->Translate(smoothTargetVelocity_ * timeStep, TS_WORLD);
+    Quaternion camRot{ node_->GetWorldRotation() };
     Quaternion aimRotation{ camRot };
-    aimRotation.FromLookRotation(smoothTargetPosition_ - rootNode_->GetWorldPosition());
-    rootNode_->SetRotation(aimRotation);
+    aimRotation.FromLookRotation(smoothTargetPosition_ - node_->GetWorldPosition());
+    node_->SetRotation(aimRotation);
 }
 
 void KOCam::Lock(const Node& target)

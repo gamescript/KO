@@ -84,7 +84,6 @@
 #include <Urho3D/DebugNew.h>
 
 #include <initializer_list>
-#include "mastercontrol.h"
 
 #define FILES GetSubsystem<FileSystem>()
 #define ENGINE GetSubsystem<Engine>()
@@ -94,8 +93,6 @@
 #define GRAPHICS GetSubsystem<Graphics>()
 #define RENDERER GetSubsystem<Renderer>()
 #define AUDIO GetSubsystem<Audio>()
-
-#define MC GetSubsystem<MasterControl>()
 
 namespace Urho3D {
 class Drawable;

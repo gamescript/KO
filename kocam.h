@@ -31,7 +31,7 @@ class KOCam : public LogicComponent
     URHO3D_OBJECT(KOCam, LogicComponent);
     friend class MasterControl;
     friend class InputMaster;
-    friend class Player;
+//    friend class KO;
 public:
     static void RegisterObject(Context *context);
     KOCam(Context *context);
@@ -46,7 +46,6 @@ public:
 private:
     MasterControl* masterControl_;
     void Update(float timeStep);
-    SharedPtr<Node> rootNode_;
     Vector3 smoothTargetPosition_;
     Vector3 smoothTargetVelocity_;
 

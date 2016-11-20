@@ -38,18 +38,18 @@ Tile::Tile(Context *context, const IntVector2 coords, Dungeon *platform):
         //Add the right model to the node
         StaticModel* model = elements_[i]->CreateComponent<StaticModel>();
         switch (i){
-        case TE_CENTER:    model->SetModel(MC->resources.models.tileParts.blockCenter);
-            model->SetMaterial(MC->resources.materials.floor);
+        case TE_CENTER:    model->SetModel(MC->GetModel("Block_center"));
+            model->SetMaterial(MC->GetMaterial("Floor"));
             break;
         case TE_NORTH:case TE_EAST:case TE_SOUTH:case TE_WEST:
-            model->SetModel(MC->resources.models.tileParts.blockTween);
-            model->SetMaterial(0, MC->resources.materials.floor);
+            model->SetModel(MC->GetModel("Block_tween"));
+            model->SetMaterial(0, MC->GetMaterial("Floor"));
             break;
         case TE_NORTHEAST:case TE_SOUTHEAST:case TE_SOUTHWEST:case TE_NORTHWEST:
-            model->SetModel(MC->resources.models.tileParts.blockOutCorner);
-            model->SetMaterial(0, MC->resources.materials.wall);
+            model->SetModel(MC->GetModel("Block_outcorner"));
+            model->SetMaterial(0, MC->GetMaterial("Wall"));
             if (model->GetNumGeometries() > 2)
-            model->SetMaterial(1, MC->resources.materials.darkness);
+            model->SetMaterial(1, MC->GetMaterial("Darkness"));
             break;
         default:break;
         }
@@ -68,15 +68,15 @@ void Tile::FixFringe()
             //If corresponding neighbour is empty
             if (dungeon_->CheckEmptyNeighbour(coords_, (TileElement)element, true))
             {
-                model->SetModel(MC->resources.models.tileParts.blockSide);
-                model->SetMaterial(0, MC->resources.materials.wall);
-                model->SetMaterial(1, MC->resources.materials.darkness);
+                model->SetModel(MC->GetModel("Block_side"));
+                model->SetMaterial(0, MC->GetMaterial("Wall"));
+                model->SetMaterial(1, MC->GetMaterial("Darkness"));
             }
             //If neighbour is not empty
             else {
                 if (element == 1 || element == 4) {
-                    model->SetModel(MC->resources.models.tileParts.blockTween);
-                    model->SetMaterial(0, MC->resources.materials.floor);
+                    model->SetModel(MC->GetModel("Block_tween"));
+                    model->SetMaterial(0, MC->GetMaterial("Floor"));
                 }
                 else model->SetModel(SharedPtr<Model>());
             }
@@ -86,26 +86,26 @@ void Tile::FixFringe()
             switch (dungeon_->PickCornerType(coords_, (TileElement)element)){
             case CT_NONE:   model->SetModel(SharedPtr<Model>()); break;
             case CT_IN:
-                model->SetModel(MC->resources.models.tileParts.blockInCorner);
-                model->SetMaterial(0, MC->resources.materials.wall);
-                model->SetMaterial(1, MC->resources.materials.darkness);
+                model->SetModel(MC->GetModel("Block_incorner"));
+                model->SetMaterial(0, MC->GetMaterial("Wall"));
+                model->SetMaterial(1, MC->GetMaterial("Darkness"));
                 break;
             case CT_OUT:
-                model->SetModel(MC->resources.models.tileParts.blockOutCorner);
-                model->SetMaterial(0, MC->resources.materials.wall);
+                model->SetModel(MC->GetModel("Block_outcorner"));
+                model->SetMaterial(0, MC->GetMaterial("Wall"));
                 break;
             case CT_TWEEN:
-                model->SetModel(MC->resources.models.tileParts.blockTweenCorner);
-                model->SetMaterial(0, MC->resources.materials.wall);
-                model->SetMaterial(1, MC->resources.materials.darkness);
+                model->SetModel(MC->GetModel("Block_tweencorner"));
+                model->SetMaterial(0, MC->GetMaterial("Wall"));
+                model->SetMaterial(1, MC->GetMaterial("Darkness"));
                 break;
             case CT_DOUBLE:
-                model->SetModel(MC->resources.models.tileParts.blockDoubleCorner);
-                model->SetMaterial(0, MC->resources.materials.wall);
+                model->SetModel(MC->GetModel("Block_doublecorner"));
+                model->SetMaterial(0, MC->GetMaterial("Wall"));
                 break;
             case CT_FILL:
-                model->SetModel(MC->resources.models.tileParts.blockFillCorner);
-                model->SetMaterial(0, MC->resources.materials.floor);
+                model->SetModel(MC->GetModel("Block_fillcorner"));
+                model->SetMaterial(0, MC->GetMaterial("Floor"));
                 break;
             default: break;
             }

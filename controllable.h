@@ -1,4 +1,4 @@
-/* heXon
+/* KO
 // Copyright (C) 2016 LucKey Productions (luckeyproductions.nl)
 //
 // This program is free software; you can redistribute it and/or modify
@@ -21,10 +21,13 @@
 #define CONTROLLABLE_H
 
 #include <Urho3D/Urho3D.h>
-#include "sceneobject.h"
 #include <bitset>
 
+#include "sceneobject.h"
+
 #define INPUTMASTER GetSubsystem<InputMaster>()
+
+//class Player;
 
 class Controllable : public SceneObject
 {
@@ -67,7 +70,7 @@ protected:
     void AlignWithVelocity(float timeStep);
     void AlignWithMovement(float timeStep);
 
-    virtual void HandleAction(int actionId);
+    virtual void HandleAction(int actionId) { (void)actionId; }
 };
 
 #endif // CONTROLLABLE_H

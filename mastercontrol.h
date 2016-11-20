@@ -28,6 +28,7 @@ using namespace Urho3D;
 class KOCam;
 class InputMaster;
 class Dungeon;
+class KO;
 class Player;
 
 typedef struct GameWorld
@@ -35,61 +36,13 @@ typedef struct GameWorld
     SharedPtr<KOCam> camera;
     SharedPtr<Scene> scene;
     SharedPtr<Node> voidNode;
-    SharedPtr<Player> player_;
+    SharedPtr<KO> ko;
     struct {
         SharedPtr<Node> sceneCursor;
         SharedPtr<Cursor> uiCursor;
         PODVector<RayQueryResult> hitResults;
     } cursor;
 } GameWorld;
-
-typedef struct Resources
-{
-    struct {
-        SharedPtr<Model> ko;
-        struct {
-            SharedPtr<Model> shield;
-            SharedPtr<Model> sword;
-        } items;
-        struct {
-            SharedPtr<Model> floatingEye;
-            SharedPtr<Model> cornea;
-        } enemies;
-        struct {
-            SharedPtr<Model> firePit;
-        } doodads;
-        struct {
-            SharedPtr<Model> blockCenter;
-            SharedPtr<Model> blockSide;
-            SharedPtr<Model> blockTween;
-            SharedPtr<Model> blockTweenCorner;
-            SharedPtr<Model> blockInCorner;
-            SharedPtr<Model> blockOutCorner;
-            SharedPtr<Model> blockFillCorner;
-            SharedPtr<Model> blockDoubleCorner;
-        } tileParts;
-    } models;
-    struct {
-        SharedPtr<Material> ko;
-        SharedPtr<Material> darkness;
-        SharedPtr<Material> cloth;
-        SharedPtr<Material> skin;
-        SharedPtr<Material> metal;
-        SharedPtr<Material> leather;
-        SharedPtr<Material> floor;
-        SharedPtr<Material> wall;
-        SharedPtr<Material> hair;
-        SharedPtr<Material> pants;
-        SharedPtr<Material> blood;
-        SharedPtr<Material> floatingEye;
-        SharedPtr<Material> cornea;
-    } materials;
-    struct {
-        struct {
-            SharedPtr<Animation> walk;
-        } ko;
-    } animations;
-} Resources;
 
 typedef struct HitInfo
 {
@@ -111,26 +64,27 @@ StringHash const N_FLOATINGEYE = StringHash("FloatingEye");
 
 class MasterControl : public Application
 {
-    /// Enable type information.
     URHO3D_OBJECT(MasterControl, Application);
     friend class InputMaster;
     friend class KOCam;
 public:
-    /// Constructor.
     MasterControl(Context* context);
     static MasterControl* GetInstance();
     GameWorld world;
-    Resources resources;
-    SharedPtr<ResourceCache> cache_;
     SharedPtr<Graphics> graphics_;
 
-    //HashMap<unsigned, SharedPtr<Dungeon> > platformMap_;
+    Vector< SharedPtr<Player> > players_;
+    Vector< SharedPtr<Player> > GetPlayers() const;
+    Player* GetPlayer(int playerID) const;
 
-    /// Setup before engine initialization. Modifies the engine paramaters.
+    Material* GetMaterial(String name) const;
+    Model* GetModel(String name) const;
+    Texture* GetTexture(String name) const;
+    Sound* GetMusic(String name) const;
+    Sound* GetSample(String name) const;
+
     virtual void Setup();
-    /// Setup after engine initialization.
     virtual void Start();
-    /// Cleanup after the main loop. Called by Application.
     virtual void Stop();
     void Exit();
 
@@ -143,37 +97,25 @@ private:
     SharedPtr<Renderer> renderer_;
     SharedPtr<XMLFile> defaultStyle_;
 
-    /// Set custom window title and icon
-    void SetWindowTitleAndIcon();
-    /// Create console and debug HUD
     void CreateConsoleAndDebugHud();
 
-    /// Construct the scene content.
     void CreateScene();
-    /// Construct user interface elements.
     void CreateUI();
-    /// Subscribe to application-wide logic update and post-render update events.
     void SubscribeToEvents();
 
-    /// Handle scene update event to control camera's pitch and yaw.
     void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
-    /// Handle the logic update event.
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
-    /// Handle the post-render update event.
     void HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData);
 
-    /// Create a mushroom object at position.
     void CreateDungeon(const Vector3 pos);
     void UpdateCursor(double timeStep);
-    /// Utility function to raycast to the cursor position. Return true if hit.
     bool CursorRayCast(double maxDistance, PODVector<RayQueryResult> &hitResults);
 
-    /// Pause flag
     bool paused_;
 
-    ///Sine lookup table
     Vector<double> sine_;
     void LoadResources();
+
 };
 
 #endif // MASTERCONTROL_H

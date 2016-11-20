@@ -22,41 +22,54 @@
 
 #include <Urho3D/Urho3D.h>
 #include "mastercontrol.h"
-#include "luckey.h"
+#include "controllable.h"
 
 enum class MasterInputAction { UP, RIGHT, DOWN, LEFT, CONFIRM, CANCEL, PAUSE, MENU, SCREENSHOT };
 enum class PlayerInputAction { UP, RIGHT, DOWN, LEFT, RUN, HACK, CAST};
 
 struct InputActions {
     Vector<MasterInputAction> master_;
-    Vector<PlayerInputAction> player1_;
+    HashMap<int, Vector<PlayerInputAction>> player_;
 };
+
+class Player;
 
 class InputMaster : public Object
 {
     URHO3D_OBJECT(InputMaster, Object);
 public:
-    InputMaster(Context* context, MasterControl* masterControl);
-private:
-    MasterControl* masterControl_;
-    Input* input_;
+    InputMaster(Context* context);
+    void SetPlayerControl(Player *player, Controllable* controllable);
+    Player *GetPlayerByControllable(Controllable* controllable);
+    Controllable*  GetControllableByPlayer(int playerId);
+    Vector<Controllable*>  GetControllables() { return controlledByPlayer_.Values(); }
 
+private:
     HashMap<int, MasterInputAction> keyBindingsMaster_;
     HashMap<int, MasterInputAction> buttonBindingsMaster_;
-    HashMap<int, PlayerInputAction> keyBindingsPlayer1_;
-    HashMap<int, PlayerInputAction> buttonBindingsPlayer1_;
+    HashMap<int, HashMap<int, PlayerInputAction> > keyBindingsPlayer_;
+    HashMap<int, HashMap<int, PlayerInputAction> > buttonBindingsPlayer_;
 
     Vector<int> pressedKeys_;
-    Vector<LucKey::SixaxisButton> pressedJoystickButtons_;
+    HashMap<int, Vector<LucKey::SixaxisButton> > pressedJoystickButtons_;
+    HashMap<int, HashMap<int, float> > axesPosition_;
+
+    HashMap<int, Controllable*> controlledByPlayer_;
 
     void HandleUpdate(StringHash eventType, VariantMap &eventData);
     void HandleKeyDown(StringHash eventType, VariantMap &eventData);
     void HandleKeyUp(StringHash eventType, VariantMap &eventData);
-    void HandleJoyButtonDown(StringHash eventType, VariantMap &eventData);
-    void HandleJoyButtonUp(StringHash eventType, VariantMap &eventData);
+    void HandleJoystickButtonDown(StringHash eventType, VariantMap &eventData);
+    void HandleJoystickButtonUp(StringHash eventType, VariantMap &eventData);
+    void HandleJoystickAxisMove(StringHash eventType, VariantMap& eventData);
 
     void HandleActions(const InputActions &actions);
-    void HandlePlayerAction(PlayerInputAction action);
+    void HandlePlayerAction(PlayerInputAction action, int playerId);
+    Vector3 GetMoveFromActions(Vector<PlayerInputAction>* actions);
+    Vector3 GetAimFromActions(Vector<PlayerInputAction>* actions);
+    void Screenshot();
+
+    void PauseButtonPressed();
 };
 
 #endif // INPUTMASTER_H

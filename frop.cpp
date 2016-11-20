@@ -40,8 +40,8 @@ void Frop::OnNodeSet(Node *node)
     float randomWidth{ Random(0.5f, 2.0f) };
     scale_ = Vector3(randomWidth, Random(0.5f,1.0f+randomWidth), randomWidth);
     fropModel_ = node_->CreateComponent<StaticModel>();
-    fropModel_->SetModel(MC->cache_->GetResource<Model>("Models/Frop.mdl"));
-    fropModel_->SetMaterial(MC->cache_->GetResource<Material>("Materials/Frop.xml"));
+    fropModel_->SetModel(MC->GetModel("Frop"));
+    fropModel_->SetMaterial(MC->GetMaterial("Frop"));
     fropModel_->SetCastShadows(true);
 }
 

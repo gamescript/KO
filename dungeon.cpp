@@ -24,7 +24,7 @@
 #include "tile.h"
 #include "wallcollider.h"
 #include "kocam.h"
-#include "player.h"
+#include "ko.h"
 
 namespace Urho3D {
 template <> unsigned MakeHash(const IntVector2& value)
@@ -44,7 +44,7 @@ Dungeon::Dungeon(Context *context, MasterControl* masterControl):
 
     //InitializeRandom();
 
-    TmxFile2D* tmxFile = MC->cache_->GetResource<TmxFile2D>("Maps/test.tmx");
+    TmxFile2D* tmxFile = MC->CACHE->GetResource<TmxFile2D>("Maps/test.tmx");
     if (tmxFile)
         InitializeFromMap(*tmxFile);
     else
@@ -109,7 +109,8 @@ void Dungeon::InitializeRandom()
 
     for (int i{0}; i < 23; i++){
 
-        FloatingEye* fe{ MC->world.scene->CreateChild("FloatingEye")->CreateComponent<FloatingEye>() };
+        FloatingEye* fe{ MC->world.scene->CreateChild()
+                    ->CreateComponent<FloatingEye>() };
         fe->Set(Vector3(Random(-5.0f, 5.0f), 0.0f, Random(-5.0f, 5.0f)));
     }
 }
@@ -151,16 +152,26 @@ void Dungeon::InitializeFromMap(const TmxFile2D& tmxFile)
         Vector3 pos(object->GetPosition().x_ * 3.12f, 0.0f, 3.12f * object->GetPosition().y_ - tileLayer.GetHeight() + 1.0f);
         if (properties->HasProperty("FloatingEye")) {
 
-            FloatingEye* fe{ MC->world.scene->CreateChild()->CreateComponent<FloatingEye>() };
+            FloatingEye* fe{ MC->world.scene->CreateChild()
+                        ->CreateComponent<FloatingEye>() };
             fe->Set(pos);
+
         } else if (properties->HasProperty("Player")) {
-            MC->world.player_->Set(pos);
+
+            MC->world.ko->Set(pos);
+
         } else if (properties->HasProperty("FirePit")) {
-            FirePit* fp{ MC->world.scene->CreateChild()->CreateComponent<FirePit>() };
+
+            FirePit* fp{ MC->world.scene->CreateChild()
+                        ->CreateComponent<FirePit>() };
             fp->Set(pos);
+
         } else if (properties->HasProperty("Plant")) {
-            Frop* f{ MC->world.scene->CreateChild()->CreateComponent<Frop>() };
+
+            Frop* f{ MC->world.scene->CreateChild()
+                        ->CreateComponent<Frop>() };
             f->Set(pos);
+
         }
     }
 

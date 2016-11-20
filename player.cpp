@@ -1,5 +1,5 @@
 /* KO
-// Copyright (C) 2015 LucKey Productions (luckeyproductions.nl)
+// Copyright (C) 2016 LucKey Productions (luckeyproductions.nl)
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,171 +16,99 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "mastercontrol.h"
 #include "player.h"
-#include "kocam.h"
 
+#include "mastercontrol.h"
+#include "inputmaster.h"
 
-void Player::RegisterObject(Context *context)
+Player::Player(int playerId, Context* context): Object(context),
+    playerId_{playerId},
+    autoPilot_{playerId_ == 2 && !GetSubsystem<Input>()->GetJoystickByIndex(playerId_-1)},
+//    autoPilot_{false},
+//    autoPilot_{true},
+    alive_{true},
+    score_{0},
+    flightScore_{0},
+    multiplier_{1}
 {
-    context->RegisterFactory<Player>();
+//    Node* guiNode{ MC->scene_->CreateChild("GUI3D") };
+//    gui3d_ = guiNode->CreateComponent<GUI3D>();
+//    gui3d_->Initialize(playerId_);
 }
 
-Player::Player(Context *context):
-    Controllable(context)
+void Player::Die()
 {
+    alive_ = false;
+}
+void Player::Respawn()
+{
+    ResetScore();
+    multiplier_ = 1;
+    alive_ = true;
 }
 
-void Player::OnNodeSet(Node *node)
+void Player::SetScore(int points)
 {
-    node_->SetName("KO");
-    node_->SetRotation(Quaternion(160.0f, Vector3::UP));
+    score_ = points;
+//    gui3d_->SetScore(score_);
 
-    model_ = node_->CreateComponent<AnimatedModel>();
-    model_->SetModel(MC->resources.models.ko);
-    model_->SetMaterial(0, MC->resources.materials.ko);
-    model_->SetCastShadows(true);
+}
+void Player::ResetScore()
+{
+    SetScore(0);
+}
 
-    rightHand_ = node_->GetChild("Sword",true)->CreateComponent<StaticModel>();
-    rightHand_->SetCastShadows(true);
+void Player::EnterLobby()
+{
 
-    leftHand_ = node_->GetChild("Shield",true)->CreateComponent<StaticModel>();
-    leftHand_->SetCastShadows(true);
+//    for (Pilot* pilot : MC->GetComponentsRecursive<Pilot>()) {
+//        if (playerId_ == pilot->GetPlayerId()){
+//            GetSubsystem<InputMaster>()->SetPlayerControl(playerId_, pilot);
+//            if (!alive_){
+//                pilot->Revive();
+//            } else pilot->EnterLobbyFromShip();
+//        }
+//    }
 
-    animCtrl_ = node_->CreateComponent<AnimationController>();
-
-    rigidBody_ = node_->CreateComponent<RigidBody>();
-    rigidBody_->SetFriction(0.0f);
-    rigidBody_->SetRestitution(0.0f);
-    rigidBody_->SetMass(1.0f);
-    rigidBody_->SetLinearFactor(Vector3::ONE - Vector3::UP);
-    rigidBody_->SetLinearDamping(0.99f);
-    rigidBody_->SetAngularFactor(Vector3::UP);
-    rigidBody_->SetAngularDamping(1.0f);
-    rigidBody_->SetLinearRestThreshold(0.01f);
-    rigidBody_->SetAngularRestThreshold(0.1f);
-
-    CollisionShape* collisionShape{ node_->CreateComponent<CollisionShape>() };
-    collisionShape->SetCylinder(0.3f, 0.5f);
-
-    EquipLeftHand();
-    EquipRightHand();
+//    gui3d_->EnterLobby();
+}
+void Player::EnterPlay()
+{
+//    gui3d_->EnterPlay();
 }
 
 void Player::AddScore(int points)
 {
-    score_ += points;
+    if (!alive_) return;
+
+//    points *= static_cast<int>(pow(2.0, static_cast<double>(multiplier_-1)));
+//    SetScore(GetScore()+points);
+//    //Check for multiplier increase
+//    for (int i{0}; i < 10; ++i){
+//        unsigned tenPow{static_cast<unsigned>(pow(10, i))};
+//        if (flightScore_ < tenPow && (flightScore_ + points) > tenPow){
+//            ++multiplier_;
+//            GetSubsystem<InputMaster>()->GetControllableByPlayer(playerId_)->
+//                    PlaySample(MC->GetSample("MultiX"), 0.42f);
+//            MC->arena_->FlashX(playerId_);
+//            break;
+//        }
+//    }
+//    flightScore_ += points;
+//    toCount_ += points;
 }
 
-void Player::PlaySample(Sound* sample)
+Vector3 Player::GetPosition()
 {
-    for (unsigned i{0}; i < sampleSources_.Size(); ++i){
-        if (!sampleSources_[i]->IsPlaying()) {
-
-            sampleSources_[i]->Play(sample);
-            break;
-        }
-    }
+    return GetSubsystem<InputMaster>()->GetControllableByPlayer(playerId_)->GetPosition();
 }
 
-void Player::Update(float timeStep)
+Controllable* Player::GetControllable()
 {
-    Input* input{ GetSubsystem<Input>() };
+    Controllable* controllable{ GetSubsystem<InputMaster>()->GetControllableByPlayer(playerId_) };
+    if (controllable)
 
-    //Orientation vectors
-    Vector3 camRight{ MC->world.camera->rootNode_->GetRight() };
-    Vector3 camForward{ MC->world.camera->rootNode_->GetDirection() };
-    camRight = LucKey::Scale(camRight, Vector3::ONE - Vector3::UP).Normalized();
-    camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
-    //Movement values
-    Vector3 move{ Vector3::ZERO };
-    Vector3 moveJoy{ Vector3::ZERO };
-    Vector3 moveKey{ Vector3::ZERO };
-    float thrust{ 300.0f };
-    float maxSpeed{ 18.0f };
+        return controllable;
 
-    //Read input
-    JoystickState* joystickState{ input->GetJoystickByIndex(0) };
-    if (joystickState){
-
-        moveJoy = camRight * joystickState->GetAxisPosition(0) +
-               -camForward * joystickState->GetAxisPosition(1);
-    }
-
-    moveKey = -camRight * input->GetKeyDown(KEY_A) +
-               camRight * input->GetKeyDown(KEY_D) +
-               camForward * input->GetKeyDown(KEY_W) +
-              -camForward * input->GetKeyDown(KEY_S);
-
-    //Pick most significant input
-    moveJoy.Length() > moveKey.Length() ? move = moveJoy
-                                        : move = moveKey;
-
-    //Restrict move vector length
-    if (move.Length() > 1.0f) move.Normalize();
-    //Deadzone
-    else if (move.Length() < 0.01f) move *= 0.0f;
-
-    //Update animation
-    if (rigidBody_->GetLinearVelocity().Length() > 0.05f) {
-
-        animCtrl_->SetStartBone("Models/Walk.ani", "RootBone");
-        animCtrl_->Play("Models/Walk.ani", 0, true, 0.23f);
-        animCtrl_->SetSpeed("Models/Walk.ani", rigidBody_->GetLinearVelocity().Length() * 2.63f);
-
-        animCtrl_->SetStartBone("Models/Swing1.ani", "LowerBack");
-    }
-    else {
-
-        animCtrl_->PlayExclusive("Models/Idle.ani", 0, true, 0.42f);
-        animCtrl_->SetStartBone("Models/Swing1.ani", "RootBone");
-    }
-
-    if (GetSubsystem<Input>()->GetKeyDown(KEY_SPACE))
-    {
-
-        animCtrl_->Play("Models/Swing1.ani", 1, false, 0.23f);
-        animCtrl_->SetSpeed("Models/Swing1.ani", 1.42f);
-
-//        >= animCtrl_->GetLength("Models/Swing1.ani") animCtrl_->GetAnimationsAttr
-    } else {
-        animCtrl_->Stop("Models/Swing1.ani", 0.23f);
-    }
-
-    //Apply movement
-    Vector3 force{ move * thrust * timeStep * (1 + 0.42f * input->GetKeyDown(KEY_SHIFT)) };
-    rigidBody_->ApplyForce(force);
-
-    //Update rotation according to direction of the player's movement.
-    if (rigidBody_->GetLinearVelocity().Length() > 0.01f) {
-
-        Vector3 velocity{ rigidBody_->GetLinearVelocity() };
-        Quaternion rotation{ node_->GetWorldRotation() };
-        Quaternion aimRotation{ rotation };
-        aimRotation.FromLookRotation(velocity);
-        node_->SetRotation(rotation.Slerp(aimRotation, 7.0f * timeStep * velocity.Length()));
-    }
-
-    //Breathe
-    float mouthClosed{ MC->Sine(0.1f, 0.0f, 0.9f, MC->Sine(0.23f, -1.0f, 1.0f)) };
-    model_->SetMorphWeight(0, mouthClosed);
-
-}
-
-void Player::EquipRightHand()
-{
-    rightHand_->SetModel(MC->resources.models.items.sword);
-    rightHand_->SetMaterial(MC->resources.materials.metal);
-}
-
-void Player::EquipLeftHand()
-{
-    leftHand_->SetModel(MC->resources.models.items.shield);
-    leftHand_->SetMaterial(1, MC->resources.materials.leather);
-    leftHand_->SetMaterial(0, MC->resources.materials.metal);
-}
-
-void Player::Hack()
-{
-    
+    else return nullptr;
 }

@@ -1,5 +1,5 @@
 /* KO
-// Copyright (C) 2015 LucKey Productions (luckeyproductions.nl)
+// Copyright (C) 2016 LucKey Productions (luckeyproductions.nl)
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,54 +20,46 @@
 #define PLAYER_H
 
 #include <Urho3D/Urho3D.h>
+#include "mastercontrol.h"
 
-#include "controllable.h"
+class GUI3D;
+class Controllable;
 
-using namespace Urho3D;
-
-class Player : public Controllable
+class Player : public Object
 {
-    URHO3D_OBJECT(Player, Controllable);
-    friend class KOCam;
-    friend class FloatingEye;
+    URHO3D_OBJECT(Player, Object);
 public:
-    static void RegisterObject(Context *context);
-    Player(Context* context);
-    virtual void OnNodeSet(Node *node);
+    Player(int playerId, Context* context);
 
-    float GetHealth(){ return health_; }
-    void Hit(float damage, int ownerID);
+    Vector3 GetPosition();
+    Controllable *GetControllable();
+
+    int GetPlayerId() const { return playerId_; }
     void AddScore(int points);
-    Vector3 GetLinearVelocity() {return rigidBody_->GetLinearVelocity();}
+    unsigned GetScore() const { return score_; }
+    unsigned GetFlightScore() const { return flightScore_; }
+    void Die();
+    void Respawn();
+    void ResetScore();
 
-    void SetPosition(const Vector3& pos) { node_->SetPosition(pos); }
+    bool IsAlive() const noexcept { return alive_; }
+    bool IsHuman() const noexcept { return !autoPilot_; }
+    void EnterLobby();
+    void EnterPlay();
 
-    void EquipRightHand();
-    void EquipLeftHand();
+//    GUI3D* gui3d_;
 private:
-    float health_ = 1.0f;
-    float initialHealth_ = 1.0f;
-    int firstHitBy_ = 0;
-    int lastHitBy_ = 0;
-    int score_ = 0;
+    int playerId_;
+    bool autoPilot_;
+    bool alive_;
 
-    const float shotInterval_ = 0.23f;
-    float sinceLastShot_ = 0.0f;
+    unsigned score_;
+    unsigned flightScore_;
+    int multiplier_;
 
-    AnimatedModel* model_;
-    AnimationController* animCtrl_;
 
-    StaticModel* leftHand_;
-    StaticModel* rightHand_;
-
-    RigidBody* rigidBody_;
-
-    SharedPtr<Sound> sample_;
-    Vector<SharedPtr<SoundSource> > sampleSources_;
-
-    void Update(float timeStep);
-    void PlaySample(Sound *sample);
-    void Hack();
+    void SetScore(int points);
+    Vector3 Sniff(float playerFactor, bool taste);
 };
 
 #endif // PLAYER_H
