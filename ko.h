@@ -25,7 +25,7 @@
 
 //using namespace Urho3D;
 
-enum KOActions{ RUN, HACK, CAST };
+enum KOActions{ RUN, HACK, BASH, KICK, CAST };
 
 class KO : public Controllable
 {
@@ -49,14 +49,11 @@ public:
 protected:
     void HandleAction(int actionId);
 private:
-    float health_ = 1.0f;
-    float initialHealth_ = 1.0f;
-    int firstHitBy_ = 0;
-    int lastHitBy_ = 0;
-    int score_ = 0;
-
-    const float shotInterval_ = 0.23f;
-    float sinceLastShot_ = 0.0f;
+    float health_;
+    float initialHealth_;
+    int firstHitBy_;
+    int lastHitBy_;
+    int score_;
 
     StaticModel* leftHand_;
     StaticModel* rightHand_;

@@ -27,8 +27,14 @@ void KO::RegisterObject(Context *context)
 }
 
 KO::KO(Context *context):
-    Controllable(context)
+    Controllable(context),
+    health_{1.0f},
+    initialHealth_{1.0f},
+    firstHitBy_{0},
+    lastHitBy_{0},
+    score_{0}
 {
+    actionInterval_[HACK] = 0.6;
 }
 
 void KO::OnNodeSet(Node *node)
@@ -36,16 +42,18 @@ void KO::OnNodeSet(Node *node)
 
     Controllable::OnNodeSet(node_);
 
+    actionSince_[HACK] = actionInterval_[HACK];
+
     node_->SetName("KO");
     node_->SetRotation(Quaternion(160.0f, Vector3::UP));
 
     model_->SetModel(MC->GetModel("KO"));
     model_->SetMaterial(0, MC->GetMaterial("KO"));
 
-    rightHand_ = node_->GetChild("Sword",true)->CreateComponent<StaticModel>();
+    rightHand_ = node_->GetChild("Sword", true)->CreateComponent<StaticModel>();
     rightHand_->SetCastShadows(true);
 
-    leftHand_ = node_->GetChild("Shield",true)->CreateComponent<StaticModel>();
+    leftHand_ = node_->GetChild("Shield", true)->CreateComponent<StaticModel>();
     leftHand_->SetCastShadows(true);
 
     rigidBody_->SetFriction(0.0f);
@@ -82,15 +90,17 @@ void KO::PlaySample(Sound* sample)
 
 void KO::Update(float timeStep)
 {
+    Controllable::Update(timeStep);
+
     //Orientation vectors
-    Vector3 camForward{ MC->world.camera->GetNode()->GetDirection() };
-    camForward = LucKey::Scale(camForward, Vector3::ONE - Vector3::UP).Normalized();
+    Vector3 camForward{ LucKey::Scale(MC->world.camera->GetNode()->GetDirection(), Vector3::ONE - Vector3::UP).Normalized() };
     //Movement values
     float thrust{ 300.0f };
-    float maxSpeed{ 18.0f };
+//    float maxSpeed{ 18.0f };
 
     //Apply movement
-    Vector3 force{ Quaternion(camForward.Angle(Vector3::FORWARD), Vector3::DOWN)
+    Vector3 axis = camForward.Angle(Vector3::RIGHT) > 90.0f ? Vector3::DOWN : Vector3::UP;
+    Vector3 force{ Quaternion(camForward.Angle(Vector3::FORWARD), axis)
                 * move_ * thrust * timeStep * (1 + 0.42f * actions_[RUN]) };
     rigidBody_->ApplyForce(force);
 
@@ -106,6 +116,7 @@ void KO::Update(float timeStep)
     else {
 
         animCtrl_->PlayExclusive("Models/Idle.ani", 0, true, 0.42f);
+
         animCtrl_->SetStartBone("Models/Swing1.ani", "RootBone");
     }
 
@@ -133,19 +144,19 @@ void KO::EquipLeftHand()
 void KO::HandleAction(int actionId)
 {
     switch(actionId) {
-    case HACK: Hack(); break;
+    case HACK:
+        if (actionSince_[HACK] > actionInterval_[HACK])
+            Hack();
+        break;
     default: break;
     }
 }
 
 void KO::Hack()
 {
-    if (animCtrl_->GetTime("Models/Swing1.ani") > 1.0f
-     || !animCtrl_->IsPlaying("Models/Swing1.ani"))
-    {
-        animCtrl_->Play("Models/Swing1.ani", 1, false, 0.23f);
-        animCtrl_->SetSpeed("Models/Swing1.ani", 1.42f);
-        animCtrl_->SetTime("Models/Swing1.ani", 0.0f);
-        animCtrl_->SetAutoFade("Models/Swing1.ani", 0.23f);
-    }
+    actionSince_[HACK] = 0.0f;
+    animCtrl_->Play("Models/Swing1.ani", 1, false, 0.23f);
+    animCtrl_->SetSpeed("Models/Swing1.ani", 1.666f);
+    animCtrl_->SetTime("Models/Swing1.ani", 0.0f);
+    animCtrl_->SetAutoFade("Models/Swing1.ani", 0.23f);
 }

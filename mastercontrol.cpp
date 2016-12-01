@@ -242,7 +242,7 @@ void MasterControl::CreateSineLookupTable()
     //Generate sine lookup array
     int maxi{256};
     for (int i{0}; i < maxi; ++i){
-        sine_.Push((float)sin((i/(float)maxi)*2.0f*M_PI));
+        sine_.Push((float)sin((i / (float)maxi) * 2.0f * M_PI));
     }
 }
 

@@ -57,6 +57,7 @@ protected:
 
     std::bitset<4> actions_;
     HashMap<int, float> actionSince_;
+    HashMap<int, float> actionInterval_;
 
     AnimatedModel* model_;
     RigidBody* rigidBody_;

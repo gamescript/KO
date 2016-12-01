@@ -48,7 +48,7 @@ void KOCam::OnNodeSet(Node *node)
 
     //Create the camera. Limit far clip distance to match the fog
     node_ = MC->world.scene->CreateChild("Camera");
-    node_->SetPosition(MC->world.ko->GetPosition() + Vector3(0.23f, 8.8f, -4.2f));
+    node_->SetPosition(MC->world.ko->GetPosition() + Vector3(0.23f, 5.0f, -4.2f));
     node_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
     camera_ = node_->CreateComponent<Camera>();
     camera_->SetFarClip(viewRange);

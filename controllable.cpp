@@ -40,8 +40,11 @@ Controllable::Controllable(Context* context) : SceneObject(context),
     for (int a{0}; a < 4; ++a)
         actionSince_[a] = 0.0f;
 }
+
 void Controllable::OnNodeSet(Node *node)
 { (void)node;
+
+    SceneObject::OnNodeSet(node_);
 
     model_ = node_->CreateComponent<AnimatedModel>();
     model_->SetCastShadows(true);
@@ -56,7 +59,7 @@ void Controllable::Update(float timeStep)
 {
     for (int a{0}; a < static_cast<int>(actions_.size()); ++a){
 
-        if (actions_[a])
+        if (actions_[a] || actionSince_[a] > 0.0f)
             actionSince_[a] += timeStep;
     }
 
@@ -85,18 +88,18 @@ void Controllable::SetActions(std::bitset<4> actions)
     if (actions == actions_)
         return;
     else
-        for (int i{0}; i < static_cast<int>(actions.size()); ++i){
+        for (int i{0}; i < static_cast<int>(actions.size()); ++i) {
 
             if (actions[i] != actions_[i]){
                 actions_[i] = actions[i];
 
                 if (actions[i])
                     HandleAction(i);
-                else
-                    actionSince_[i] = 0.0f;
             }
         }
 }
+
+
 
 void Controllable::AlignWithMovement(float timeStep)
 {
@@ -106,6 +109,7 @@ void Controllable::AlignWithMovement(float timeStep)
     rot = rot.Slerp(targetRot, Clamp(timeStep * 23.0f, 0.0f, 1.0f));
     node_->SetRotation(rot);
 }
+
 void Controllable::AlignWithVelocity(float timeStep)
 {
     Quaternion targetRot{};
