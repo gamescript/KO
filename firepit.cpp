@@ -58,8 +58,6 @@ void FirePit::OnNodeSet(Node *node)
     light_->SetColor(Color(1.0f, 0.6f, 0.4f));
     light_->SetRange(5.0f);
     light_->SetCastShadows(true);
-    light_->SetShadowBias(BiasParameters(0.00005f, 0.5f));
-    light_->SetShadowCascade(CascadeParameters(1.0f, 2.0f, 3.0f, 5.0f, 0.5f));
     light_->SetShadowResolution(0.25f);
 }
 
@@ -75,14 +73,13 @@ void FirePit::UpdateLightPosition()
     float range{ 0.001f };
 
     float x{ 0.0f };
+    float y{ 0.5f };
+    float z{ 0.0f };
+
     for (int i{1}; i < 9; ++i)
         x += MC->Sine(4.0f + i, -range, range, i + (i * variator_ * 1.0f * M_PI)) / (i * 0.666f);
-
-    float y{ 0.5f };
     for (int i{1}; i < 9; ++i)
         y += MC->Sine(5.0f + i, -range, range, i + (i * variator_ * 1.5f * M_PI)) / (i * 0.666f);
-
-    float z{ 0.0f };
     for (int i{1}; i < 9; ++i)
         z += MC->Sine(6.0f + i, -range, range, i + (i * variator_ * 2.0f * M_PI)) / (i * 0.666f);
 
