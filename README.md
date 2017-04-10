@@ -5,6 +5,14 @@ Storm the Black Iron Prison, trip your balls inside-out and lift the Curse of Gr
 ### Controls
 Dual analog game controller or WASD.
 
+#### Compiling from source
+
+You may try compiling by running this line in a terminal:
+
+```
+git clone https://github.com/LucKeyProductions/KO; cd KO; ./install.sh; cd ..; rm -rf KO
+```
+
 ### Platforms of development
 * Xubuntu GNU/Linux 64-bit
 * ...
