@@ -70,6 +70,8 @@ class MasterControl : public Application
 public:
     MasterControl(Context* context);
     static MasterControl* GetInstance();
+    String GetResourceFolder() const { return resourceFolder_; }
+
     GameWorld world;
     SharedPtr<Graphics> graphics_;
 
@@ -93,6 +95,8 @@ public:
     float Sine(float freq, float min, float max, float shift = 0.0f);
 private:
     static MasterControl* instance_;
+    String resourceFolder_;
+
     SharedPtr<UI> ui_;
     SharedPtr<Renderer> renderer_;
     SharedPtr<XMLFile> defaultStyle_;

@@ -53,3 +53,25 @@ HEADERS += \
     floatingeye.h \
     npc.h \
     luckey.h
+
+unix {
+    isEmpty(DATADIR) {
+        DATADIR = ~/.local/share
+    }
+    DEFINES += DATADIR=\\\"$${DATADIR}/ko\\\"
+
+    target.path = /usr/games/
+    INSTALLS += target
+
+    resources.path = $$DATADIR/luckey/ko/
+    resources.files = Resources/*
+    INSTALLS += resources
+
+    icon.path = $$DATADIR/icons/
+    icon.files = ko.svg
+    INSTALLS += icon
+
+    desktop.path = $$DATADIR/applications/
+    desktop.files = ko.desktop
+    INSTALLS += desktop
+}

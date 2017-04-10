@@ -112,8 +112,8 @@ void KO::Update(float timeStep)
         animCtrl_->SetSpeed("Models/Walk.ani", rigidBody_->GetLinearVelocity().Length() * 2.63f);
 
         animCtrl_->SetStartBone("Models/Swing1.ani", "LowerBack");
-    }
-    else {
+
+    } else {
 
         animCtrl_->PlayExclusive("Models/Idle.ani", 0, true, 0.42f);
 

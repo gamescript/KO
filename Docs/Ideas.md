@@ -97,6 +97,8 @@ Syrups can be used to make lemonade at fountains; a less potent potion with a sl
 	+ Critical damage
 	+ Increased spell casting rate
 	+ Colorful surroundings
+- **Bullshit**
+    + Makes the flowers grow
 
 Increased awareness (shrooms or meditation) adds a kind of 4th dimension. An overlay hinting at buffs. This 4th dimension consists of visualized belief systems that can can be traversed by the player within the scope of the magic they learned about.
 This may have downsides too like stronger or faster monsters, but more experience in any case.

@@ -48,8 +48,28 @@ void MasterControl::Setup()
 {
     engineParameters_["WindowTitle"] = "KO: The Curse of Greyface";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"KO.log";
-    engineParameters_["ResourcePaths"] = "Data;CoreData;Resources";
     engineParameters_["WindowIcon"] = "icon.png";
+
+    //Add resource paths
+    String resourcePaths{};
+
+    if (FILES->DirExists(FILES->GetAppPreferencesDir("luckey", "ko")))
+        resourcePaths = FILES->GetAppPreferencesDir("luckey", "ko");
+    else if (FILES->DirExists("Resources"))
+        resourcePaths = "Resources";
+    else if (FILES->DirExists("../KO/Resources"))
+        resourcePaths = "../KO/Resources";
+
+    resourceFolder_ = resourcePaths;
+    resourcePaths += ";";
+
+    if (FILES->DirExists("Data"))
+        resourcePaths += "Data;";
+    if (FILES->DirExists("CoreData"))
+        resourcePaths += "CoreData;";
+
+    engineParameters_[EP_RESOURCE_PATHS] = resourcePaths;
+
 //    engineParameters_["FullScreen"] = false;
 //    engineParameters_["Headless"] = true;
 //    engineParameters_["WindowWidth"] = 960;
